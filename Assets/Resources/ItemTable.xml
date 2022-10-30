@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+	<ItemData ItemCode="0" Name="체력 룬" Description="체력 증가" Type="Normal" StatCode="0" EffectCode="0"/>
+	<ItemData ItemCode="1" Name="마나 룬" Description="마나 증가" Type="Normal" StatCode="1" EffectCode="0"/>
+	<ItemData ItemCode="2" Name="스태미나 룬" Description="스태미나 증가" Type="Normal" StatCode="2" EffectCode="0"/>
+	<ItemData ItemCode="3" Name="공격속도 룬" Description="공격속도 증가" Type="Normal" StatCode="3" EffectCode="0"/>
+	<ItemData ItemCode="4" Name="이동속도 룬" Description="이동속도 증가" Type="Normal" StatCode="4" EffectCode="0"/>
+	<ItemData ItemCode="5" Name="공격력 룬" Description="공격력 증가" Type="Normal" StatCode="5" EffectCode="0"/>
+	<ItemData ItemCode="6" Name="방어력 룬" Description="방어력 증가" Type="Normal" StatCode="6" EffectCode="0"/>
+	<ItemData ItemCode="7" Name="피해 증폭 룬" Description="주는 피해량 증가" Type="Normal" StatCode="7" EffectCode="0"/>
+	<ItemData ItemCode="8" Name="피해 반감 룬" Description="받는 피해량 감소" Type="Normal" StatCode="8" EffectCode="0"/>
+</root>
