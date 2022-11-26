@@ -10,6 +10,7 @@ public class Craft
     public GameObject go_PreviewPrefab; // 미리 보기 프리팹
 }
 
+
 public class CraftManual : MonoBehaviour
 {
     private bool isActivated = false;  // CraftManual UI 활성 상태
@@ -31,10 +32,13 @@ public class CraftManual : MonoBehaviour
 
     public void SlotClick(int _slotNumber)
     {
-        go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
-        go_Prefab = craft_fire[_slotNumber].go_prefab;
-        isPreviewActivated = true;
-        go_BaseUI.SetActive(false);
+        if (!isPreviewActivated)
+        {
+            go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
+            go_Prefab = craft_fire[_slotNumber].go_prefab;
+            isPreviewActivated = true;
+            go_BaseUI.SetActive(false);
+        }
     }
 
     void Update()
@@ -59,10 +63,14 @@ public class CraftManual : MonoBehaviour
             if (hitInfo.transform != null)
             {
                 Vector3 _location = hitInfo.point;
-                go_Preview.transform.position = _location;
 
-                Debug.Log(_location);
-                Debug.Log(go_Preview.transform.position);
+                if (Input.GetKeyDown(KeyCode.Q))
+                    go_Preview.transform.Rotate(0f, -90f, 0f);
+                else if (Input.GetKeyDown(KeyCode.E))
+                    go_Preview.transform.Rotate(0f, +90f, 0f);
+
+                _location.Set(Mathf.Round(_location.x), Mathf.Round(_location.y / 0.1f) * 0.1f, Mathf.Round(_location.z));
+                go_Preview.transform.position = _location;
             }
         }
     }
@@ -71,7 +79,7 @@ public class CraftManual : MonoBehaviour
     {
         if (isPreviewActivated && go_Preview.GetComponent<PreviewObject>().isBuildable())
         {
-            Instantiate(go_Prefab, hitInfo.point, Quaternion.identity);
+            Instantiate(go_Prefab, go_Preview.transform.position, go_Preview.transform.rotation);
             Destroy(go_Preview);
             isActivated = false;
             isPreviewActivated = false;
