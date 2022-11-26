@@ -127,4 +127,6 @@ public class Status : MonoBehaviour
         InitItemList();
         curCondition = ConditionType.Default;
     }
+
+
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : Status
+public class Enemy : Status
 {
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] [Range(0, 100)] private float searchRange = 20;
@@ -159,7 +159,10 @@ public class EnemyAI : Status
         // target과의 거리가 벌어진다면 다시 target을 쫓아 간다.
         if (!IsHpZero) StartCoroutine(UpdatePath());   // if(!isDead) 조건 추가.
     }
+    private void OnDeath()
+    {
 
+    }
     private void OnDisable()
     {
         //if (EnemyMgr.Instance) EnemyMgr.Instance.SetPooling(this);
