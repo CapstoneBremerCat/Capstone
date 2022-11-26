@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Status : MonoBehaviour
+public class Status : MonoBehaviour, IDamageable
 {
     public string unitName { get; private set; } // name
     public int level { get; private set; }   // level
@@ -14,37 +15,52 @@ public class Status : MonoBehaviour
     public float curMana { get; private set; }      // current Mp
     public float curStamina { get; private set; }   // current Sp
 
-    public float MaxHealth { get { return totalStat.healthGauge.maxValue; } }
-    public float MaxMana { get { return totalStat.manaGauge.maxValue; } }
-    public float MaxStamina { get { return totalStat.staminaGauge.maxValue; } }
+    public float maxHealth { get { return totalStat.healthGauge.maxValue; } }
+    public float maxMana { get { return totalStat.manaGauge.maxValue; } }
+    public float maxStamina { get { return totalStat.staminaGauge.maxValue; } }
 
-    public float RegenHealth { get { return totalStat.healthGauge.regenValue; } }
-    public float RegenMana { get { return totalStat.manaGauge.regenValue; } }
-    public float RegenStamina { get { return totalStat.staminaGauge.regenValue; } }
+    public float regenHealth { get { return totalStat.healthGauge.regenValue; } }
+    public float regenMana { get { return totalStat.manaGauge.regenValue; } }
+    public float regenStamina { get { return totalStat.staminaGauge.regenValue; } }
 
-    public bool IsHpFull { get { return totalStat.healthGauge.maxValue <= curHealth; } }
-    public bool IsHpZero { get { return 0 >= curHealth; } }    // 죽음 상태 확인.
-    public bool IsMpFull { get { return totalStat.manaGauge.maxValue <= curMana; } }
-    public bool IsMpZero { get { return 0 >= curMana; } }
-    public bool IsSpFull { get { return totalStat.staminaGauge.maxValue <= curStamina; } }
-    public bool IsSpZero { get { return 0 >= curStamina; } }
+    public bool isHpFull { get { return totalStat.healthGauge.maxValue <= curHealth; } }
+    public bool isHpZero { get { return 0 >= curHealth; } }    // 죽음 상태 확인.
+    public bool isMpFull { get { return totalStat.manaGauge.maxValue <= curMana; } }
+    public bool isMpZero { get { return 0 >= curMana; } }
+    public bool isSpFull { get { return totalStat.staminaGauge.maxValue <= curStamina; } }
+    public bool isSpZero { get { return 0 >= curStamina; } }
 
-    public float MoveSpeed { get { return totalStat.moveSpeed; } }
-    public float AttackSpeed { get { return totalStat.attackSpeed; } }
+    public float moveSpeed { get { return totalStat.moveSpeed; } }
+    public float attackSpeed { get { return totalStat.attackSpeed; } }
 
-    public float AttackPower { get { return totalStat.attackPower; } }
-    public float Defense { get { return totalStat.defense; } }
+    public float attackPower { get { return totalStat.attackPower; } }
+    public float defense { get { return totalStat.defense; } }
 
-    public float DamageIncrease { get { return totalStat.damageIncrease; } }
-    public float DamageReduction { get { return totalStat.damageReduction; } }
-    public float JumpPower { get { return totalStat.jumpPower; } }
-    public float RunStamina { get { return totalStat.runStamina; } }
+    public float damageIncrease { get { return totalStat.damageIncrease; } }
+    public float damageReduction { get { return totalStat.damageReduction; } }
+    public float jumpPower { get { return totalStat.jumpPower; } }
+    public float runStamina { get { return totalStat.runStamina; } }
 
     public ConditionType curCondition { get; private set; }    // 현재 상태(기본, 침묵, 기절)
+    public bool isDead { get { return (0 >= curHealth); } }    // 죽음 상태 확인.
+    public event Action OnDeath; // 사망 시 발동할 이벤트
 
-    private void Awake()
+    protected virtual void OnEnable()
     {
         totalStat = baseStat.status;
+        curHealth = maxHealth;
+    }
+
+    public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+    {
+        if (isDead) return; // 이미 죽은 상태라면 더 이상 처리하지 않는다.
+
+        curHealth -= damage;   // 데미지 만큼 체력 감소.
+        if (isDead) Die();  // 데미지를 입어 체력이 0이하(사망 상태) 라면 사망 이벤트 실행.
+    }
+    private void Die()
+    {
+        if (null != OnDeath) OnDeath(); // 등록된 사망 이벤트 실행.
     }
 
     // 아이템도 초기화를 해야할까? 영구적인 아이템은?
@@ -58,7 +74,12 @@ public class Status : MonoBehaviour
 
         curCondition = ConditionType.Default;
     }
-    
+    public virtual void RestoreHealth(float value)
+    {
+        if (isDead) return; // 이미 죽은 상태에서는 체력회복 불가능.
+        SetHealth(curHealth + value);
+    }
+
     // sum of itemStats & unitStat
     public void SetTotalStat(StatusData StatusObject)
     {

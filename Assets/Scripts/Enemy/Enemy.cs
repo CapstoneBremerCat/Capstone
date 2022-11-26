@@ -13,12 +13,13 @@ public class Enemy : Status
 
     private new Collider collider;
 
-    private float damage = 20f; // 공격력.
+    [SerializeField] private float health; // 현재 체력.
+    [SerializeField] private float damage = 20f; // 공격력.
 
-    //[SerializeField] private AudioClip deathSound;  // 사망 효과음.
-    //[SerializeField] private AudioClip hitSound; // 피격 효과음.
-    //[SerializeField] private ParticleSystem hitEffect;  // 피격 이펙트.
-    //private AudioSource audioSource;    // 효과음을 출력하는데 사용.
+    [SerializeField] private AudioClip deathSound;  // 사망 효과음.
+    [SerializeField] private AudioClip hitSound; // 피격 효과음.
+    [SerializeField] private ParticleSystem hitEffect;  // 피격 이펙트.
+    private AudioSource audioSource;    // 효과음을 출력하는데 사용.
 
     //[SerializeField] private Renderer enemyRenderer;
 
@@ -44,26 +45,30 @@ public class Enemy : Status
         collider = GetComponent<Collider>();    // Collider의 종류를 신경쓰지 않는다.
 
         // 현재 오브젝트에 AudioSource 컴포넌트 추가
-        //audioSource = gameObject.AddComponent<AudioSource>();
-        //audioSource.playOnAwake = false;    // 플레이 시, 사운드 실행되지 않도록 한다.
-        /*OnDeath += () =>
+        audioSource = gameObject.AddComponent<AudioSource>();
+        audioSource.playOnAwake = false;    // 플레이 시, 사운드 실행되지 않도록 한다.
+        OnDeath += () =>
         {
             // 더 이상 피격 판정이 되지 않게 collider를 끈다.
             if (collider) collider.enabled = false;
             if (agent) agent.isStopped = true;  // navigation 정지.
             if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
-            GameMgr.instance.AddScore(100); // enemy 처치 시, 100 score 상승.
-            EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
-        };*/
+            //GameMgr.instance.AddScore(100); // enemy 처치 시, 100 score 상승.
+            //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
+        };
     }
-    private void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();    // Status의 OnEnable() 호출.
         if (collider) collider.enabled = true;  // 피격을 받을 수 있도록 collider를 활성화.
         InitStatus();
+        health = curHealth;
+        // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
+        if (agent) agent.isStopped = false;
         StartCoroutine(UpdatePath());
     }
-    /*protected override void OnEnable()
+/*    protected override void OnEnable()
     {
         base.OnEnable();    // LivingEntity의 OnEnable() 호출.
 
@@ -72,12 +77,12 @@ public class Enemy : Status
         // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
         if (agent) agent.isStopped = false;
         StartCoroutine(UpdatePath());
-    }
+    }*/
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
-
+        health = curHealth;
         if (anim && !isDead)
         {
             if (hitEffect)
@@ -93,7 +98,7 @@ public class Enemy : Status
             if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
             anim.SetTrigger("Damaged"); // 데미지를 입고 죽지 않았다면, 피격 애니메이션 실행.
         }
-    }*/
+    }
 
     public void UnactiveObject() // Zombie Death 실행 후 호출하여 오브젝트를 비활성화 시킨다.
     {
@@ -102,7 +107,7 @@ public class Enemy : Status
 
     private IEnumerator UpdatePath()
     {
-        while (!IsHpZero)
+        while (!isHpZero)
         {
             if (agent)
             {
@@ -110,7 +115,7 @@ public class Enemy : Status
                 if (null != targets && 0 < targets.Length)
                 {
                     var livingEntity = targets[0].GetComponent<Status>();
-                    if (livingEntity && !livingEntity.IsHpZero)
+                    if (livingEntity && !livingEntity.isHpZero)
                     { // 대상이 존재하고 죽지 않았을 경우.
                         var targetPos = livingEntity.transform.position;
                         agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
@@ -136,19 +141,19 @@ public class Enemy : Status
         if (agent && target)
         {
             var trTarget = target.transform;
-            while (!IsHpZero && !target.IsHpZero)
+            while (!isHpZero && !target.isHpZero)
             {
                 // 공격 모션 실행.
-                //if (anim) anim.SetTrigger("Attack");
+                if (anim) anim.SetTrigger("Attack");
                 yield return new WaitForSeconds(1.1f);
 
                 // 피격 판정 타이밍에 target이 유효한 거리에 있는지 확인.
                 if (Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
 
                 // TODO : Player Damageable Code 추가.
-                if (IsHpZero || target.IsHpZero) yield break;
+                if (isHpZero || target.isHpZero) yield break;
                 var hitNormal = transform.position - trTarget.position;
-                //target.OnDamage(damage, Vector3.zero, hitNormal);
+                target.OnDamage(damage, Vector3.zero, hitNormal);
 
                 yield return new WaitForSeconds(1.2f);
 
@@ -157,12 +162,15 @@ public class Enemy : Status
             }
         }
         // target과의 거리가 벌어진다면 다시 target을 쫓아 간다.
-        if (!IsHpZero) StartCoroutine(UpdatePath());   // if(!isDead) 조건 추가.
+        if (!isHpZero) StartCoroutine(UpdatePath());   // if(!isDead) 조건 추가.
     }
-    private void OnDeath()
-    {
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        IDamageable target = collision.collider.GetComponent<IDamageable>();
+        if (null != target) target.OnDamage(damage, collision.transform.position, Vector3.zero);
     }
+
     private void OnDisable()
     {
         //if (EnemyMgr.Instance) EnemyMgr.Instance.SetPooling(this);

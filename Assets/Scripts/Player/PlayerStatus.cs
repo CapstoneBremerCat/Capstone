@@ -9,7 +9,7 @@ public class PlayerStatus : Status
     private void Awake()
     {
         InitStatus();
-        speed = MoveSpeed;
+        speed = moveSpeed;
     }
 
     //private bool isRun = false;

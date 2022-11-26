@@ -48,15 +48,15 @@ public class PlayerController : MonoBehaviour
         animSpeed = isRun ? 2 : 1;
     }
 
-    public void RunStamina(bool isRun)
+    public void runStamina(bool isRun)
     {
         if (isRun)
         {
-            livingEntity.UseStamina(playerStatus.RunStamina);
+            livingEntity.UseStamina(playerStatus.runStamina);
         }
         else
         {
-            livingEntity.RestoreStamina(playerStatus.RegenStamina);
+            livingEntity.RestoreStamina(playerStatus.regenStamina);
         }
         //UIMgr.Instance.SetStaminaBar(playerStatus.GetStaminaRatio());
     }
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
             offset.y = 0;
             transform.LookAt(charController.transform.position + offset);
         }
-        RunStamina(playerInput.run);
+        runStamina(playerInput.run);
     }
 
     private void FixedUpdate()
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         // 캐릭터가 땅에 붙어있는 경우에만 작동
         if (playerInput.jump && charController.isGrounded)
         {
-            yVelocity = playerStatus.JumpPower;
+            yVelocity = playerStatus.jumpPower;
         }
 
         // 키보드 입력에 따른 이동량 측정

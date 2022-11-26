@@ -8,6 +8,8 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private string horizontalAxisName = "Horizontal";
     [SerializeField] private string runButtonName = "Run";
     [SerializeField] private string jumpButtonName = "Jump";
+    [SerializeField] private string fireBtnName = "Fire1";
+    [SerializeField] private string reloadBtnName = "Reload";
     //[SerializeField] private string SkillSlot1ButtonName = "SkillSlot 1";
     //[SerializeField] private string SkillSlot2ButtonName = "SkillSlot 2";
     //[SerializeField] private string SkillSlot3ButtonName = "SkillSlot 3";
@@ -18,6 +20,8 @@ public class PlayerInput : MonoBehaviour
     public float horizontal { get; private set; }
     public bool run { get; private set; }
     public bool jump { get; private set; }
+    public bool fire { get; private set; }
+    public bool reload { get; private set; }
     //public bool skillSlot1 { get; private set; }
     //public bool skillSlot2 { get; private set; }
     //public bool skillSlot3 { get; private set; }
@@ -35,6 +39,8 @@ public class PlayerInput : MonoBehaviour
         horizontal = Input.GetAxis(horizontalAxisName);
         run = Input.GetButton(runButtonName);
         jump = Input.GetButton(jumpButtonName);
+        fire = Input.GetButton(fireBtnName);
+        reload = Input.GetButton(reloadBtnName);
         //skillSlot1 = Input.GetButton(SkillSlot1ButtonName);
         //skillSlot2 = Input.GetButton(SkillSlot2ButtonName);
         //skillSlot3 = Input.GetButton(SkillSlot3ButtonName);
