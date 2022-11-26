@@ -23,6 +23,7 @@ public class CraftManual : MonoBehaviour
     private GameObject go_Preview; // 미리 보기 프리팹을 담을 변수
     private GameObject go_Prefab; // 실제 생성될 프리팹을 담을 변수 
 
+    [SerializeField] private Transform tf_Camera;  // 카메라 위치
     [SerializeField] private Transform tf_Player;  // 플레이어 위치
 
     private RaycastHit hitInfo;
@@ -34,7 +35,7 @@ public class CraftManual : MonoBehaviour
     {
         if (!isPreviewActivated)
         {
-            go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Player.position + tf_Player.forward, Quaternion.identity);
+            go_Preview = Instantiate(craft_fire[_slotNumber].go_PreviewPrefab, tf_Camera.position + tf_Camera.forward, Quaternion.identity);
             go_Prefab = craft_fire[_slotNumber].go_prefab;
             isPreviewActivated = true;
             go_BaseUI.SetActive(false);
@@ -58,19 +59,25 @@ public class CraftManual : MonoBehaviour
 
     private void PreviewPositionUpdate()
     {
-        if (Physics.Raycast(tf_Player.position, tf_Player.forward, out hitInfo, range, layerMask))
+        if (Physics.Raycast(tf_Camera.position, tf_Camera.forward, out hitInfo, range, layerMask))
         {
             if (hitInfo.transform != null)
             {
                 Vector3 _location = hitInfo.point;
+                Vector3 _locationPlayer = tf_Player.position;
 
                 if (Input.GetKeyDown(KeyCode.Q))
                     go_Preview.transform.Rotate(0f, -90f, 0f);
                 else if (Input.GetKeyDown(KeyCode.E))
                     go_Preview.transform.Rotate(0f, +90f, 0f);
 
-                _location.Set(Mathf.Round(_location.x), Mathf.Round(_location.y / 0.1f) * 0.1f, Mathf.Round(_location.z));
-                go_Preview.transform.position = _location;
+                // 놓을 위치를 정수 단위로 조정
+                _location.Set(Mathf.Round(_location.x), Mathf.Round(_location.y / 0.1f) * 0.1f, Mathf.Round(_location.z / 0.1f));
+/*                _locationPlayer.Set(Mathf.Round(_locationPlayer.x), Mathf.Round(_locationPlayer.y / 0.1f) * 0.1f, Mathf.Round(_locationPlayer.z));
+
+                // 플레이어의 위치는 놓을 수 없다
+                if (_location.x != _locationPlayer.x && _location.y != _locationPlayer.y)*/
+                    go_Preview.transform.position = _location;  
             }
         }
     }
