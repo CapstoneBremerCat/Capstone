@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class UIMgr : MonoBehaviour
 {
     #region instance
@@ -29,15 +29,15 @@ public class UIMgr : MonoBehaviour
     [SerializeField] private float defaultLength = 400f;
 
     [SerializeField] private Slider staminaSlider;
-
-
-
+    [SerializeField] private TextMeshProUGUI waveText; // 적 웨이브 표시용 텍스트.
+    [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
+    [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
 
     private float healthLength;
 
-    private void Start()
+    public void Init()
     {
-
+        gameoverUI.SetActive(false);
     }
 
     public void SetHealthBar(float ratio)
@@ -60,5 +60,19 @@ public class UIMgr : MonoBehaviour
     public void SetStaminaBar(float ratio)
     {
         staminaSlider.value = ratio;
+    }
+
+    public void UpdateAmmoText(int magAmmo, int remainAmmo)
+    {
+        //var strBuilder = new System.Text.StringBuilder();
+        //strBuilder.Append(magAmmo);
+        //strBuilder.Append(" / ");
+        //strBuilder.Append(remainAmmo);
+        ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
+    }
+
+    public void GameOver()
+    {
+        if(gameoverUI) gameoverUI.SetActive(true);
     }
 }
