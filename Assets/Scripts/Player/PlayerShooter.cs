@@ -44,7 +44,7 @@ public class PlayerShooter : MonoBehaviour
             // 총알이 비었으면 재장전 시도.
             if ((gun.GetState.Equals(State.Empty) || playerInput.reload) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
 
-            //if (gun && UIMgr.Instance) UIMgr.Instance.UpdateAmmoText(gun.MagAmmo, gun.AmmoRemain);  // ? 보호 수준
+            if (gun && UIMgr.Instance) UIMgr.Instance.UpdateAmmoText(gun.MagAmmo, gun.AmmoRemain);  // ? 보호 수준
         }
     }
 

@@ -11436,6 +11436,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4adb804736fc9df4698ad8831d0ffb90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bolt: {fileID: 1230814205968661385, guid: 87df41d5b0bb7d24ea0c898d516a0fad, type: 3}
   firePos: {fileID: 1153365712}
   leftHandMount: {fileID: 0}
   rightHandMount: {fileID: 0}
