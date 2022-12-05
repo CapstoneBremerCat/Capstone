@@ -56,7 +56,7 @@ public class Enemy : Status
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
             //GameMgr.instance.AddScore(100); // enemy 처치 시, 100 score 상승.
             //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
         };
     }
     protected override void OnEnable()
@@ -131,7 +131,7 @@ public class Enemy : Status
                     }
                 }
                 // Enemy가 움직이는 속도(velocity)의 크기(magnitude)를 이용하여, 움직이는 애니메이션 처리를 한다.
-                //if (anim) anim.SetFloat("Magnitude", agent.velocity.magnitude);
+                if (anim) anim.SetFloat("Magnitude", agent.velocity.magnitude);
             } // if(agent)
             yield return new WaitForSeconds(0.04f);
         } //while()

@@ -31,8 +31,8 @@ public class Gun : MonoBehaviour
     private float lastFireTime; // 총을 마지막으로 발사한 시점.
     private LineRenderer bulletLineRenderer;    // 총알 궤적을 그리기 위한 도구.
 
-    private readonly int magCapacity = 25;  // 탄창 용량.
-    private int ammoRemain = 100; // 소지하고 있는 총알의 수.
+    [SerializeField] private readonly int magCapacity = 50;  // 탄창 용량.
+    [SerializeField] private int ammoRemain = 900; // 소지하고 있는 총알의 수.
     private int magAmmo;    // 현재 탄창에 남아있는 총알의 수.
 
     [SerializeField] private float reloadTime = 0.9f;   // 재장전 소요 시간.

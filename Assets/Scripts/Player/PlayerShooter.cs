@@ -38,6 +38,7 @@ public class PlayerShooter : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        Look();
         if (playerInput && gun)
         {
             if (playerInput.fire) gun.Fire();   // 총알 발사.  
@@ -51,5 +52,23 @@ public class PlayerShooter : MonoBehaviour
     public void AddAmmo(int value)
     {
         if (gun) gun.AddAmmo(value);
+    }
+
+
+    // 스크린 상의 마우스 위치를 참조하여 플레이어를 해당 방향으로 회전시킨다.
+    private void Look()
+    {
+        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
+
+        float rayLength;
+
+        if (GroupPlane.Raycast(cameraRay, out rayLength))
+
+        {
+            Vector3 pointTolook = cameraRay.GetPoint(rayLength);
+            gun.transform.LookAt(new Vector3(pointTolook.x, gun.transform.position.y, pointTolook.z));
+        }
     }
 }
