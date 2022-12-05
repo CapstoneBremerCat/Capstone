@@ -37,10 +37,13 @@ public class PlayerController : MonoBehaviour
 
         //대각선 이동으로 하면서 루트2로 길이가 늘어나기에 1로 만들어준다.
         moveDir.Normalize();
-
+        float value;
+        value = Mathf.Abs(v) > Mathf.Abs(h) ? v : h;
         // 달리기 입력 시 값 두배로 증가
-        if (anim && playerInput) anim.SetFloat("Vertical", v * animSpeed);
-        if (anim && playerInput) anim.SetFloat("Horizontal", h * animSpeed);
+        if (anim && playerInput) anim.SetFloat("Magnitude", value * animSpeed);
+        //if (anim && playerInput) anim.SetFloat("Magnitude", h * animSpeed);
+/*        if (anim && playerInput) anim.SetFloat("Vertical", v * animSpeed);
+        if (anim && playerInput) anim.SetFloat("Horizontal", h * animSpeed);*/
     }
 
     public void Run(bool isRun)

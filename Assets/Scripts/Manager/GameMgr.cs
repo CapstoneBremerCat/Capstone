@@ -28,11 +28,26 @@ public class GameMgr : MonoBehaviour
 
     [SerializeField] private float maxFatigue = 100f;   // 최대 피로도
     public float curFatigue { get; private set; }   // 현재 피로도
+    public int wave { get; private set; } = 0;  // 현재 Wave 카운트.
+    [SerializeField] private int maxWave = 10;  // 최대 Wave 카운트.
+    // 이번 Wave에 출현할 Enemy의 수.
+    public int enemySpawnCount { get { return Mathf.RoundToInt(wave * 1.5f); } }
+
+    [SerializeField] private int spwanCount = 0; // 필드에 존재하는 Enemy의 수.
+    public void DecreaseSpawnCount()
+    {
+        // spawnCount를 감소하고 UI정보를 갱신한다.
+        UIMgr2.Instance.UpdateWaveText(wave, --spwanCount);
+    }
+
+    private int score = 0;
 
     // Start is called before the first frame update
     private void Start()
     {
         curFatigue = maxFatigue;
+        // 현재 wave UI 정보를 갱신.
+        UIMgr2.Instance.UpdateWaveText(GameMgr.instance.wave, spwanCount);
     }
 
     // Update is called once per frame
@@ -40,6 +55,21 @@ public class GameMgr : MonoBehaviour
     {
         //playerStatus.Updates();
 
+    }
+    public bool NextWave()
+    {
+        if (maxWave > wave)
+        {
+            wave++;
+            return true;
+        }
+        return false;
+    }
+    public void AddScore(int value)
+    {
+        score += value;
+        // UI의 ScoreText를 갱신.
+        UIMgr2.Instance.UpdateScoreText(score);
     }
 
     public void ResetGameMgr()

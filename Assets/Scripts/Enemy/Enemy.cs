@@ -54,7 +54,8 @@ public class Enemy : Status
             if (agent) agent.isStopped = true;  // navigation 정지.
             if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
-            //GameMgr.instance.AddScore(100); // enemy 처치 시, 100 score 상승.
+            GameMgr.Instance.AddScore(100); // enemy 처치 시, 100 score 상승.
+            GameMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, 100 score 상승.
             //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
             //gameObject.SetActive(false);
         };
