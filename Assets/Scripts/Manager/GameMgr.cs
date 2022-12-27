@@ -1,6 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public enum GAMEMODE
+{
+    DAY,        // 낮 - 생존 게임(수집, 사냥, 건축)
+    NIGHT       // 밤 - 디펜스 게임(웨이브 방어)
+}
 
 public class GameMgr : MonoBehaviour
 {
@@ -34,6 +39,8 @@ public class GameMgr : MonoBehaviour
     public int enemySpawnCount { get { return Mathf.RoundToInt(wave * 1.5f); } }
 
     [SerializeField] private int spwanCount = 0; // 필드에 존재하는 Enemy의 수.
+    public GAMEMODE GameMode { get; private set; }      // 게임 모드. 게임매니저에서 쓰는게 나을 듯 
+
     public void DecreaseSpawnCount()
     {
         // spawnCount를 감소하고 UI정보를 갱신한다.
@@ -41,11 +48,16 @@ public class GameMgr : MonoBehaviour
     }
 
     private int score = 0;
+    private PlayTime playTime;
+    private TimeData currTime;
 
     // Start is called before the first frame update
     private void Start()
     {
         curFatigue = maxFatigue;
+        GameMode = GAMEMODE.DAY;
+        currTime = playTime.GetTime();
+
         // 현재 wave UI 정보를 갱신.
         UIMgr2.Instance.UpdateWaveText(GameMgr.instance.wave, spwanCount);
     }
