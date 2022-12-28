@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
 public readonly struct TimeData
 {
     private const int SecondsPerMinute = 60;
@@ -25,7 +24,7 @@ public readonly struct TimeData
         Day = seconds / SecondsPerDay;
         seconds -= Day * SecondsPerDay;
 
-        Hour = (int)(time / SecondsPerHour);
+        Hour = (int)(seconds / SecondsPerHour);
         seconds -= Hour * SecondsPerHour;
 
         Minute = seconds / SecondsPerMinute;
@@ -38,23 +37,20 @@ public readonly struct TimeData
 public class PlayTime
 {
     private float initTime;
-    private float loadedTime;
+    private float loadedTime;   // 저장된 이전 플레이타임 시간
 
-    private float timeScale;
-
-    public int Morning { get; private set; }    // 낮 시작 시간
-    public int Night { get; private set; }      // 밤 시작 시간
+    private float timeScale;    // 시간 배속
 
     public PlayTime()
     {
         SetTimeScale(1440.0f);       // 24 * 60. 하루 1분
-        SetMorningAndNight(8, 20);  // 낮은 8시부터, 밤은 20시부터 시작
-        ResetTime();
+        InitTime();
     }
 
     public TimeData GetTime()
     {
-        return new TimeData((Time.time - initTime) * timeScale);
+        // 흘러간 시간 * 시간 배속 + 저장된 시간
+        return new TimeData((Time.time - initTime) * timeScale + loadedTime);
     }
 
     public void SetTimeScale(float scale)
@@ -62,18 +58,13 @@ public class PlayTime
         timeScale = scale;
     }
 
-    // 낮, 밤 시작 시간 설정.
-    public void SetMorningAndNight(int morning, int night)
-    {
-        Morning = morning;
-        Night = night;
-    }
-
     // 시간 정보 초기화.
-    public void ResetTime()
+    public void InitTime()
     {
+        // DataManager에 저장되어있는 플레이타임을 가져온다.
         //if(DataManager) loadedTime = DataManager.Instance.GetSavedTime();
-        //else loadedTime = 0.0f;
-        initTime = Time.time + loadedTime;
+        //else
+        loadedTime = 28800.0f;  //08시
+        initTime = Time.time;
     }
 }

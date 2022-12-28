@@ -2,46 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
-    [SerializeField] private readonly List<Enemy> enemies = new List<Enemy>();  // 생성된 적들을 담는 리스트
+    [SerializeField] private List<Enemy> enemies = new List<Enemy>();  // 생성된 적들을 담는 리스트
 
     [SerializeField] private Enemy enemyPrefab;     // 생성할 적 AI
 
     [SerializeField] private Transform[] spawnPoints;   // 적 AI를 소환할 위치들
 
-    private int wave;   // 현재 웨이브
-
-    // Update is called once per frame
-    void Update()
+    // spawnCount만큼 적을 생성
+    public void SpawnEnemy(int spawnCount)
     {
-        
-    }
-
-    private void UpdateUI()
-    {
-
-    }
-
-    // 현재 웨이브에 맞춰 적을 생성
-    private void SpawnWave()
-    {
-        // 웨이브 1 증가
-        wave++;
-
-        // 적 생성 수 (임시)
-        var spawnCount = Mathf.RoundToInt(wave * 5f);
-
         // spawnCount 만큼 적을 생성
-        for (int i=0;i< spawnCount;i++)
+        for (int i=0;i< spawnCount; i++)
         {
             // 적 생성 처리
-            CreateEnemy();
+            CreateEnemy(enemyPrefab);
         }
     }
 
     // 적을 생성
-    private void CreateEnemy()
+    private void CreateEnemy(Enemy enemyPrefab)
     {
         var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
 
