@@ -50,8 +50,8 @@ public class Timer
 
     public Timer()
     {
-        //SetTimeScale(1440.0f);       // 24 * 60. 하루 1분
-        SetTimeScale(8640.0f);       // 24 * 60. 하루 1분
+        SetTimeScale(1440.0f);       // 24 * 60. 하루 1분
+        //SetTimeScale(8640.0f);       // 24 * 60 * 6. 하루 10초
         InitTime();
     }
 
