@@ -2639,6 +2639,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 6242396168255025633, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
   m_PrefabInstance: {fileID: 6242396168644132545}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &798174961 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6242396169024385880, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+  m_PrefabInstance: {fileID: 6242396168644132545}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &821420450 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7245000872403300940, guid: d81db60255347954aba4312bacc268a1, type: 3}
@@ -4382,7 +4393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4adb804736fc9df4698ad8831d0ffb90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bolt: {fileID: 1230814205968661385, guid: 87df41d5b0bb7d24ea0c898d516a0fad, type: 3}
+  bullet: {fileID: 1230814205968661385, guid: 87df41d5b0bb7d24ea0c898d516a0fad, type: 3}
   firePos: {fileID: 1153365712}
   leftHandMount: {fileID: 0}
   rightHandMount: {fileID: 0}
@@ -5627,8 +5638,8 @@ MonoBehaviour:
   player: {fileID: 5474169261384976412}
   spawner: {fileID: 950935636}
   maxWave: 10
-  spwanCount: 10
   maxFatigue: 100
+  recoverFatiguePerHour: 10
   gameMode: 0
 --- !u!4 &1791438763
 Transform:
@@ -6872,6 +6883,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1256100618819834600, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: dayText
+      value: 
+      objectReference: {fileID: 798174961}
+    - target: {fileID: 1256100618819834600, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
       propertyPath: ammoText
       value: 
       objectReference: {fileID: 0}
@@ -6896,6 +6911,10 @@ PrefabInstance:
       value: 'Wave : 1
 
         Enemy Left : 0'
+      objectReference: {fileID: 0}
+    - target: {fileID: 2412034547677323739, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6242396167047448903, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
       propertyPath: m_LocalScale.x
@@ -6929,6 +6948,10 @@ PrefabInstance:
       propertyPath: playerStatus
       value: 
       objectReference: {fileID: 3738608764646491001}
+    - target: {fileID: 6242396168244072366, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6242396168255025631, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
       propertyPath: m_Type
       value: 1
@@ -7024,6 +7047,50 @@ PrefabInstance:
     - target: {fileID: 6242396168689210108, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
       propertyPath: m_Name
       value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385878, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_Name
+      value: Day Text
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385880, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_Text
+      value: Day - 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385880, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_FontData.m_MaxSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385880, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_FontData.m_FontStyle
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385881, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385881, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385881, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169024385881, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169057972957, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_Name
+      value: Days
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169057972957, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242396169057972959, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}
+      propertyPath: m_Color.a
+      value: 0.11764706
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6242396168689209987, guid: da76dd95fa49c334ea4e6adad29c4f46, type: 3}

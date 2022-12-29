@@ -20,6 +20,7 @@ public class UIMgr2 : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
     [SerializeField] private Text scoreText; // 점수 표시용 텍스트.
+    [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
     [SerializeField] private Text waveText; // 적 웨이브 표시용 텍스트.
     [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
     public event System.Action RestartEvent;
@@ -38,9 +39,26 @@ public class UIMgr2 : MonoBehaviour
         scoreText.text = string.Format("Score : {0}", newScore);
     }
 
+    public void EnableWaveText()
+    {
+        waveText.gameObject.SetActive(true);
+    }
+    public void DisableWaveText()
+    {
+        waveText.gameObject.SetActive(false);
+    }
+
     public void UpdateWaveText(int waves, int count)
     {
-        waveText.text = string.Format("Wave : {0}\nEnemy Left : {1}", waves, count);
+        if (waveText.gameObject.activeSelf)
+        {
+            waveText.text = string.Format("Wave : {0}\nEnemy Left : {1}", waves, count);
+        }
+    }
+
+    public void UpdateDateText(int day)
+    {
+        dayText.text = string.Format("Day - {0}", day);
     }
 
     public void GameOver()
