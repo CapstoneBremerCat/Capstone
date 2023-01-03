@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
-    [SerializeField] private Bullet bullet;
+    [SerializeField] private Bolt bolt;
     [SerializeField] private Transform FirePos;
 
     // Update is called once per frame
@@ -12,7 +12,7 @@ public class Fire : MonoBehaviour
     {
 /*        if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(bullet.gameObject, FirePos.transform.position, FirePos.transform.rotation);
+            Instantiate(bolt.gameObject, FirePos.transform.position, FirePos.transform.rotation);
         }*/
 
     }

@@ -21,8 +21,6 @@ public class Enemy : Status
     [SerializeField] private ParticleSystem hitEffect;  // 피격 이펙트.
     private AudioSource audioSource;    // 효과음을 출력하는데 사용.
 
-    [SerializeField] private bool isWaveEnemy;   // 웨이브 적인지 판단
-
     //[SerializeField] private Renderer enemyRenderer;
 
     public void Setup(float damage, float maxhealth, float speed, Color color, Vector3 pos)
@@ -56,8 +54,8 @@ public class Enemy : Status
             if (agent) agent.isStopped = true;  // navigation 정지.
             if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
-            GameManager.Instance.AddScore(100); // enemy 처치 시, 100 score 상승.
-            if(isWaveEnemy) GameManager.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
+            GameMgr.Instance.AddScore(100); // enemy 처치 시, 100 score 상승.
+            GameMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, 100 score 상승.
             //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
             //gameObject.SetActive(false);
         };
