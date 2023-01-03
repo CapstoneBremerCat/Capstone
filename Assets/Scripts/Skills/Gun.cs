@@ -14,7 +14,7 @@ public class Gun : MonoBehaviour
     private State state = State.Ready;  // 총의 현재 상태 정보.
 
     [Header("Gun")] //inspector에 표시, 해당 Data들의 사용처를 알려준다.
-    [SerializeField] private Bolt bolt; // 총알
+    [SerializeField] private Bullet bullet; // 총알
     [SerializeField] private Transform firePos; // 총알 발사 위치.
     [SerializeField] private Transform leftHandMount; // 왼손 위치 지점.
     [SerializeField] private Transform rightHandMount; // 오른손 위치 지점.
@@ -104,7 +104,7 @@ public class Gun : MonoBehaviour
                 hitPos = hit.point; // 실제 총알이 맞은 지점으로 갱신.
             }
             StartCoroutine(ShotEffect(hitPos)); // 총알 발사 이펙트.
-            Instantiate(bolt.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
+            Instantiate(bullet.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
             magAmmo--;  // 탄창의 총알을 감소.
             if (0 >= magAmmo) state = State.Empty;  // 남은 총알 수 확인. 총알이 없다면, 총의 상태를 Empty로 변경.
         }

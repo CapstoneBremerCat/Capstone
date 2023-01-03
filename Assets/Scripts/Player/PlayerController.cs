@@ -11,20 +11,21 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LivingEntity livingEntity;
 
     [Header("PlayerMove")]
-    [SerializeField] private GameObject cam; // 제어할 캐릭터 컨트롤러
-    [SerializeField] private CharacterController charController;
+    [SerializeField] private Transform cam; // 메인 카메라
+    [SerializeField] private Transform cameraArm; // 카메라 축
+    [SerializeField] private Transform charBody; //  캐릭터 몸체
+    [SerializeField] private CharacterController charController;    //  캐릭터 컨트롤러
 
     private float gravity;  // 중력
     private float yVelocity;  // z 이동값
     private Vector3 moveDir; // 캐릭터의 움직이는 방향
 
-    private Animator anim;
+    [SerializeField] private Animator anim;
     private int animSpeed = 0;
 
     void Start()
     {
         playerInput = GetComponent<PlayerInput>();
-        anim = GetComponent<Animator>();
 
         gravity = -9.81f;
         yVelocity = 0f;
@@ -32,13 +33,7 @@ public class PlayerController : MonoBehaviour
     }
     public void MoveAnim(float h, float v)
     {
-        moveDir = transform.forward * v +
-                 transform.right * h;
-
-        //대각선 이동으로 하면서 루트2로 길이가 늘어나기에 1로 만들어준다.
-        moveDir.Normalize();
-        float value;
-        value = Mathf.Abs(v) > Mathf.Abs(h) ? v : h;
+        float value = Mathf.Abs(v) > Mathf.Abs(h) ? v : h;
         // 달리기 입력 시 값 두배로 증가
         if (anim && playerInput) anim.SetFloat("Magnitude", value * animSpeed);
         //if (anim && playerInput) anim.SetFloat("Magnitude", h * animSpeed);
@@ -46,13 +41,10 @@ public class PlayerController : MonoBehaviour
         if (anim && playerInput) anim.SetFloat("Horizontal", h * animSpeed);*/
     }
 
+    /*
     public void Run(bool isRun)
     {
         animSpeed = isRun ? 2 : 1;
-    }
-
-    public void runStamina(bool isRun)
-    {
         if (isRun)
         {
             livingEntity.UseStamina(playerStatus.runStamina);
@@ -63,20 +55,77 @@ public class PlayerController : MonoBehaviour
         }
         //UIMgr.Instance.SetStaminaBar(playerStatus.GetStaminaRatio());
     }
+    */
+    private void LookAround()
+    {
+        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        Vector3 camAngle = cameraArm.rotation.eulerAngles;
+
+        //추가
+        float x = camAngle.x - mouseDelta.y;
+        if (x < 180f)
+        {
+            x = Mathf.Clamp(x, -1f, 70f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 335f, 361f);
+        }
+
+        cameraArm.rotation = Quaternion.Euler(x, camAngle.y + mouseDelta.x, camAngle.z);
+    }
 
     private void Update()
     {
         if (charController == null) return;
-
+        LookAround();
+        Move();
+/*
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
         {
             var offset = cam.transform.forward;
             offset.y = 0;
             transform.LookAt(charController.transform.position + offset);
-        }
-        runStamina(playerInput.run);
+        }*/
+        //runStamina(playerInput.run);
     }
 
+    private void Move()
+    {
+
+        // 캐릭터가 땅에 붙어있는 경우에만 작동
+        if (playerInput.jump && charController.isGrounded)
+        {
+            yVelocity = playerStatus.jumpPower;
+        }
+
+
+        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        bool isMove = moveInput.magnitude != 0;
+        //anim.SetBool("isMove", isMove);
+        if (isMove)
+        {
+            Vector3 lookForward = new Vector3(cameraArm.forward.x, 0f, cameraArm.forward.z).normalized;
+            Vector3 lookRight = new Vector3(cameraArm.right.x, 0f, cameraArm.right.z).normalized;
+
+            moveDir = lookForward * moveInput.y + lookRight * moveInput.x;
+            charBody.forward = moveDir;
+
+            // y속도를 최종 dir의 y에 대입.
+            moveDir.y = yVelocity;
+
+            // run 키 입력 시 animSpeed를 2로 변경
+            animSpeed = playerInput.run ? 2 : 1;
+            //transform.position += moveDir * playerStatus.speed * animSpeed * Time.deltaTime * 5f;
+            charController.Move(moveDir * playerStatus.speed * animSpeed * Time.deltaTime);
+        }
+        MoveAnim(moveDir.x, moveDir.z);
+
+        // y속도를 지속적으로 갱신.
+        yVelocity += gravity * Time.deltaTime;
+    }
+
+    /*
     private void FixedUpdate()
     {
         if (!charController) return;
@@ -103,7 +152,8 @@ public class PlayerController : MonoBehaviour
         Run(playerInput.run);
         MoveAnim(moveDir.x, moveDir.z);
 
-    }
+    }*/
+
     /* public GameObject Cam; // 제어할 캐릭터 컨트롤러
      public CharacterController SelectPlayer; // 제어할 캐릭터 컨트롤러
      public float Speed;  // 이동속도

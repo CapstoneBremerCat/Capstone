@@ -72,11 +72,11 @@ public class CraftManual : MonoBehaviour
                     go_Preview.transform.Rotate(0f, +90f, 0f);
 
                 // 놓을 위치를 정수 단위로 조정
-                _location.Set(Mathf.Round(_location.x), Mathf.Round(_location.y / 0.1f) * 0.1f, Mathf.Round(_location.z / 0.1f));
-/*                _locationPlayer.Set(Mathf.Round(_locationPlayer.x), Mathf.Round(_locationPlayer.y / 0.1f) * 0.1f, Mathf.Round(_locationPlayer.z));
+                //_location.Set(Mathf.Round(_location.x), Mathf.Round(_location.y / 0.1f) * 0.1f, Mathf.Round(_location.z / 0.1f));
+                _locationPlayer.Set(Mathf.Round(_locationPlayer.x), Mathf.Round(_locationPlayer.y / 0.1f) * 0.1f, Mathf.Round(_locationPlayer.z));
 
                 // 플레이어의 위치는 놓을 수 없다
-                if (_location.x != _locationPlayer.x && _location.y != _locationPlayer.y)*/
+                if (_location.x != _locationPlayer.x && _location.y != _locationPlayer.y)
                     go_Preview.transform.position = _location;  
             }
         }

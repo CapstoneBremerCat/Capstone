@@ -207,23 +207,19 @@ namespace Polyperfect.Common
             // Draw target position.
             if (useNavMesh)
             {
-                
                 if (navMeshAgent.remainingDistance > 1f)
                 {
                     Gizmos.DrawSphere(navMeshAgent.destination + new Vector3(0f, 0.1f, 0f), 0.2f);
                     Gizmos.DrawLine(transform.position, navMeshAgent.destination);
                 }
-                
             }
             else
             {
-                
                 if (targetLocation != Vector3.zero)
                 {
                     Gizmos.DrawSphere(targetLocation + new Vector3(0f, 0.1f, 0f), 0.2f);
                     Gizmos.DrawLine(transform.position, targetLocation);
                 }
-                
             }
         }
 
