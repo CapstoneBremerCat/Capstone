@@ -64,8 +64,9 @@ public class Timer
         var seconds = Mathf.RoundToInt(SavedTimeData);
 
         // Now we can use the reminder free integer divisions to get the target values 
-        Day = seconds / SecondsPerDay;
+        Day = seconds / SecondsPerDay;  
         seconds -= Day * SecondsPerDay;
+        Day++; // Day는 1일부터 시작
 
         Hour = (int)(seconds / SecondsPerHour);
         seconds -= Hour * SecondsPerHour;

@@ -126,9 +126,9 @@ public class GameManager : MonoBehaviour
     public IEnumerator StartWave()
     {
         // 웨이브 시작 연출 실행
-
+        UIMgr.Instance.WaveStart();
         // 연출이 끝날 때 까지 대기
-        yield return new WaitForSeconds(1.0f);
+        yield return null;
 
         // 웨이브에 맞춰 적 스폰
         Wave++;
@@ -143,8 +143,10 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator EndWave()
     {
+        // 웨이브 클리어 연출 실행
+        UIMgr.Instance.WaveClear();
         // 연출이 끝날 때 까지 대기
-        yield return new WaitForSeconds(1.0f);
+        yield return null;
 
         // 웨이브 UI 비활성화
         UIMgr2.Instance.DisableWaveText();
@@ -152,6 +154,8 @@ public class GameManager : MonoBehaviour
 
     public void NextDay()
     {
+        // 다음 날 연출 실행
+        UIMgr.Instance.DisplayNextDay(playTime.Day);
         UIMgr2.Instance.UpdateDateText(playTime.Day);
     }
 

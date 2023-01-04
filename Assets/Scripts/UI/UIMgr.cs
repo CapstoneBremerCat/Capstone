@@ -32,6 +32,13 @@ public class UIMgr : MonoBehaviour
     [SerializeField] private TextMeshProUGUI waveText; // 적 웨이브 표시용 텍스트.
     [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
     [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
+    [SerializeField] private GameObject sleepUI; // 수면 UI.
+    [SerializeField] private Animator waveStartUI; // 웨이브 시작 UI.
+    [SerializeField] private Animator waveClearUI; // 웨이브 클리어 UI.
+    [SerializeField] private Animator stageClearUI; // 스테이지 클리어 UI.
+    [SerializeField] private Animator nextDayUI; // 다음 날 연출 UI.
+    [SerializeField] private TextMeshProUGUI beforeDayText; // 이전 요일 텍스트
+    [SerializeField] private TextMeshProUGUI afterDayText;  // 다음 요일 텍스트
 
     private float healthLength;
 
@@ -73,6 +80,40 @@ public class UIMgr : MonoBehaviour
 
     public void GameOver()
     {
-        if(gameoverUI) gameoverUI.SetActive(true);
+        if (gameoverUI) gameoverUI.SetActive(true);
+    }
+
+    public void WaveStart()
+    {
+        if (waveStartUI) StartCoroutine(PlayAnim(waveStartUI));
+    }
+
+    public void WaveClear()
+    {
+        if (waveClearUI) StartCoroutine(PlayAnim(waveClearUI));
+    }
+
+    public void StageClear()
+    {
+        if (stageClearUI) StartCoroutine(PlayAnim(stageClearUI));
+    }
+
+    public void DisplayNextDay(int nextDay)
+    {
+        beforeDayText.text = (nextDay - 1).ToString();
+        afterDayText.text = (nextDay).ToString();
+        if (nextDayUI) StartCoroutine(PlayAnim(nextDayUI));
+    }
+
+    private IEnumerator PlayAnim(Animator anim)
+    {
+        anim.gameObject.SetActive(true);
+
+        // 해당 애니메이션 종료 시점까지 대기
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return null;
+        };
+        anim.gameObject.SetActive(false);
     }
 }
