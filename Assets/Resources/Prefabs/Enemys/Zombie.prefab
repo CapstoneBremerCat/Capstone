@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7245000872403300936}
   - component: {fileID: 7245000872389337868}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Zombie_Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 7245000872402905263}
   - component: {fileID: 7245000872402905262}
   - component: {fileID: 7245000872393481677}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,6 +187,7 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: b86f03005ed394911b43027aeaaedeb7, type: 3}
   hitSound: {fileID: 8300000, guid: c3d8accfc053f004ca665a1c8c4a6919, type: 3}
   hitEffect: {fileID: 7364518018014343544}
+  isWaveEnemy: 0
 --- !u!136 &7245000872393481677
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -208,9 +209,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7245000872403300940}
     m_Modifications:
+    - target: {fileID: 1000010159161520, guid: da33d2f1d5c4b41689d8063e19e3a7dc, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 1000012909287652, guid: da33d2f1d5c4b41689d8063e19e3a7dc, type: 3}
       propertyPath: m_Name
       value: BloodSprayEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012909287652, guid: da33d2f1d5c4b41689d8063e19e3a7dc, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4000013488956786, guid: da33d2f1d5c4b41689d8063e19e3a7dc, type: 3}
       propertyPath: m_RootOrder
