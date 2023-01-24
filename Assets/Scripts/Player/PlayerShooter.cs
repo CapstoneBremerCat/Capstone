@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
 {
-    [SerializeField] private Gun gun;
+    [SerializeField] private Gun gun;   // 총 오브젝트
+    [SerializeField] private Vector3 ScreenCenter;    // 에임 위치(정중앙)
     private Animator anim;
     private PlayerInput playerInput;
     // Start is called before the first frame update
+
     private void Start()
     {
+        ScreenCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
         anim = GetComponent<Animator>();
         playerInput = GetComponent<PlayerInput>();
     }
@@ -55,10 +58,14 @@ public class PlayerShooter : MonoBehaviour
     }
 
 
-    // 스크린 상의 마우스 위치를 참조하여 플레이어를 해당 방향으로 회전시킨다.
+    // 총 회전
     private void Look()
     {
-        Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        // 스크린 상의 마우스 위치를 참조하여 총을 해당 방향으로 회전시킨다.
+        //Ray cameraRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        // 스크린 상의 에임 위치를 참조하여 총을 해당 위치로 회전시킨다.
+        Ray cameraRay = Camera.main.ScreenPointToRay(ScreenCenter);
 
         Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
 
@@ -68,7 +75,9 @@ public class PlayerShooter : MonoBehaviour
 
         {
             Vector3 pointTolook = cameraRay.GetPoint(rayLength);
-            gun.transform.LookAt(new Vector3(pointTolook.x, gun.transform.position.y, pointTolook.z));
+            var gunDir = cameraRay.direction - gun.FirePos.position.normalized;
+            gun.transform.LookAt(new Vector3(pointTolook.x, gunDir.y, pointTolook.z));
+            //gun.transform.LookAt(new Vector3(pointTolook.x, gun.transform.position.y, pointTolook.z));
         }
     }
 }

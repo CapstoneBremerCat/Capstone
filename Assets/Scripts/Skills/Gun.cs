@@ -47,6 +47,8 @@ public class Gun : MonoBehaviour
     private AudioSource audioSource;
 
 
+
+    public Transform FirePos { get { return firePos; } }
     public Vector3 Pivot { get { return (pivot) ? pivot.position : Vector3.zero; } set { if (pivot) pivot.position = value; } }
     public Vector3 LeftHandMountPos { get { return (leftHandMount) ? leftHandMount.position : Vector3.zero; } }
     public Quaternion LeftHandMountRo { get { return (leftHandMount) ? leftHandMount.rotation : Quaternion.identity; } }
