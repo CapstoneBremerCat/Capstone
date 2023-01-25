@@ -6862,12 +6862,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseStat: {fileID: 11400000, guid: 3364f3de6e661a640aebf52d965d7bda, type: 2}
   gun: {fileID: 476537059}
-  searchRange: 30
+  followRange: 24
+  searchRange: 12
   rateOfAccuracy: 0
   rateOfFire: 0
-  viewAngle: 0
-  spinSpeed: 0
-  layerMask:
+  viewAngle: 120
+  spinSpeed: 5
+  playerLayer:
     serializedVersion: 2
     m_Bits: 8
   tf_TopGun: {fileID: 0}
@@ -6875,7 +6876,7 @@ MonoBehaviour:
   go_HitEffect_Prefab: {fileID: 0}
   targetLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 256
   agent: {fileID: 1669025364}
   health: 0
   hitEffect: {fileID: 7364518018014343544, guid: 3feb2f2941fd74f46a6627b08eaabe9f, type: 3}
@@ -10578,7 +10579,7 @@ GameObject:
   - component: {fileID: 7380606103433629674}
   m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

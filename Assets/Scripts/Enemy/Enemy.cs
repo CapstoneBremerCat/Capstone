@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class Enemy : Status
 {
     [SerializeField] private LayerMask targetLayer;
-    [SerializeField] [Range(0, 100)] private float searchRange = 20;
+    [SerializeField] [Range(0, 100)] private float searchRange = 20;    // 탐색 범위
+    [SerializeField] [Range(0, 100)] private float damagedSearchRange = 30; // 피격 시 탐색 범위
 
     [SerializeField] private NavMeshAgent agent;
     private Animator anim;
@@ -22,6 +23,7 @@ public class Enemy : Status
     private AudioSource audioSource;    // 효과음을 출력하는데 사용.
 
     [SerializeField] private bool isWaveEnemy;   // 웨이브 적인지 판단
+    private bool isDamaged = false;
 
     //[SerializeField] private Renderer enemyRenderer;
 
@@ -45,6 +47,7 @@ public class Enemy : Status
     {
         anim = GetComponent<Animator>();
         collider = GetComponent<Collider>();    // Collider의 종류를 신경쓰지 않는다.
+
 
         // 현재 오브젝트에 AudioSource 컴포넌트 추가
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -70,6 +73,7 @@ public class Enemy : Status
         health = curHealth;
         // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
         if (agent) agent.isStopped = false;
+        isDamaged = false;
         StartCoroutine(UpdatePath());
     }
 /*    protected override void OnEnable()
@@ -101,7 +105,20 @@ public class Enemy : Status
             // 피격 효과음 1회 재생.
             if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
             anim.SetTrigger("Damaged"); // 데미지를 입고 죽지 않았다면, 피격 애니메이션 실행.
+            if(!isDamaged) StartCoroutine(DamagedReact()); // 피해를 입지 않은 상태일 경우 피격 코루틴 실행
         }
+    }
+
+
+    private IEnumerator DamagedReact()
+    {
+        var originRange = searchRange;
+
+        isDamaged = true;
+        searchRange = damagedSearchRange;   // 피격 시 탐색범위 증가
+        yield return new WaitForSeconds(3.0f);
+        searchRange = originRange;  // 일정 시간이 지나면 탐색범위 복구
+        isDamaged = false;  // 피격 상태 초기화
     }
 
     public void UnactiveObject() // Zombie Death 실행 후 호출하여 오브젝트를 비활성화 시킨다.

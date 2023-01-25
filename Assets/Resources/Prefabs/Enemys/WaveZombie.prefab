@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 7245000872393481677}
   m_Layer: 8
   m_Name: WaveZombie
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -181,6 +181,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   searchRange: 100
+  damagedSearchRange: 100
   agent: {fileID: 7245000872402905263}
   health: 0
   damage: 20

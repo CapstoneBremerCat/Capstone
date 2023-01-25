@@ -14,13 +14,14 @@ public enum PArtnerMode
 public class PartnerAI : Status
 {
     [SerializeField] private Gun gun; // 총
-    [SerializeField] [Range(0, 100)] private float searchRange = 20;
+    [SerializeField] [Range(0, 100)] private float followRange;
+    [SerializeField] [Range(0, 100)] private float searchRange;
     [SerializeField] private float rateOfAccuracy; // 정확도(0에 가까울 수록 정확도 높음)
     [SerializeField] private float rateOfFire; // 연사속도(rateOfFire초마다 발사)
     private float currentRateOfFire; // 연사속도 계산(갱신됨)
     [SerializeField] private float viewAngle; // 시야각
     [SerializeField] private float spinSpeed; // 포신 회전 속도
-    [SerializeField] private LayerMask layerMask; // 움직이는 대상만 타겟으로 지정(플레이어 혹은 동물)
+    [SerializeField] private LayerMask playerLayer;
     [SerializeField] private Transform tf_TopGun; // 포신
     [SerializeField] private ParticleSystem particle_MuzzleFlash; // 총구 섬광
     [SerializeField] private GameObject go_HitEffect_Prefab; // 적중 효과 이펙트
@@ -62,12 +63,14 @@ public class PartnerAI : Status
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, searchRange);
+        Gizmos.DrawWireSphere(transform.position, followRange);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        SearchEnemy();
+        LookTarget();
     }
 
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
@@ -95,8 +98,8 @@ public class PartnerAI : Status
     {
         if (!isFindTarget && !isAttack)
         {
-            Quaternion _spin = Quaternion.Euler(0f, tf_TopGun.eulerAngles.y + (1f * spinSpeed * Time.deltaTime), 0f);
-            tf_TopGun.rotation = _spin;
+            Quaternion _spin = Quaternion.Euler(0f, transform.eulerAngles.y + (1f * spinSpeed * Time.deltaTime), 0f);
+            transform.rotation = _spin;
         }
     }
 
@@ -106,7 +109,7 @@ public class PartnerAI : Status
         {
             if (agent)
             {
-                var targets = Physics.OverlapSphere(transform.position, searchRange, targetLayer);  // 설정한 탐색 범위 내에 Target(Player)이 있는 지 확인.
+                var targets = Physics.OverlapSphere(transform.position, followRange, playerLayer);  // 설정한 탐색 범위 내에 Target(Player)이 있는 지 확인.
                 if (null != targets && 0 < targets.Length)
                 {
                     var livingEntity = targets[0].GetComponent<Status>();
@@ -134,16 +137,16 @@ public class PartnerAI : Status
 
     private void SearchEnemy()
     {
-        Collider[] _target = Physics.OverlapSphere(tf_TopGun.position, searchRange, layerMask);
+        Collider[] _target = Physics.OverlapSphere(transform.position, searchRange, targetLayer);
 
         for (int i = 0; i < _target.Length; i++)
         {
             Transform _targetTf = _target[i].transform; // 이게 더 빠르다
 
-            if (_targetTf.name == "Player")
+            if (_targetTf.tag == "Enemy")
             {
-                Vector3 _direction = (_targetTf.position - tf_TopGun.position).normalized;
-                float _angle = Vector3.Angle(_direction, tf_TopGun.forward);
+                Vector3 _direction = (_targetTf.position - transform.position).normalized;
+                float _angle = Vector3.Angle(_direction, transform.forward);
 
                 if (_angle < viewAngle * 0.5f)
                 {
@@ -169,10 +172,10 @@ public class PartnerAI : Status
     {
         if (isFindTarget)
         {
-            Vector3 _direction = (tf_Target.position - tf_TopGun.position).normalized;
+            Vector3 _direction = (tf_Target.position - transform.position).normalized;
             Quaternion _lookRotation = Quaternion.LookRotation(_direction);
-            Quaternion _rotation = Quaternion.Lerp(tf_TopGun.rotation, _lookRotation, 0.2f);
-            tf_TopGun.rotation = _rotation;
+            Quaternion _rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 0.2f);
+            transform.rotation = _rotation;
         }
     }
 
@@ -187,11 +190,11 @@ public class PartnerAI : Status
                 anim.SetTrigger("Fire");
                 particle_MuzzleFlash.Play();
 
-                if (Physics.Raycast(tf_TopGun.position,
-                                    tf_TopGun.forward + new Vector3(Random.Range(-1, 1f) * rateOfAccuracy, Random.Range(-1, 1f) * rateOfAccuracy, 0f),
+                if (Physics.Raycast(transform.position,
+                                    transform.forward + new Vector3(Random.Range(-1, 1f) * rateOfAccuracy, Random.Range(-1, 1f) * rateOfAccuracy, 0f),
                                     out hitInfo,
                                     searchRange,
-                                    layerMask))
+                                    targetLayer))
                 {
                     GameObject _HitEffect = Instantiate(go_HitEffect_Prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                     Destroy(_HitEffect, 1f);
