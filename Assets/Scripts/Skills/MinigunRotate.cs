@@ -10,9 +10,10 @@ public class MinigunRotate : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerInput.fire)
+        barrel.transform.Rotate(0f, 0f, rotateSpeed);
+/*        if (playerInput.fire)
         {
             barrel.transform.Rotate(0f, 0f, rotateSpeed);
-        }
+        }*/
     }
 }

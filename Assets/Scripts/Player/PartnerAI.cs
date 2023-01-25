@@ -44,7 +44,7 @@ public class PartnerAI : Status
     // Start is called before the first frame update
     void Start()
     {
-        gun = GetComponent<Gun>();
+        //gun = GetComponent<Gun>();
         anim = GetComponent<Animator>();
     }
     protected override void OnEnable()
@@ -176,6 +176,9 @@ public class PartnerAI : Status
             Quaternion _lookRotation = Quaternion.LookRotation(_direction);
             Quaternion _rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 0.2f);
             transform.rotation = _rotation;
+            gun.Fire();
+            if ((gun.GetState.Equals(State.Empty)) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+
         }
     }
 
@@ -196,8 +199,11 @@ public class PartnerAI : Status
                                     searchRange,
                                     targetLayer))
                 {
-                    GameObject _HitEffect = Instantiate(go_HitEffect_Prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(_HitEffect, 1f);
+/*                    GameObject _HitEffect = Instantiate(go_HitEffect_Prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                    Destroy(_HitEffect, 1f);*/
+                    gun.Fire();   // 총알 발사.  
+                                                        // 총알이 비었으면 재장전 시도.
+                    if ((gun.GetState.Equals(State.Empty)) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
 
                     if (hitInfo.transform.name == "Player")
                     {
