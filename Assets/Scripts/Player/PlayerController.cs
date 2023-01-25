@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         if (charController == null) return;
-        LookAround();
+        //LookAround();
         Move();
 /*
         if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
