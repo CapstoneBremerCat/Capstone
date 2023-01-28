@@ -7,7 +7,7 @@ public class LivingEntity : MonoBehaviour //, IDamageable
 {
     [SerializeField] private Status status;
 
-    private bool IsDead { get { return status.isHpZero; } }
+    public bool IsDead { get { return status.isHpZero; } }
 
     public event Action OnDeath; // 사망 시 발동할 이벤트
 

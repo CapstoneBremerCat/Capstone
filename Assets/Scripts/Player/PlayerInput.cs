@@ -16,8 +16,7 @@ public class PlayerInput : MonoBehaviour
     //[SerializeField] private string SkillSlot4ButtonName = "SkillSlot 4";
     //[SerializeField] private string ItemSlotButtonName = "ItemSlot";
 
-    public float vertical { get; private set; }
-    public float horizontal { get; private set; }
+    public Vector2 moveInput { get; private set; }  // Horizontal, Vertical
     public bool run { get; private set; }
     public bool jump { get; private set; }
     public bool fire { get; private set; }
@@ -34,9 +33,23 @@ public class PlayerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // 게임오버 상태에서는 사용자 입력을 감지하지 않는다
+        if (GameManager.Instance != null
+            && GameManager.Instance.isGameOver)
+        {
+            moveInput = Vector2.zero;
+            fire = false;
+            reload = false;
+            jump = false;
+
+            return;
+        }
+
         //MoveHandler?.Invoke(Input.GetAxis(moveAxisName), Input.GetAxis(horizontalAxisName));
-        vertical = Input.GetAxis(verticalAxisName);
-        horizontal = Input.GetAxis(horizontalAxisName);
+        moveInput = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
+
+        if (moveInput.sqrMagnitude > 1) moveInput = moveInput.normalized;
+
         run = Input.GetButton(runButtonName);
         jump = Input.GetButton(jumpButtonName);
         fire = Input.GetButton(fireBtnName);

@@ -56,10 +56,11 @@ public class GameManager : MonoBehaviour
     private int lastSavedHour;   // 마지막으로 저장된 시간
 
     private const float sleepWaitPeriod = 0.5f;    // 수면 시 매 시간이 변하는 간격
-
+    public bool isGameOver { get; private set; }    // 게임오버 여부
     // Start is called before the first frame update
     private void Start()
     {
+        isGameOver = false;
         playTime = new Timer();
         CurFatigue = maxFatigue;
         gameMode = GAMEMODE.MORNING;
@@ -175,7 +176,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-
+        isGameOver = true;
     }
 
     public void AddScore(int value)
