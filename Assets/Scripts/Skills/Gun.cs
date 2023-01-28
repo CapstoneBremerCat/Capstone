@@ -76,6 +76,11 @@ public class Gun : MonoBehaviour
             bulletLineRenderer.enabled = false;   // 총을 쏘기 전까지 궤적이 보이지 않도록 비활성화.
         }
 
+
+    }
+
+    private void OnEnable()
+    {
         magAmmo = magCapacity;  // 초기 탄창의 총알을 최대치로.
         state = State.Ready;
         lastFireTime = Time.time - timeBetFire;
@@ -157,5 +162,10 @@ public class Gun : MonoBehaviour
     public void AddAmmo(int value)
     {
         ammoRemain += value;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }

@@ -173,6 +173,15 @@ public class GameManager : MonoBehaviour
             CurFatigue = Mathf.Max(0.0f, CurFatigue - recoverFatiguePerHour);
         }
     }
+    
+    public void OnPause()
+    {
+        Time.timeScale = 0;
+    }
+    public void OffPause()
+    {
+        Time.timeScale = 1;
+    }
 
     public void GameOver()
     {
