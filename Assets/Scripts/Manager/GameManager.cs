@@ -183,6 +183,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
     }
 
+    public void StageClear()
+    {
+        UIMgr.Instance.StageClear();
+    }
+
     public void GameOver()
     {
         isGameOver = true;
