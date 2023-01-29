@@ -46,7 +46,8 @@ public class Gun : MonoBehaviour
     [SerializeField] private AudioClip reloadSound; // 탄창 재장전 효과음.
     private AudioSource audioSource;
 
-
+    private Vector3 originPos;  // 원래 총의 위치
+    [SerializeField] private float retroActionForce;  // 반동 세기. 총의 종류마다 다름.
 
     public Transform FirePos { get { return firePos; } }
     public Vector3 Pivot { get { return (pivot) ? pivot.position : Vector3.zero; } set { if (pivot) pivot.position = value; } }
@@ -84,6 +85,8 @@ public class Gun : MonoBehaviour
         magAmmo = magCapacity;  // 초기 탄창의 총알을 최대치로.
         state = State.Ready;
         lastFireTime = Time.time - timeBetFire;
+        // 첫 위치 등록
+        originPos = transform.localPosition;
     }
 
     public void Fire()
@@ -110,11 +113,59 @@ public class Gun : MonoBehaviour
                 if (null != target) target.OnDamage(damage, hit.point, hit.normal);
                 hitPos = hit.point; // 실제 총알이 맞은 지점으로 갱신.
             }
+            // 총기 반동 코루틴 실행
+            StopAllCoroutines();
+            StartCoroutine(RetroActionCoroutine());
             StartCoroutine(ShotEffect(hitPos)); // 총알 발사 이펙트.
+
             Instantiate(bullet.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
+
             magAmmo--;  // 탄창의 총알을 감소.
             if (0 >= magAmmo) state = State.Empty;  // 남은 총알 수 확인. 총알이 없다면, 총의 상태를 Empty로 변경.
         }
+    }
+
+    IEnumerator RetroActionCoroutine()
+    {
+        Vector3 recoilBack = new Vector3(originPos.x, originPos.y, -retroActionForce);     // 정조준 안 했을 때의 최대 반동
+        //Vector3 retroActionRecoilBack = new Vector3(currentGun.retroActionFineSightForce, currentGun.fineSightOriginPos.y, currentGun.fineSightOriginPos.z);  // 정조준 했을 때의 최대 반동
+
+        //if (!isFineSightMode)  // 정조준이 아닌 상태
+        {
+            transform.localPosition = originPos;
+
+            // 반동 시작
+            while (transform.localPosition.z >= -retroActionForce)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, recoilBack, 0.4f);
+                yield return null;
+            }
+
+            // 원위치
+            while (transform.localPosition != originPos)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, originPos, 0.1f);
+                yield return null;
+            }
+        }
+        /*        else  // 정조준 상태
+                {
+                    transform.localPosition = fineSightOriginPos;
+
+                    // 반동 시작
+                    while (transform.localPosition.x <= retroActionFineSightForce - 0.02f)
+                    {
+                        transform.localPosition = Vector3.Lerp(transform.localPosition, retroActionRecoilBack, 0.4f);
+                        yield return null;
+                    }
+
+                    // 원위치
+                    while (transform.localPosition != fineSightOriginPos)
+                    {
+                        transform.localPosition = Vector3.Lerp(transform.localPosition, fineSightOriginPos, 0.1f);
+                        yield return null;
+                    }
+                }*/
     }
 
     private IEnumerator ShotEffect(Vector3 hitPosition)

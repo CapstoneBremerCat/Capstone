@@ -5712,7 +5712,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340979866}
-  m_LocalRotation: {x: -0.01745245, y: 0, z: 0, w: 0.99984777}
+  m_LocalRotation: {x: -0.008726465, y: 0, z: 0, w: 0.999962}
   m_LocalPosition: {x: 0.01, y: 0.05, z: 0.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5720,7 +5720,7 @@ Transform:
   - {fileID: 164621007}
   m_Father: {fileID: 1014974175}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -2, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -1, y: 0, z: 0}
 --- !u!4 &1345917409 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7245000872403300940, guid: d81db60255347954aba4312bacc268a1, type: 3}
@@ -5900,7 +5900,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387713337}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4adb804736fc9df4698ad8831d0ffb90, type: 3}
   m_Name: 
@@ -5922,6 +5922,7 @@ MonoBehaviour:
   shellEjectEffect: {fileID: 0}
   shootSound: {fileID: 0}
   reloadSound: {fileID: 0}
+  retroActionForce: 0.08
 --- !u!120 &1387713340
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -6028,11 +6029,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1387713337}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e83ba4c9de90d814e88a48d514ed1618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originPos: {fileID: 1387713338}
   shotClip: {fileID: 8300000, guid: 13a58eb5deb3e46599037ffb43ae7600, type: 3}
   reloadClip: {fileID: 8300000, guid: 695628755669c46ecac58b609405526c, type: 3}
   muzzleFlashEffect: {fileID: 1658843852}
@@ -6041,6 +6043,7 @@ MonoBehaviour:
   leftHandMount: {fileID: 0}
   damage: 25
   fireDistance: 100
+  retroActionForce: 0.3
   ammoRemain: 100
   magAmmo: 0
   magCapacity: 30
@@ -11901,6 +11904,14 @@ PrefabInstance:
     - target: {fileID: 6290915867078038972, guid: b962153d51f2e464983c14fe45c40be7, type: 3}
       propertyPath: m_Name
       value: Heavy1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6290915867078038973, guid: b962153d51f2e464983c14fe45c40be7, type: 3}
+      propertyPath: originPos
+      value: 
+      objectReference: {fileID: 476537060}
+    - target: {fileID: 6290915867078038973, guid: b962153d51f2e464983c14fe45c40be7, type: 3}
+      propertyPath: retroActionForce
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6290915867987661170, guid: b962153d51f2e464983c14fe45c40be7, type: 3}
       propertyPath: playerInput

@@ -13,29 +13,31 @@ public class Gun1 : MonoBehaviour
         Reloading // 재장전 중
     }
     public State state { get; private set; } // 현재 총의 상태
+    [SerializeField] private Transform originPos;  // 원래 총의 위치
 
     private PlayerShooter gunHolder;
     private LineRenderer bulletLineRenderer; // 총알 궤적을 그리기 위한 렌더러
 
     private AudioSource gunAudioPlayer; // 총 소리 재생기
-    public AudioClip shotClip; // 발사 소리
-    public AudioClip reloadClip; // 재장전 소리
+    [SerializeField] private AudioClip shotClip; // 발사 소리
+    [SerializeField] private AudioClip reloadClip; // 재장전 소리
 
-    public ParticleSystem muzzleFlashEffect; // 총구 화염 효과
-    public ParticleSystem shellEjectEffect; // 탄피 배출 효과
+    [SerializeField] private ParticleSystem muzzleFlashEffect; // 총구 화염 효과
+    [SerializeField] private ParticleSystem shellEjectEffect; // 탄피 배출 효과
 
-    public Transform fireTransform; // 총알이 발사될 위치
-    public Transform leftHandMount;
+    [SerializeField] private Transform fireTransform; // 총알이 발사될 위치
+    [SerializeField] private Transform leftHandMount;
 
-    public float damage = 25; // 공격력
-    public float fireDistance = 100f; // 사정거리
+    [SerializeField] private float damage = 25; // 공격력
+    [SerializeField] private float fireDistance = 100f; // 사정거리
+    [SerializeField] private float retroActionForce;  // 반동 세기. 총의 종류마다 다름.
 
-    public int ammoRemain = 100; // 남은 전체 탄약
-    public int magAmmo; // 현재 탄창에 남아있는 탄약
-    public int magCapacity = 30; // 탄창 용량
+    [SerializeField] private int ammoRemain = 100; // 남은 전체 탄약
+    [SerializeField] private int magAmmo; // 현재 탄창에 남아있는 탄약
+    [SerializeField] private int magCapacity = 30; // 탄창 용량
 
-    public float timeBetFire = 0.12f; // 총알 발사 간격
-    public float reloadTime = 1.8f; // 재장전 소요 시간
+    [SerializeField] private float timeBetFire = 0.12f; // 총알 발사 간격
+    [SerializeField] private float reloadTime = 1.8f; // 재장전 소요 시간
 
     [Range(0f, 10f)] public float maxSpread = 3f;
     [Range(1f, 10f)] public float stability = 1f;
@@ -74,11 +76,55 @@ public class Gun1 : MonoBehaviour
         state = State.Ready;
         // 마지막으로 총을 쏜 시점을 초기화
         lastFireTime = 0;
+        // 첫 위치 등록
+        originPos.localPosition = transform.localPosition;
     }
 
     private void OnDisable()
     {
         StopAllCoroutines();
+    }
+    IEnumerator RetroActionCoroutine()
+    {
+        Vector3 recoilBack = new Vector3(originPos.localPosition.x, originPos.localPosition.y, retroActionForce);     // 정조준 안 했을 때의 최대 반동
+        //Vector3 retroActionRecoilBack = new Vector3(currentGun.retroActionFineSightForce, currentGun.fineSightOriginPos.y, currentGun.fineSightOriginPos.z);  // 정조준 했을 때의 최대 반동
+
+        //if (!isFineSightMode)  // 정조준이 아닌 상태
+        {
+            transform.localPosition = originPos.localPosition;
+
+            // 반동 시작
+            while (transform.localPosition.z <= retroActionForce - 0.02f)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, recoilBack, 0.4f);
+                yield return new WaitForSeconds(0.1f);
+            }
+
+            // 원위치
+            while (transform.localPosition != originPos.localPosition)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, originPos.localPosition, 0.1f);
+                yield return null;
+            }
+        }
+/*        else  // 정조준 상태
+        {
+            transform.localPosition = fineSightOriginPos;
+
+            // 반동 시작
+            while (transform.localPosition.x <= retroActionFineSightForce - 0.02f)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, retroActionRecoilBack, 0.4f);
+                yield return null;
+            }
+
+            // 원위치
+            while (transform.localPosition != fineSightOriginPos)
+            {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, fineSightOriginPos, 0.1f);
+                yield return null;
+            }
+        }*/
     }
 
     public bool Fire(Vector3 aimTarget)
@@ -103,6 +149,7 @@ public class Gun1 : MonoBehaviour
             lastFireTime = Time.time;
             // 실제 발사 처리 실행
             Shot(fireTransform.position, fireDirection);
+
 
             return true;
         }
@@ -156,6 +203,10 @@ public class Gun1 : MonoBehaviour
 
         // 발사 이펙트 재생 시작
         StartCoroutine(ShotEffect(hitPosition));
+
+        // 총기 반동 코루틴 실행
+        //StopAllCoroutines();
+        StartCoroutine(RetroActionCoroutine());
 
         // 남은 탄환의 수를 -1
         magAmmo--;
