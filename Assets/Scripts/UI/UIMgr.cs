@@ -59,14 +59,9 @@ public class UIMgr : MonoBehaviour
         return defaultLength * ratio;
     }
 
-    public void SetManaBar(float ratio)
-    {
-        staminaSlider.value = ratio;
-    }
-
     public void SetStaminaBar(float ratio)
     {
-        staminaSlider.value = ratio;
+        if (staminaSlider) staminaSlider.value = ratio;
     }
 
     public void UpdateAmmoText(int magAmmo, int remainAmmo)
@@ -75,7 +70,7 @@ public class UIMgr : MonoBehaviour
         //strBuilder.Append(magAmmo);
         //strBuilder.Append(" / ");
         //strBuilder.Append(remainAmmo);
-        ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
+        if (ammoText) ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
     }
 
     public void GameOver()
@@ -100,8 +95,8 @@ public class UIMgr : MonoBehaviour
 
     public void DisplayNextDay(int nextDay)
     {
-        beforeDayText.text = (nextDay - 1).ToString();
-        afterDayText.text = (nextDay).ToString();
+        if(beforeDayText) beforeDayText.text = (nextDay - 1).ToString();
+        if (afterDayText) afterDayText.text = (nextDay).ToString();
         if (nextDayUI) StartCoroutine(PlayAnim(nextDayUI));
     }
 

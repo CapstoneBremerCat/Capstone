@@ -56,7 +56,7 @@ public class Enemy : Status
         {
             // 더 이상 피격 판정이 되지 않게 collider를 끈다.
             if (collider) collider.enabled = false;
-            if (agent) agent.isStopped = true;  // navigation 정지.
+            if (agent && agent.enabled) agent.isStopped = true;  // navigation 정지.
             if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
             GameManager.Instance.AddScore(100); // enemy 처치 시, 100 score 상승.

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 public enum SkillState
 {
     Ready
@@ -13,7 +14,7 @@ public class Horse : MonoBehaviour
     private bool isReady;   // 스킬 사용이 가능한 상태인지 확인
     private bool isCharging;   // 차지 공격 중인지 확인
     private int currentAlly;  //현재 진영
-    [SerializeField] private LayerMask currentEnemy;  // 적 진영
+    [SerializeField] private string currentEnemy;  // 적 진영
     [SerializeField] private LayerMask obstacle;  // 장애물
 
     private float lastFireTime; // 총을 마지막으로 발사한 시점.
@@ -52,13 +53,13 @@ public class Horse : MonoBehaviour
         originPos = transform.localPosition;
         currentAlly = gameObject.layer;
         // 피아 식별
-        if(currentAlly == LayerMask.NameToLayer("Enemy"))
+        if (currentAlly == LayerMask.NameToLayer("Enemy"))
         {
-            currentEnemy = LayerMask.GetMask("Player");
+            currentEnemy = "Player";
         }
         else
         {
-            currentEnemy = LayerMask.GetMask("Enemy");
+            currentEnemy = "Enemy";
         }
     }
     
@@ -114,6 +115,7 @@ public class Horse : MonoBehaviour
         while (transform.position.z < hitPos.z - 0.02f)
         {
             transform.position = Vector3.Lerp(transform.position, hitPos, 0.1f);
+            Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.red);
             yield return null;
         }
         isCharging = false;    //  차지 상태 비활성화.
@@ -131,16 +133,35 @@ public class Horse : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision)
-    {        
+    {
+        Debug.Log(collision.gameObject.layer);
+        //Debug.Log(collision.gameObject.layer);
         // 차지 중 적과 닿으면 해당 적에게 피해를 준다.
-        if(isCharging && collision.gameObject.layer.Equals(currentEnemy))
+        if(isCharging && collision.gameObject.layer == LayerMask.NameToLayer(currentEnemy))
         {
             IDamageable entity = collision.gameObject.GetComponent<IDamageable>();
+            var navMesh = collision.gameObject.GetComponent<NavMeshAgent>();
             // 충돌지점 데이터 받아오기
+            navMesh.enabled = false;
             ContactPoint contact = collision.contacts[0];
             if (null != entity) entity.OnDamage(damage, contact.point, contact.normal);
         }
     }
+
+/*    private void OnTriggerEnter(Collider other)
+    {
+        // 차지 중 적과 닿으면 해당 적에게 피해를 준다.
+        if (isCharging && other.gameObject.layer.Equals(currentEnemy))
+        {
+            IDamageable entity = other.gameObject.GetComponent<IDamageable>();
+            var navMesh = other.gameObject.GetComponent<NavMeshAgent>();
+            // 충돌지점 데이터 받아오기
+            navMesh.enabled = false;
+            ContactPoint contact = other.;
+            if (null != entity) entity.OnDamage(damage, contact.point, contact.normal);
+        }
+    }*/
+
 
     private void OnDisable()
     {
