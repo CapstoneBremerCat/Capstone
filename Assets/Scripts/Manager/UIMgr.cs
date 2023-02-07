@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 public class UIMgr : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class UIMgr : MonoBehaviour
     [SerializeField] private RectTransform healthBar;
     [SerializeField] private float defaultLength = 400f;
 
+    [SerializeField] private Button startButton;    // 시작 버튼
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private TextMeshProUGUI waveText; // 적 웨이브 표시용 텍스트.
     [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
@@ -73,6 +75,11 @@ public class UIMgr : MonoBehaviour
         if (ammoText) ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
     }
 
+    public void GameStart(string sceneName = "Prolog")
+    {
+        /* 로드할 씬 선택 */
+        SceneManager.LoadScene(sceneName);
+    }
     public void GameOver()
     {
         if (gameoverUI) gameoverUI.SetActive(true);

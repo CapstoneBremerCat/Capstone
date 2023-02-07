@@ -26,15 +26,17 @@ public class GameManager : MonoBehaviour
         instance = this;
 
         // Scene 이동 시 삭제 되지 않도록 처리
-        // DontDestroyOnLoad(this.gameObject);
+        DontDestroyOnLoad(this.gameObject);
 
         // DelayedUpdate가 1초 후부터(Start이후) 1초마다 반복해서 실행
         InvokeRepeating("DelayedUpdate", 1.0f, 1.0f);
     }
     #endregion
 
-    [SerializeField] private GameObject player;     // 플레이어
+    [SerializeField] private PlayerController player;     // 플레이어
+    [SerializeField] private PartnerAI partner;     // 플레이어
     [SerializeField] private Spawner spawner; // 스포너
+    [SerializeField] private Transform startPoint; // 스테이지 시작 지점
 
     public int Wave { get; private set; }  // 현재 Wave 카운트.
     [SerializeField] private int maxWave = 10;  // 최대 Wave 카운트.
@@ -72,6 +74,7 @@ public class GameManager : MonoBehaviour
         UIMgr2.Instance.DisableWaveText();
         // 현재 Wave UI 정보를 갱신.
         // UIMgr2.Instance.UpdateWaveText(Wave, spawnCount);
+        InitNewStage();
     }
 
     // Update is called once per frame
@@ -110,6 +113,29 @@ public class GameManager : MonoBehaviour
         }
         // 마지막 시간 저장
         lastSavedHour = playTime.Hour;
+    }
+
+    // 스테이지 시작 세팅
+    public void InitNewStage()
+    {
+        // 시작지점 가져오기
+        startPoint = GameObject.FindWithTag("Start").transform;
+        if (startPoint && player)
+        {
+            player.gameObject.SetActive(false);
+            // 플레이어 위치를 시작지점으로 변경
+            if (player) player.transform.position = startPoint.position;
+            player.gameObject.SetActive(true);
+
+            // 파트너 위치도 변경
+            if (partner)
+            {
+                partner.gameObject.SetActive(false);
+                partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
+                partner.gameObject.SetActive(true);
+            }
+        }
+
     }
 
     public void DecreaseSpawnCount()

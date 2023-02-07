@@ -34,6 +34,13 @@ public class PlayerController : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
     }
 
+    public void SetPosition(Vector3 pos)
+    {
+        charController.enabled = false;
+        transform.position = pos;
+        charController.enabled = true;
+    }
+
     // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
     private void FixedUpdate()
     {
