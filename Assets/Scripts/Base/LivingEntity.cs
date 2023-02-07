@@ -8,6 +8,7 @@ public class LivingEntity : MonoBehaviour //, IDamageable
     [SerializeField] private Status status;
 
     public bool IsDead { get { return status.isHpZero; } }
+    public bool isGodMode { get; private set; }
 
     public event Action OnDeath; // 사망 시 발동할 이벤트
 
@@ -20,8 +21,17 @@ public class LivingEntity : MonoBehaviour //, IDamageable
     {
         if (IsDead) return; // 이미 죽은 상태라면 더 이상 처리하지 않는다.
 
-        status.SetHealth(status.curHealth - damage);
+        if(!isGodMode) status.SetHealth(status.curHealth - damage);
         if (IsDead) Die();  // 데미지를 입어 체력이 0이하(사망 상태) 라면 사망 이벤트 실행.
+    }
+
+    public void OnGodMode()
+    {
+        isGodMode = true;
+    }
+    public void OffGodMode()
+    {
+        isGodMode = false;
     }
 
     public virtual bool UseMana(float value)

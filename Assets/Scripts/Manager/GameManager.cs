@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] private PlayerController player;     // 플레이어
+    [SerializeField] private Player player;     // 플레이어
     [SerializeField] private PartnerAI partner;     // 플레이어
     [SerializeField] private Spawner spawner; // 스포너
     [SerializeField] private Transform startPoint; // 스테이지 시작 지점
@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
     {
         // 시작지점 가져오기
         startPoint = GameObject.FindWithTag("Start").transform;
+        spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         if (startPoint && player)
         {
             player.gameObject.SetActive(false);
@@ -212,6 +213,7 @@ public class GameManager : MonoBehaviour
     public void StageClear()
     {
         UIMgr.Instance.StageClear();
+        
     }
 
     public void GameOver()
