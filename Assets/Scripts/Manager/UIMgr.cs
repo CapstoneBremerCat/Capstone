@@ -26,12 +26,14 @@ public class UIMgr : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] private RectTransform healthBar;
-    [SerializeField] private float defaultLength = 400f;
-
+    [Header("Main UI")]
     [SerializeField] private Button startButton;    // 시작 버튼
+
+    [Header("Stage UI")]
+    [SerializeField] private RectTransform healthBar;   // 체력 바
+    [SerializeField] private float defaultLength = 400f;    // 체력 바 길이
     [SerializeField] private Slider staminaSlider;
-    [SerializeField] private TextMeshProUGUI waveText; // 적 웨이브 표시용 텍스트.
+    [SerializeField] private Text waveText; // 적 웨이브 표시용 텍스트.
     [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
     [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
     [SerializeField] private GameObject sleepUI; // 수면 UI.
@@ -41,7 +43,8 @@ public class UIMgr : MonoBehaviour
     [SerializeField] private Animator nextDayUI; // 다음 날 연출 UI.
     [SerializeField] private TextMeshProUGUI beforeDayText; // 이전 요일 텍스트
     [SerializeField] private TextMeshProUGUI afterDayText;  // 다음 요일 텍스트
-
+    [SerializeField] private Text scoreText; // 점수 표시용 텍스트.
+    [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
     private float healthLength;
 
     public void Init()
@@ -75,7 +78,33 @@ public class UIMgr : MonoBehaviour
         if (ammoText) ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
     }
 
-    public void GameStart(string sceneName = "Prolog")
+    public void UpdateScoreText(int newScore)
+    {
+        scoreText.text = string.Format("Score : {0}", newScore);
+    }
+
+    public void EnableWaveText()
+    {
+        waveText.gameObject.SetActive(true);
+    }
+    public void DisableWaveText()
+    {
+        waveText.gameObject.SetActive(false);
+    }
+    public void UpdateWaveText(int waves, int count)
+    {
+        if (waveText.gameObject.activeSelf)
+        {
+            waveText.text = string.Format("Wave : {0}\nEnemy Left : {1}", waves, count);
+        }
+    }
+
+    public void UpdateDateText(int day)
+    {
+        dayText.text = string.Format("Day - {0}", day);
+    }
+
+    public void MoveScene(string sceneName = "Prolog")
     {
         /* 로드할 씬 선택 */
         SceneManager.LoadScene(sceneName);

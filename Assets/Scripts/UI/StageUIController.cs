@@ -3,26 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-public class UIMgr2 : MonoBehaviour
+public class StageUIController : MonoBehaviour
 {
-    public static UIMgr2 Instance { get; private set; }
-
-    private void Awake()
-    {
-        if (null == Instance)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            return;
-        }
-        Destroy(gameObject);
-    }
-
+    [SerializeField] private RectTransform healthBar;   // 체력 바
+    [SerializeField] private float defaultLength = 400f;    // 체력 바 길이
+    [SerializeField] private Slider staminaSlider;
+    [SerializeField] private Text waveText; // 적 웨이브 표시용 텍스트.
     [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
+    [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
+    [SerializeField] private GameObject sleepUI; // 수면 UI.
+    [SerializeField] private Animator waveStartUI; // 웨이브 시작 UI.
+    [SerializeField] private Animator waveClearUI; // 웨이브 클리어 UI.
+    [SerializeField] private Animator stageClearUI; // 스테이지 클리어 UI.
+    [SerializeField] private Animator nextDayUI; // 다음 날 연출 UI.
+    [SerializeField] private TextMeshProUGUI beforeDayText; // 이전 요일 텍스트
+    [SerializeField] private TextMeshProUGUI afterDayText;  // 다음 요일 텍스트
     [SerializeField] private Text scoreText; // 점수 표시용 텍스트.
     [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
-    [SerializeField] private Text waveText; // 적 웨이브 표시용 텍스트.
-    [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
     public event System.Action RestartEvent;
 
     public void UpdateAmmoText(int magAmmo, int remainAmmo)

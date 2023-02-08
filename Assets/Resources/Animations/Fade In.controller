@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MainDisplayPanel
+  m_Name: Fade In
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -37,7 +37,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -7433283787367969066}
-    m_Position: {x: 280, y: 10, z: 0}
+    m_Position: {x: 290, y: 80, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -54,7 +54,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Panel 2
+  m_Name: Fade In
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:

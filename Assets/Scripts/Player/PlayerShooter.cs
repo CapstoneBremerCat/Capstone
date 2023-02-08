@@ -67,9 +67,13 @@ public class PlayerShooter : MonoBehaviour
         // 스크린 상의 에임 위치를 참조하여 총을 해당 위치로 회전시킨다.
         Ray cameraRay = Camera.main.ScreenPointToRay(ScreenCenter);
 
-        Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
+        Vector3 pointTolook = cameraRay.direction;//cameraRay.GetPoint(rayLength);
+        var gunDir = cameraRay.direction - gun.FirePos.position.normalized;
+        // 사정거리 추가 필요
+        gun.transform.LookAt(gun.FirePos.position + cameraRay.direction * gun.HitRange);
+        //Plane GroupPlane = new Plane(Vector3.up, Vector3.zero);
 
-        float rayLength;
+        /*float rayLength;
 
         if (GroupPlane.Raycast(cameraRay, out rayLength))
 
@@ -78,6 +82,6 @@ public class PlayerShooter : MonoBehaviour
             var gunDir = cameraRay.direction - gun.FirePos.position.normalized;
             gun.transform.LookAt(new Vector3(pointTolook.x, gunDir.y, pointTolook.z));
             //gun.transform.LookAt(new Vector3(pointTolook.x, gun.transform.position.y, pointTolook.z));
-        }
+        }*/
     }
 }

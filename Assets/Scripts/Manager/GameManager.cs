@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviour
 
     private int spawnCount = 0; // 필드에 존재하는 Enemy의 수.
 
-
     [SerializeField] private float maxFatigue = 100f;   // 최대 피로도
     [SerializeField] private float recoverFatiguePerHour = 10f;   // 수면 시간당 회복하는 피로도 수치
     public float CurFatigue { get; private set; }   // 현재 피로도
@@ -59,33 +58,32 @@ public class GameManager : MonoBehaviour
 
     private const float sleepWaitPeriod = 0.5f;    // 수면 시 매 시간이 변하는 간격
     public bool isGameOver { get; private set; }    // 게임오버 여부
+    public bool isGameStart { get; private set; }    // 게임시작 여부
+
     // Start is called before the first frame update
     private void Start()
     {
+        isGameStart = false;
         isGameOver = false;
-        playTime = new Timer();
-        CurFatigue = maxFatigue;
-        gameMode = GAMEMODE.MORNING;
-        Wave = 0;
 
-        // 현재 날짜 UI 정보를 갱신.
-        UIMgr2.Instance.UpdateDateText(playTime.Day);
-        // 웨이브 UI 비활성화
-        UIMgr2.Instance.DisableWaveText();
-        // 현재 Wave UI 정보를 갱신.
-        // UIMgr2.Instance.UpdateWaveText(Wave, spawnCount);
-        InitNewStage();
+        if (player) player.gameObject.SetActive(false);
+        if (partner) partner.gameObject.SetActive(false);
+
+        //InitNewStage();
     }
 
     // Update is called once per frame
-    private void Update()
+/*    private void Update()
     {     
         //playerStatus.Updates();
 
-    }
+    }*/
 
     private void DelayedUpdate()
     {
+        // 게임이 시작됐을 경우에만 실행
+        if (!isGameStart) return;
+
         playTime.UpdateTime();
         Debug.Log(playTime.Hour);
 
@@ -136,13 +134,28 @@ public class GameManager : MonoBehaviour
                 partner.gameObject.SetActive(true);
             }
         }
+        //CurFatigue = maxFatigue;
+
+        // 플레이 시작 시간 저장.
+        playTime = new Timer();
+        // 현재 날짜 UI 정보를 갱신.
+        UIMgr.Instance.UpdateDateText(playTime.Day);
+        // 웨이브 UI 비활성화
+        UIMgr.Instance.DisableWaveText();
+
+        // 게임모드 초기화
+        gameMode = GAMEMODE.MORNING;
+        // 웨이브 수 초기화.
+        Wave = 0;
+        // 게임 시작 신호 활성화.
+        isGameStart = true;
 
     }
 
     public void DecreaseSpawnCount()
     {
         // spawnCount를 감소하고 UI정보를 갱신한다.
-        UIMgr2.Instance.UpdateWaveText(Wave, --spawnCount);
+        UIMgr.Instance.UpdateWaveText(Wave, --spawnCount);
 
         // 소환된 웨이브 적을 모두 처치하였을 경우 웨이브 종료
         if(spawnCount <= 0)
@@ -164,8 +177,8 @@ public class GameManager : MonoBehaviour
         spawner.SpawnEnemy(spawnCount);
 
         // 웨이브 UI 활성화
-        UIMgr2.Instance.EnableWaveText();
-        UIMgr2.Instance.UpdateWaveText(Wave, spawnCount);
+        UIMgr.Instance.EnableWaveText();
+        UIMgr.Instance.UpdateWaveText(Wave, spawnCount);
         //NextWave();
     }
 
@@ -177,14 +190,14 @@ public class GameManager : MonoBehaviour
         yield return null;
 
         // 웨이브 UI 비활성화
-        UIMgr2.Instance.DisableWaveText();
+        UIMgr.Instance.DisableWaveText();
     }
 
     public void NextDay()
     {
         // 다음 날 연출 실행
         UIMgr.Instance.DisplayNextDay(playTime.Day);
-        UIMgr2.Instance.UpdateDateText(playTime.Day);
+        UIMgr.Instance.UpdateDateText(playTime.Day);
     }
 
     // 지정한 시간동안 대기(수면)
@@ -214,18 +227,25 @@ public class GameManager : MonoBehaviour
     {
         UIMgr.Instance.StageClear();
         player.OnGodMode();
+        isGameStart = false;
     }
 
     public void GameOver()
     {
         isGameOver = true;
+        isGameStart = false;
+    }
+
+    public void RestartGame()
+    {
+        isGameStart = true;
     }
 
     public void AddScore(int value)
     {
         score += value;
         // UI의 ScoreText를 갱신.
-        UIMgr2.Instance.UpdateScoreText(score);
+        UIMgr.Instance.UpdateScoreText(score);
     }
 
     public void ResetGame()

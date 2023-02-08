@@ -26,7 +26,7 @@ public class Gun : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float rightHandRoWeight = 1f;
 
     [Header("Gun 속성")] // [Range(a,b)] : 값의 범위를 제한(a~b).
-    [SerializeField] private float hitRange = 150f;  // 사정거리.
+    [SerializeField] private float hitRange = 100f;  // 사정거리.
     [SerializeField] private float timeBetFire = 0.12f;    // 총알 발사 간격.
     private float lastFireTime; // 총을 마지막으로 발사한 시점.
     private LineRenderer bulletLineRenderer;    // 총알 궤적을 그리기 위한 도구.
@@ -62,6 +62,7 @@ public class Gun : MonoBehaviour
     public State GetState { get { return state; } } // 커스텀.
     public int AmmoRemain { get { return ammoRemain; } }
     public int MagAmmo { get { return magAmmo; } }
+    public float HitRange { get { return hitRange; } }
 
     private void Awake()
     {
@@ -118,7 +119,7 @@ public class Gun : MonoBehaviour
             StartCoroutine(RetroActionCoroutine());
             StartCoroutine(ShotEffect(hitPos)); // 총알 발사 이펙트.
 
-            Instantiate(bullet.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
+            //Instantiate(bullet.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
 
             magAmmo--;  // 탄창의 총알을 감소.
             if (0 >= magAmmo) state = State.Empty;  // 남은 총알 수 확인. 총알이 없다면, 총의 상태를 Empty로 변경.
