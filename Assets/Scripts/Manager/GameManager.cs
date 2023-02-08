@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
             // 플레이어 위치를 시작지점으로 변경
             if (player) player.transform.position = startPoint.position;
             player.gameObject.SetActive(true);
-
+            player.InitStatus();
             // 파트너 위치도 변경
             if (partner)
             {
@@ -213,7 +213,7 @@ public class GameManager : MonoBehaviour
     public void StageClear()
     {
         UIMgr.Instance.StageClear();
-        
+        player.OnGodMode();
     }
 
     public void GameOver()

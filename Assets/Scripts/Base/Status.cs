@@ -29,7 +29,7 @@ public class Status : MonoBehaviour, IDamageable
     public bool isMpZero { get { return 0 >= curMana; } }
     public bool isSpFull { get { return totalStat.staminaGauge.maxValue <= curStamina; } }
     public bool isSpZero { get { return 0 >= curStamina; } }
-
+    public bool isGodMode { get; private set; }
     public float moveSpeed { get { return totalStat.moveSpeed; } }
     public float attackSpeed { get { return totalStat.attackSpeed; } }
 
@@ -47,8 +47,7 @@ public class Status : MonoBehaviour, IDamageable
 
     protected virtual void OnEnable()
     {
-        totalStat = baseStat.status;
-        curHealth = maxHealth;
+        InitStatus();
     }
 
     public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
@@ -73,6 +72,7 @@ public class Status : MonoBehaviour, IDamageable
         SetStamina(totalStat.staminaGauge.maxValue);
 
         curCondition = ConditionType.Default;
+        OffGodMode();
     }
     public virtual void RestoreHealth(float value)
     {
@@ -103,7 +103,15 @@ public class Status : MonoBehaviour, IDamageable
     {
         itemList.Remove(itemCode);
     }
-    
+
+    public void OnGodMode()
+    {
+        isGodMode = true;
+    }
+    public void OffGodMode()
+    {
+        isGodMode = false;
+    }
     public float GetHpRatio()
     {
         return curHealth / totalStat.healthGauge.maxValue;
@@ -148,6 +156,4 @@ public class Status : MonoBehaviour, IDamageable
         InitItemList();
         curCondition = ConditionType.Default;
     }
-
-
 }

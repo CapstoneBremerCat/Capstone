@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : LivingEntity
+public class Player : Status
 {
     [Header("Scripts")]
-    [SerializeField] private PlayerStatus playerStatus;     // 플레이어 스테이터스
+    //[SerializeField] private PlayerStatus playerStatus;     // 플레이어 스테이터스
     [SerializeField] private PlayerInput playerInput;       // 입력 감지
     [SerializeField] private PlayerShooter playerShooter;   // 총 발사 
 
@@ -24,13 +24,46 @@ public class Player : LivingEntity
     private float turnSmoothVelocity;   // 회전 보정 속도
     private float currentVelocityY;     // 중력에 의해서 바닥에 떨어지는 y방향 속도
 
+    [Header("SFX")]
+    [SerializeField] private AudioClip deathSound;  // 사망 효과음.
+    [SerializeField] private AudioClip hitSound; // 피격 효과음.
+    [SerializeField] private ParticleSystem hitEffect;  // 피격 이펙트.
     [SerializeField] private Animator anim; // 애니메이션
+    private AudioSource audioSource;    // 효과음을 출력하는데 사용.
     private int animSpeed = 0;   // 애니메이션 속도
 
-
-    void Start()
+    private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
+        OnDeath += () =>
+        {
+            // 더 이상 피격 판정이 되지 않게 collider를 끈다.
+            //if (collider) collider.enabled = false;
+            if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
+            if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
+            //GameMgr.instance.AddScore(100); // enemy 처치 시, 100 score 상승.
+            //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
+            UIMgr.Instance.GameOver();
+        };
+    }
+    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+    {
+        base.OnDamage(damage, hitPoint, hitNormal);
+        UIMgr.Instance.SetHealthBar(GetHpRatio());
+        if (anim && !isDead)
+        {
+            if (hitEffect)
+            {
+                var hitEffectTR = hitEffect.transform;
+                hitEffectTR.position = hitPoint;    // 이펙트를 피격 지점으로 이동.
+                // 피격 당한 방향으로 회전.
+                hitEffectTR.rotation = Quaternion.LookRotation(hitNormal);
+                hitEffect.Play();   // 이펙트 재생.
+            }
+
+            // 피격 효과음 1회 재생.
+            if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
+            anim.SetTrigger("Damaged"); // 데미지를 입고 죽지 않았다면, 피격 애니메이션 실행.
+        }
     }
 
     public void SetPosition(Vector3 pos)
@@ -43,7 +76,7 @@ public class Player : LivingEntity
     // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
     private void FixedUpdate()
     {
-        if (IsDead || charController == null) return;
+        if (isDead || charController == null) return;
         if (currentSpeed > 0.2f || playerInput.fire) Rotate();
 
         Move(playerInput.moveInput);
@@ -63,7 +96,7 @@ public class Player : LivingEntity
     {
         // run 키 입력 시 animSpeed를 2로 변경
         animSpeed = playerInput.run ? 2 : 1;
-        var targetSpeed = playerStatus.speed * moveInput.magnitude * animSpeed;
+        var targetSpeed = moveSpeed * moveInput.magnitude * animSpeed;
         var moveDirection = Vector3.Normalize(transform.forward * moveInput.y + transform.right * moveInput.x);
 
         // 이동 입력이 있을 경우 캐릭터 바디 방향을 실제 이동방향으로 변경
@@ -95,7 +128,7 @@ public class Player : LivingEntity
         // 캐릭터가 땅에 붙어있는 경우에만 작동 
         if (!charController.isGrounded) return;
 
-        currentVelocityY = playerStatus.jumpPower;
+        currentVelocityY = jumpPower;
     }
 
     public void MoveAnim(float h, float v)
