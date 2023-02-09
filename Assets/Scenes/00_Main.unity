@@ -1786,66 +1786,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4141433826228814, guid: be148444f11dc304ab6e3bfb990adab9, type: 3}
   m_PrefabInstance: {fileID: 1631118447}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &592130533
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 592130534}
-  - component: {fileID: 592130535}
-  m_Layer: 0
-  m_Name: UIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &592130534
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 592130533}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -12.815799, y: -8.852769, z: -4.448503}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &592130535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 592130533}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37aeb8ed32cca8a42b02893b1e180816, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  startButton: {fileID: 0}
-  healthBar: {fileID: 0}
-  defaultLength: 400
-  staminaSlider: {fileID: 0}
-  waveText: {fileID: 0}
-  ammoText: {fileID: 0}
-  gameoverUI: {fileID: 0}
-  sleepUI: {fileID: 0}
-  waveStartUI: {fileID: 0}
-  waveClearUI: {fileID: 0}
-  stageClearUI: {fileID: 0}
-  nextDayUI: {fileID: 0}
-  beforeDayText: {fileID: 0}
-  afterDayText: {fileID: 0}
-  scoreText: {fileID: 0}
-  dayText: {fileID: 0}
 --- !u!4 &626276013 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4706918693468334, guid: 43311713025c8ed4fb269d28b21ca312, type: 3}
@@ -6992,6 +6932,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6e43e80c311a64b9e386babcae29f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneList:
+  - 00_Main
+  - 01_EP1_Prolog
+  - 02_Stage_1
+  sun: {fileID: 0}
+  followCam: {fileID: 159741010}
   player: {fileID: 2463601376043019009}
   partner: {fileID: 1669025365}
   spawner: {fileID: 0}
@@ -7000,6 +6946,7 @@ MonoBehaviour:
   maxFatigue: 100
   recoverFatiguePerHour: 10
   gameMode: 8
+  timeScale: 1440
 --- !u!4 &1791438763
 Transform:
   m_ObjectHideFlags: 0
@@ -7329,16 +7276,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 592130535}
-        m_TargetAssemblyTypeName: UIMgr, Assembly-CSharp
-        m_MethodName: MoveScene
-        m_Mode: 5
+      - m_Target: {fileID: 1791438762}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: LoadScene
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: EP0_Prolog
+          m_StringArgument: 01_EP1_Prolog
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1837720884
@@ -13259,9 +13206,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861c21839cfabeb4097e5731b8f230df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseStat: {fileID: 0}
+  baseStat: {fileID: 11400000, guid: b607e7933684ea045b76c18dde368273, type: 2}
   playerInput: {fileID: 3738608764646491003}
-  playerShooter: {fileID: 0}
+  playerShooter: {fileID: 7813290629727416521}
   cam: {fileID: 971281412}
   cameraArm: {fileID: 1466773189}
   charBody: {fileID: 823207968}
@@ -13270,27 +13217,10 @@ MonoBehaviour:
   gravityPercent: 2
   speedSmoothTime: 0.1
   turnSmoothTime: 0.1
-  deathSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  hitEffect: {fileID: 0}
-  anim: {fileID: 939907463}
---- !u!114 &3738608764646491001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5474169261384976412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8745cb2c12bf4404fab15991de599372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  baseStat: {fileID: 11400000, guid: b607e7933684ea045b76c18dde368273, type: 2}
-  health: 0
-  deathSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 7b6b33682babad5438d7b5414f5bcc87, type: 3}
+  hitSound: {fileID: 8300000, guid: 13a58eb5deb3e46599037ffb43ae7600, type: 3}
   hitEffect: {fileID: 2013586028}
+  anim: {fileID: 939907463}
 --- !u!114 &3738608764646491003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13338,10 +13268,8 @@ GameObject:
   - component: {fileID: 5474169261384619516}
   - component: {fileID: 7813290629727416522}
   - component: {fileID: 2463601376043019009}
-  - component: {fileID: 3738608764646491001}
   - component: {fileID: 3738608764646491003}
   - component: {fileID: 7813290629727416521}
-  - component: {fileID: 7380606103433629674}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -13418,19 +13346,6 @@ PrefabInstance:
       objectReference: {fileID: 3738608764646491003}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b962153d51f2e464983c14fe45c40be7, type: 3}
---- !u!114 &7380606103433629674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5474169261384976412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cc6267a83b7ffc488ccd1d8fa9fc390, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  status: {fileID: 3738608764646491001}
 --- !u!114 &7813290629727416521
 MonoBehaviour:
   m_ObjectHideFlags: 0

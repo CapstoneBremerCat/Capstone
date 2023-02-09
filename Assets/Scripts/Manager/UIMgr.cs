@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
 public class UIMgr : MonoBehaviour
 {
@@ -104,11 +103,6 @@ public class UIMgr : MonoBehaviour
         dayText.text = string.Format("Day - {0}", day);
     }
 
-    public void MoveScene(string sceneName = "Prolog")
-    {
-        /* 로드할 씬 선택 */
-        SceneManager.LoadScene(sceneName);
-    }
     public void GameOver()
     {
         if (gameoverUI) gameoverUI.SetActive(true);

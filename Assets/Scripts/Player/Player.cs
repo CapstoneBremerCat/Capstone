@@ -5,7 +5,6 @@ using UnityEngine;
 public class Player : Status
 {
     [Header("Scripts")]
-    //[SerializeField] private PlayerStatus playerStatus;     // 플레이어 스테이터스
     [SerializeField] private PlayerInput playerInput;       // 입력 감지
     [SerializeField] private PlayerShooter playerShooter;   // 총 발사 
 
@@ -73,8 +72,7 @@ public class Player : Status
         charController.enabled = true;
     }
 
-    // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
-    private void FixedUpdate()
+    public void UpdateMovement()
     {
         if (isDead || charController == null) return;
         if (currentSpeed > 0.2f || playerInput.fire) Rotate();
@@ -83,10 +81,9 @@ public class Player : Status
 
         if (playerInput.jump) Jump();
     }
-
-    private void Update()
+    public void UpdateAttack()
     {
-        if(playerShooter) playerShooter.ShootUpdate();
+        if (playerShooter) playerShooter.ShootUpdate();
     }
 
     public float currentSpeed =>

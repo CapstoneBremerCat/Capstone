@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public enum GAMEMODE
 {
     MORNING = 8,        // 낮 - 생존 게임(수집, 사냥, 건축)
@@ -33,14 +33,20 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    [SerializeField] private List<string> sceneList;     // 씬 이름 리스트
+
+    [Header("Component")]
+    [SerializeField] private DayAndNight sun; // 태양
+    [SerializeField] private GameObject followCam;     // 플레이어 카메라
     [SerializeField] private Player player;     // 플레이어
     [SerializeField] private PartnerAI partner;     // 플레이어
     [SerializeField] private Spawner spawner; // 스포너
+
     [SerializeField] private Transform startPoint; // 스테이지 시작 지점
 
-    public int Wave { get; private set; }  // 현재 Wave 카운트.
+    [Header("Game")]
     [SerializeField] private int maxWave = 10;  // 최대 Wave 카운트.
-
+    public int Wave { get; private set; }  // 현재 Wave 카운트.
     // 이번 Wave에 출현할 Enemy의 수.
     public int EnemySpawnCount { get { return Mathf.RoundToInt(10.0f + Wave * 2.0f); } }
 
@@ -54,9 +60,11 @@ public class GameManager : MonoBehaviour
     private int score = 0;
 
     private Timer playTime;
+    [SerializeField] private float timeScale;
     private int lastSavedHour;   // 마지막으로 저장된 시간
 
     private const float sleepWaitPeriod = 0.5f;    // 수면 시 매 시간이 변하는 간격
+
     public bool isGameOver { get; private set; }    // 게임오버 여부
     public bool isGameStart { get; private set; }    // 게임시작 여부
 
@@ -67,22 +75,33 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
 
         if (player) player.gameObject.SetActive(false);
+        if (followCam) followCam.SetActive(true);
         if (partner) partner.gameObject.SetActive(false);
 
         //InitNewStage();
     }
 
-    // Update is called once per frame
-/*    private void Update()
-    {     
-        //playerStatus.Updates();
+    // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
+    private void FixedUpdate()
+    {
+        // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
+        if (!isGameStart || isGameOver) return;
+        player.UpdateMovement();
+    }
 
-    }*/
+    // Update is called once per frame
+    private void Update()
+    {
+        // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
+        if (!isGameStart || isGameOver) return;
+        if(player) player.UpdateAttack();
+        if(sun) sun.UpdateSun();
+    }
 
     private void DelayedUpdate()
     {
-        // 게임이 시작됐을 경우에만 실행
-        if (!isGameStart) return;
+        // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
+        if (!isGameStart || isGameOver) return;
 
         playTime.UpdateTime();
         Debug.Log(playTime.Hour);
@@ -116,9 +135,11 @@ public class GameManager : MonoBehaviour
     // 스테이지 시작 세팅
     public void InitNewStage()
     {
-        // 시작지점 가져오기
+        // 태양, 시작지점, 스포너 가져오기
+        sun = GameObject.FindWithTag("Sun").GetComponent<DayAndNight>();
         startPoint = GameObject.FindWithTag("Start").transform;
         spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+
         if (startPoint && player)
         {
             player.gameObject.SetActive(false);
@@ -134,10 +155,13 @@ public class GameManager : MonoBehaviour
                 partner.gameObject.SetActive(true);
             }
         }
+        // 카메라 활성화
+        if (followCam) followCam.SetActive(true);
         //CurFatigue = maxFatigue;
 
         // 플레이 시작 시간 저장.
         playTime = new Timer();
+        playTime.SetTimeScale(timeScale);
         // 현재 날짜 UI 정보를 갱신.
         UIMgr.Instance.UpdateDateText(playTime.Day);
         // 웨이브 UI 비활성화
@@ -246,6 +270,39 @@ public class GameManager : MonoBehaviour
         score += value;
         // UI의 ScoreText를 갱신.
         UIMgr.Instance.UpdateScoreText(score);
+    }
+
+    public void MextScene()
+    {
+        // 씬 명명 규칙 1: 앞자리 두 문자는 00~99 두 자리 숫자로 시작해야한다.
+        // 씬 명명 규칙 2: 인게임(스테이지) 의 경우에는 씬 이름에 반드시 Stage가 포함되어야 한다.
+        // 현재 씬의 숫자를 참조하여 다음 씬으로 이동한다.
+        if (int.TryParse(SceneManager.GetActiveScene().name.Substring(0, 2), out int currSceneIdx))
+            StartCoroutine(MoveScene(currSceneIdx + 1));
+    }
+
+    public IEnumerator MoveScene(int sceneIndex)
+    {
+        SceneManager.LoadScene(sceneList[sceneIndex]);
+        var async = SceneManager.LoadSceneAsync(sceneList[sceneIndex]);
+
+        // 씬 이동이 끝날 때 까지 대기
+        while(!async.isDone)
+        {
+            yield return null;
+        }
+
+        // 이동한 씬이 Stage 면 스테이지 초기화
+        if (sceneList[sceneIndex].Contains("Stage"))
+        {
+            InitNewStage();
+        }
+    }
+    public void LoadScene()
+    {
+        int sceneIndex = 1;
+        /* 저장된 인덱스(씬 위치) 불러오기 */
+        StartCoroutine(MoveScene(sceneIndex));
     }
 
     public void ResetGame()

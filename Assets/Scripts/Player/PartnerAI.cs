@@ -119,12 +119,12 @@ public class PartnerAI : Status
                         agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
                         if (Vector3.Distance(targetPos, transform.position) <= agent.stoppingDistance)   // 일정 거리(stoppingDistance)만큼 다가갔을 경우,
                         {
-                            Debug.Log("Partner Stop");
-/*                            targetPos.y = transform.position.y;
-                            var dir = (targetPos - transform.position).normalized;
-                            transform.rotation = Quaternion.LookRotation(dir); //target을 향하여 바라보고,
-                            //StartCoroutine(Attack(livingEntity));   // 공격을 시도한다. Transform을 LivingEntity로 변경.
-                            yield break;*/
+                            //Debug.Log("Partner Stop");
+                            /*                            targetPos.y = transform.position.y;
+                                                        var dir = (targetPos - transform.position).normalized;
+                                                        transform.rotation = Quaternion.LookRotation(dir); //target을 향하여 바라보고,
+                                                        //StartCoroutine(Attack(livingEntity));   // 공격을 시도한다. Transform을 LivingEntity로 변경.
+                                                        yield break;*/
                         }
                     }
                 }
@@ -199,10 +199,10 @@ public class PartnerAI : Status
                                     searchRange,
                                     targetLayer))
                 {
-/*                    GameObject _HitEffect = Instantiate(go_HitEffect_Prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-                    Destroy(_HitEffect, 1f);*/
+                    /*                    GameObject _HitEffect = Instantiate(go_HitEffect_Prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                                        Destroy(_HitEffect, 1f);*/
                     gun.Fire();   // 총알 발사.  
-                                                        // 총알이 비었으면 재장전 시도.
+                                  // 총알이 비었으면 재장전 시도.
                     if ((gun.GetState.Equals(State.Empty)) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
 
                     if (hitInfo.transform.name == "Player")
