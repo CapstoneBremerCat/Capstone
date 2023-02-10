@@ -14,7 +14,7 @@ public class Inventory : MonoBehaviour
     private GameObject go_SlotsParent;
 
     // 슬롯들
-    private Slot[] slots;
+    [SerializeField] private Slot[] slots;
 
     // Start is called before the first frame update
     void Start()
@@ -74,6 +74,14 @@ public class Inventory : MonoBehaviour
                 return;
             }
         }
+    }
 
+    // 인벤토리 초기화
+    public void InitInventory()
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            slots[i].ClearSlot();
+        }
     }
 }

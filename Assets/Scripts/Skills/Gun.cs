@@ -26,6 +26,7 @@ public class Gun : MonoBehaviour
     [SerializeField] [Range(0, 1)] private float rightHandRoWeight = 1f;
 
     [Header("Gun 속성")] // [Range(a,b)] : 값의 범위를 제한(a~b).
+    [SerializeField] private string gunName;  // 총 이름
     [SerializeField] private float hitRange = 100f;  // 사정거리.
     [SerializeField] private float timeBetFire = 0.12f;    // 총알 발사 간격.
     private float lastFireTime; // 총을 마지막으로 발사한 시점.
@@ -63,6 +64,7 @@ public class Gun : MonoBehaviour
     public int AmmoRemain { get { return ammoRemain; } }
     public int MagAmmo { get { return magAmmo; } }
     public float HitRange { get { return hitRange; } }
+    public string GunName { get { return gunName; } }
 
     private void Awake()
     {
@@ -77,8 +79,6 @@ public class Gun : MonoBehaviour
             bulletLineRenderer.positionCount = 2; // 선을 그리기 위한 두 점을 설정.
             bulletLineRenderer.enabled = false;   // 총을 쏘기 전까지 궤적이 보이지 않도록 비활성화.
         }
-
-
     }
 
     private void OnEnable()
@@ -184,6 +184,7 @@ public class Gun : MonoBehaviour
         yield return new WaitForSeconds(0.03f); // 0.03초 동안 잠시 처리를 대기.
         if (bulletLineRenderer) bulletLineRenderer.enabled = false; // LineRenderer를 비활성화하여 총알 궤적을 지운다.
     }
+
 
     public bool Reload()
     {

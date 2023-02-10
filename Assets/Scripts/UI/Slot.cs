@@ -17,13 +17,19 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
     [SerializeField]
     private Text text_Count;
 
+    // 마우스 드래그가 끝났을 때 발생하는 이벤트
+    private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
+    private Transform player;  // 아이템을 떨어트릴 위치.
+
     // 무기 관리
     //private WeaponManager theWeaponManager;
-    
+
     void Start()
     {
         originPos = transform.position;
         //theWeaponManager = FindObjectOfType<WeaponManager>();
+        baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
+        player = GameObject.FindWithTag("Player").transform;
     }
 
 
@@ -43,7 +49,7 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
 
         itemImage.sprite = item.itemImage;
 
-        text_Count.text = itemCount.ToString();
+        //text_Count.text = itemCount.ToString();
 
         SetColor(1);
 
@@ -59,14 +65,17 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
     }
 
     // 슬롯 초기화
-    private void ClearSlot()
+    public void ClearSlot()
     {
         item = null;
         itemCount = 0;
+        text_Count.text = "";
         itemImage.sprite = null;
         SetColor(0);
 
     }
+
+
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -114,6 +123,16 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (DragSlot.instance.transform.localPosition.x < baseRect.xMin
+    || DragSlot.instance.transform.localPosition.x > baseRect.xMax
+    || DragSlot.instance.transform.localPosition.y < baseRect.yMin
+    || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
+        {
+            Instantiate(DragSlot.instance.dragSlot.item.itemPrefab, player.position + player.forward * 2 + new Vector3(0, 0.5f, 0),
+                Quaternion.identity);
+            DragSlot.instance.dragSlot.ClearSlot();
+
+        }
         DragSlot.instance.SetColor(0);
         DragSlot.instance.dragSlot = null;
     }
