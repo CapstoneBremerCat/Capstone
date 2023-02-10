@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CinemaController : MonoBehaviour
 {
-    [SerializeField] private GameObject skipButtonObj;
+    [SerializeField] private Button skipButton;
+
+    private void Start()
+    {
+        skipButton.onClick.AddListener(() => GameManager.Instance.MextScene());
+    }
 
     private void Update()
     {
@@ -17,14 +23,8 @@ public class CinemaController : MonoBehaviour
     // 스킵 버튼 활성화
     public IEnumerator OnSkip()
     {
-        skipButtonObj.SetActive(true);
+        skipButton.gameObject.SetActive(true);
         yield return new WaitForSeconds(2.0f);
-        skipButtonObj.SetActive(false);
-    }
-
-    // 시네마 영상이 끝났을 때 호출
-    public void EndCinema()
-    {
-        if (GameManager.Instance) GameManager.Instance.MextScene();
+        skipButton.gameObject.SetActive(false);
     }
 }

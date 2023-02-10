@@ -18,6 +18,12 @@ public class DayAndNight : MonoBehaviour
         dayFogDensity = RenderSettings.fogDensity;
     }
 
+    public void InitSun()
+    {
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        isNight = false;
+    }
+
     public void UpdateSun()
     {
         // 현실시간 1시간 기준 1시간 당 15도 회전. 

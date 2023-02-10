@@ -46,6 +46,11 @@ public class UIMgr : MonoBehaviour
     [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
     private float healthLength;
 
+    private void Start()
+    {
+        if(startButton) startButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
+    }
+
     public void Init()
     {
         gameoverUI.SetActive(false);

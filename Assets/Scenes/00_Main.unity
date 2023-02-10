@@ -6941,6 +6941,7 @@ MonoBehaviour:
   player: {fileID: 2463601376043019009}
   partner: {fileID: 1669025365}
   spawner: {fileID: 0}
+  stageUI: {fileID: 0}
   startPoint: {fileID: 0}
   maxWave: 10
   maxFatigue: 100
@@ -7275,19 +7276,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1837720884}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1791438762}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 01_EP1_Prolog
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1837720884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7875,6 +7864,53 @@ ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198000011254678926, guid: da33d2f1d5c4b41689d8063e19e3a7dc, type: 3}
   m_PrefabInstance: {fileID: 2013586027}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2041139063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2041139065}
+  - component: {fileID: 2041139064}
+  m_Layer: 0
+  m_Name: MainUIController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2041139064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041139063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64df608aca136bb41b5d8ab660bd9e68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startButton: {fileID: 1837720883}
+  shopButton: {fileID: 1641555787}
+  endButton: {fileID: 426346887}
+--- !u!4 &2041139065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041139063}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2042960801
 GameObject:
   m_ObjectHideFlags: 3

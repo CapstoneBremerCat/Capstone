@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Player player;     // 플레이어
     [SerializeField] private PartnerAI partner;     // 플레이어
     [SerializeField] private Spawner spawner; // 스포너
+    [SerializeField] private StageUIController stageUI; // 스테이지 UI
 
     [SerializeField] private Transform startPoint; // 스테이지 시작 지점
 
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
 
         if (player) player.gameObject.SetActive(false);
-        if (followCam) followCam.SetActive(true);
+        if (followCam) followCam.SetActive(false);
         if (partner) partner.gameObject.SetActive(false);
 
         //InitNewStage();
@@ -139,6 +140,7 @@ public class GameManager : MonoBehaviour
         sun = GameObject.FindWithTag("Sun").GetComponent<DayAndNight>();
         startPoint = GameObject.FindWithTag("Start").transform;
         spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+        stageUI = StageUIController.Instance;
 
         if (startPoint && player)
         {
@@ -159,18 +161,30 @@ public class GameManager : MonoBehaviour
         if (followCam) followCam.SetActive(true);
         //CurFatigue = maxFatigue;
 
-        // 플레이 시작 시간 저장.
-        playTime = new Timer();
-        playTime.SetTimeScale(timeScale);
-        // 현재 날짜 UI 정보를 갱신.
-        UIMgr.Instance.UpdateDateText(playTime.Day);
-        // 웨이브 UI 비활성화
-        UIMgr.Instance.DisableWaveText();
-
         // 게임모드 초기화
         gameMode = GAMEMODE.MORNING;
         // 웨이브 수 초기화.
         Wave = 0;
+        // 플레이 시작 시간 저장.
+        playTime = new Timer();
+        playTime.SetTimeScale(timeScale);
+        // 태양 초기화
+        sun.InitSun();
+
+        // UI 초기화
+        if (stageUI)
+        {
+            // 현재 날짜 UI 정보를 갱신.
+            stageUI.UpdateDateText(playTime.Day);
+            // 웨이브 UI 비활성화
+            stageUI.DisableWaveText();
+
+            stageUI.RestartEvent += () =>
+            {
+                InitNewStage();
+            };
+        }
+
         // 게임 시작 신호 활성화.
         isGameStart = true;
 
@@ -179,7 +193,7 @@ public class GameManager : MonoBehaviour
     public void DecreaseSpawnCount()
     {
         // spawnCount를 감소하고 UI정보를 갱신한다.
-        UIMgr.Instance.UpdateWaveText(Wave, --spawnCount);
+        if (stageUI) stageUI.UpdateWaveText(Wave, --spawnCount);
 
         // 소환된 웨이브 적을 모두 처치하였을 경우 웨이브 종료
         if(spawnCount <= 0)
@@ -190,9 +204,16 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator StartWave()
     {
-        // 웨이브 시작 연출 실행
-        UIMgr.Instance.WaveStart();
-        // 연출이 끝날 때 까지 대기
+        if (stageUI)
+        {
+            // 웨이브 시작 연출 실행
+            if (stageUI) stageUI.WaveStart();
+            // 웨이브 UI 활성화
+            stageUI.EnableWaveText();
+            stageUI.UpdateWaveText(Wave, spawnCount);
+        }
+
+        /* 연출이 끝날 때 까지 대기 */
         yield return null;
 
         // 웨이브에 맞춰 적 스폰
@@ -200,28 +221,31 @@ public class GameManager : MonoBehaviour
         spawnCount += EnemySpawnCount;
         spawner.SpawnEnemy(spawnCount);
 
-        // 웨이브 UI 활성화
-        UIMgr.Instance.EnableWaveText();
-        UIMgr.Instance.UpdateWaveText(Wave, spawnCount);
         //NextWave();
     }
 
     public IEnumerator EndWave()
     {
-        // 웨이브 클리어 연출 실행
-        UIMgr.Instance.WaveClear();
+        if (stageUI)
+        {
+            // 웨이브 클리어 연출 실행
+            stageUI.WaveClear();
+            // 웨이브 UI 비활성화
+            stageUI.DisableWaveText();
+        }
+
         // 연출이 끝날 때 까지 대기
         yield return null;
-
-        // 웨이브 UI 비활성화
-        UIMgr.Instance.DisableWaveText();
     }
 
     public void NextDay()
     {
-        // 다음 날 연출 실행
-        UIMgr.Instance.DisplayNextDay(playTime.Day);
-        UIMgr.Instance.UpdateDateText(playTime.Day);
+        if (stageUI)
+        {
+            // 다음 날 연출 실행
+            stageUI.DisplayNextDay(playTime.Day);
+            stageUI.UpdateDateText(playTime.Day);
+        }
     }
 
     // 지정한 시간동안 대기(수면)
@@ -249,15 +273,16 @@ public class GameManager : MonoBehaviour
 
     public void StageClear()
     {
-        UIMgr.Instance.StageClear();
         player.OnGodMode();
         isGameStart = false;
+        if (stageUI) stageUI.StageClear();
     }
 
     public void GameOver()
     {
         isGameOver = true;
         isGameStart = false;
+        if (stageUI) stageUI.GameOver();
     }
 
     public void RestartGame()
@@ -269,7 +294,7 @@ public class GameManager : MonoBehaviour
     {
         score += value;
         // UI의 ScoreText를 갱신.
-        UIMgr.Instance.UpdateScoreText(score);
+        if (stageUI) stageUI.UpdateScoreText(score);
     }
 
     public void MextScene()

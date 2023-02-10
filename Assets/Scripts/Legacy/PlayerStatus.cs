@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerStatus : Status
 {
-    public float speed { get; private set; } // 실제 달리기 속도
+/*    public float speed { get; private set; } // 실제 달리기 속도
     private int skillPoint = 0; // 스킬포인트
     [SerializeField] private float health; // 현재 체력.
     private Animator anim;
@@ -27,9 +27,9 @@ public class PlayerStatus : Status
             //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
             UIMgr.Instance.GameOver();
         };
-    }
+    }*/
 
-    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+/*    public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
         health = curHealth;
@@ -49,6 +49,6 @@ public class PlayerStatus : Status
             if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
             anim.SetTrigger("Damaged"); // 데미지를 입고 죽지 않았다면, 피격 애니메이션 실행.
         }
-    }
+    }*/
 
 }

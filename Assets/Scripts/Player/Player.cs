@@ -41,13 +41,13 @@ public class Player : Status
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
             //GameMgr.instance.AddScore(100); // enemy 처치 시, 100 score 상승.
             //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
-            UIMgr.Instance.GameOver();
+            GameManager.Instance.GameOver();
         };
     }
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
-        UIMgr.Instance.SetHealthBar(GetHpRatio());
+        StageUIController.Instance.SetHealthBar(GetHpRatio());
         if (anim && !isDead)
         {
             if (hitEffect)

@@ -5,6 +5,23 @@ using UnityEngine.UI;
 using TMPro;
 public class StageUIController : MonoBehaviour
 {
+    #region instance
+    private static StageUIController instance = null;
+    public static StageUIController Instance { get { return instance; } }
+
+    private void Awake()
+    {
+        // Scene에 이미 인스턴스가 존재 하는지 확인 후 처리
+        if (instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        // instance를 유일 오브젝트로 만든다
+        instance = this;
+    }
+    #endregion
+
     [SerializeField] private RectTransform healthBar;   // 체력 바
     [SerializeField] private float defaultLength = 400f;    // 체력 바 길이
     [SerializeField] private Slider staminaSlider;
@@ -21,6 +38,29 @@ public class StageUIController : MonoBehaviour
     [SerializeField] private Text scoreText; // 점수 표시용 텍스트.
     [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
     public event System.Action RestartEvent;
+    private float healthLength;
+
+    public void Init()
+    {
+        gameoverUI.SetActive(false);
+    }
+
+    public void SetHealthBar(float ratio)
+    {
+        healthLength = GetHealthLength(ratio);
+        //if (playerStatus.isHpFull) healthLength = defaultLength;
+
+        healthBar.sizeDelta = new Vector2(healthLength, 30);
+    }
+    private float GetHealthLength(float ratio)
+    {
+        return defaultLength * ratio;
+    }
+
+    public void SetStaminaBar(float ratio)
+    {
+        if (staminaSlider) staminaSlider.value = ratio;
+    }
 
     public void UpdateAmmoText(int magAmmo, int remainAmmo)
     {
@@ -28,7 +68,7 @@ public class StageUIController : MonoBehaviour
         //strBuilder.Append(magAmmo);
         //strBuilder.Append(" / ");
         //strBuilder.Append(remainAmmo);
-        ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
+        if (ammoText) ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
     }
 
     public void UpdateScoreText(int newScore)
@@ -44,7 +84,6 @@ public class StageUIController : MonoBehaviour
     {
         waveText.gameObject.SetActive(false);
     }
-
     public void UpdateWaveText(int waves, int count)
     {
         if (waveText.gameObject.activeSelf)
@@ -60,7 +99,41 @@ public class StageUIController : MonoBehaviour
 
     public void GameOver()
     {
-        gameoverUI.SetActive(true);
+        if (gameoverUI) gameoverUI.SetActive(true);
+    }
+
+    public void WaveStart()
+    {
+        if (waveStartUI) StartCoroutine(PlayAnim(waveStartUI));
+    }
+
+    public void WaveClear()
+    {
+        if (waveClearUI) StartCoroutine(PlayAnim(waveClearUI));
+    }
+
+    public void StageClear()
+    {
+        if (stageClearUI) StartCoroutine(PlayAnim(stageClearUI));
+    }
+
+    public void DisplayNextDay(int nextDay)
+    {
+        if (beforeDayText) beforeDayText.text = (nextDay - 1).ToString();
+        if (afterDayText) afterDayText.text = (nextDay).ToString();
+        if (nextDayUI) StartCoroutine(PlayAnim(nextDayUI));
+    }
+
+    private IEnumerator PlayAnim(Animator anim)
+    {
+        anim.gameObject.SetActive(true);
+
+        // 해당 애니메이션 종료 시점까지 대기
+        while (anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f)
+        {
+            yield return null;
+        };
+        anim.gameObject.SetActive(false);
     }
 
     public void Restart()
