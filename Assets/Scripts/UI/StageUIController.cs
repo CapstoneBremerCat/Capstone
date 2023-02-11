@@ -39,10 +39,35 @@ public class StageUIController : MonoBehaviour
     [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
     public event System.Action RestartEvent;
     private float healthLength;
+    [SerializeField] private Slider coolTimeSlider; // 스킬 쿨타임 슬라이더
+    [SerializeField] private Animation coolTimeAnim; // 스킬 쿨타임 애니메이션
 
     public void Init()
     {
-        gameoverUI.SetActive(false);
+        if (gameoverUI) gameoverUI.SetActive(false);
+    }
+
+    // 쿨타임 표기
+    public void DisplayCooltime(float timeRemaining)
+    {
+        StartCoroutine(CooltimeRountine(timeRemaining));
+    }
+
+    IEnumerator CooltimeRountine(float timeRemaining)
+    {
+        var totalTime = timeRemaining;
+        var interval = 0.1f;
+        while (timeRemaining > 0)
+        {
+            coolTimeSlider.value = timeRemaining / totalTime;
+            timeRemaining -= interval;
+            yield return new WaitForSeconds(interval);
+        }
+        if (coolTimeAnim)
+        {
+            // 쿨타임 연출 시작
+            coolTimeAnim.Play();
+        }
     }
 
     public void SetHealthBar(float ratio)
@@ -138,6 +163,7 @@ public class StageUIController : MonoBehaviour
 
     public void Restart()
     {
+        Init();
         if (null != RestartEvent) RestartEvent();
     }
 }

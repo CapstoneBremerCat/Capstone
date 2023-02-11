@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.ProBuilder;
+
 public enum SkillState
 {
     Ready
@@ -30,6 +32,8 @@ public class Horse : MonoBehaviour
     [SerializeField] private AudioClip shootSound;  // 총 발포 효과음.
     [SerializeField] private AudioClip reloadSound; // 탄창 재장전 효과음.
     private AudioSource audioSource;
+
+    [SerializeField] private float force = 10f;
 
     private void Awake()
     {
@@ -145,22 +149,47 @@ public class Horse : MonoBehaviour
             navMesh.enabled = false;
             ContactPoint contact = collision.contacts[0];
             if (null != entity) entity.OnDamage(damage, contact.point, contact.normal);
+
+            Rigidbody body = collision.gameObject.GetComponent<Rigidbody>();
+            if (body != null)
+            {
+                StartCoroutine(ApplyForce(body, transform.forward, force));
+            }
         }
     }
 
-/*    private void OnTriggerEnter(Collider other)
+    public IEnumerator ApplyForce(Rigidbody body, Vector3 direction, float force)
+    {
+        var time = 0.1f;
+        var duration = 0.5f;
+        while (duration > 0)
+        {
+            body.velocity = direction * force;
+            yield return new WaitForSeconds(time);
+            duration -= time;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) 
     {
         // 차지 중 적과 닿으면 해당 적에게 피해를 준다.
-        if (isCharging && other.gameObject.layer.Equals(currentEnemy))
+        if (isCharging && other.gameObject.layer == LayerMask.NameToLayer(currentEnemy))
         {
             IDamageable entity = other.gameObject.GetComponent<IDamageable>();
             var navMesh = other.gameObject.GetComponent<NavMeshAgent>();
             // 충돌지점 데이터 받아오기
             navMesh.enabled = false;
-            ContactPoint contact = other.;
-            if (null != entity) entity.OnDamage(damage, contact.point, contact.normal);
+            Vector3 position = other.ClosestPointOnBounds(transform.position);
+            Vector3 normal = (position - transform.position).normalized;
+            if (null != entity) entity.OnDamage(damage, position, normal);
+
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.AddForce(normal * force, ForceMode.Impulse);
+            }
         }
-    }*/
+    }
 
 
     private void OnDisable()

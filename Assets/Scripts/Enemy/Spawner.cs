@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private List<Enemy> enemies = new List<Enemy>();  // 생성된 적들을 담는 리스트
+    [SerializeField] private List<GameObject> enemies = new List<GameObject>();  // 생성된 적들을 담는 리스트
 
-    [SerializeField] private Enemy enemyPrefab;     // 생성할 적 AI
+    [SerializeField] private GameObject enemyPrefab;     // 생성할 적 AI
 
     [SerializeField] private Transform[] spawnPoints;   // 적 AI를 소환할 위치들
 
@@ -16,24 +16,34 @@ public class Spawner : MonoBehaviour
         // spawnCount 만큼 적을 생성
         for (int i=0;i< spawnCount; i++)
         {
-            // 적 생성 처리
-            CreateEnemy(enemyPrefab);
+            // 적 생성 및 배치
+            SetEnemyPos(CreateEnemy(enemyPrefab));
         }
     }
 
-    // 적을 생성
-    private void CreateEnemy(Enemy enemyPrefab)
+    // 적 생성
+    private GameObject CreateEnemy(GameObject enemyPrefab)
+    {
+        // 풀 안에 비활성화된 적이 있으면 재활용
+        foreach (GameObject enemy in enemies)
+        {
+            if (!enemy.activeInHierarchy)
+            {
+                enemy.SetActive(true);
+                return enemy;
+            }
+        }
+        // If all objects in the pool are active, create a new one
+        var newEnemy = Instantiate(enemyPrefab);
+        enemies.Add(newEnemy);
+        return newEnemy;
+    }
+
+    // 적 배치
+    private void SetEnemyPos(GameObject enemyPrefab)
     {
         var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        enemyPrefab.transform.position = spawnPoint.position;
 
-        var enemy = Instantiate(enemyPrefab, spawnPoint.position, spawnPoint.rotation);
-
-        enemies.Add(enemy);
-
-/*        // 사망한 적을 리스트에서 제거
-        enemy.OnDeath += () => enemies.Remove(enemy);
-        // 사망한 적을 10 초 뒤에 파괴
-        enemy.OnDeath += () => Destroy(enemy.gameObject, 10f);
-        enemy.OnDeath += () => enemies.Remove(enemy);*/
     }
 }

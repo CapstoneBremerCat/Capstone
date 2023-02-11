@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
         if (partner) partner.gameObject.SetActive(false);
 
         //InitNewStage();
+
     }
 
     // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
@@ -174,10 +175,12 @@ public class GameManager : MonoBehaviour
         // UI 초기화
         if (stageUI)
         {
+            stageUI.Init();
             // 현재 날짜 UI 정보를 갱신.
             stageUI.UpdateDateText(playTime.Day);
             // 웨이브 UI 비활성화
             stageUI.DisableWaveText();
+            stageUI.DisplayCooltime(10);
 
             stageUI.RestartEvent += () =>
             {
@@ -187,7 +190,7 @@ public class GameManager : MonoBehaviour
 
         // 게임 시작 신호 활성화.
         isGameStart = true;
-
+        
     }
 
     public void DecreaseSpawnCount()
