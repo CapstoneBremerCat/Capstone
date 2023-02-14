@@ -22,8 +22,9 @@ public class StageUIController : MonoBehaviour
     }
     #endregion
 
-    [SerializeField] private RectTransform healthBar;   // 체력 바
-    [SerializeField] private float defaultLength = 400f;    // 체력 바 길이
+/*    [SerializeField] private RectTransform healthBar;   // 체력 바
+    [SerializeField] private float defaultLength = 400f;    // 체력 바 길이*/
+    [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider staminaSlider;
     [SerializeField] private Text waveText; // 적 웨이브 표시용 텍스트.
     [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
@@ -41,20 +42,26 @@ public class StageUIController : MonoBehaviour
     private float healthLength;
     [SerializeField] private Slider coolTimeSlider; // 스킬 쿨타임 슬라이더
     [SerializeField] private Animation coolTimeAnim; // 스킬 쿨타임 애니메이션
-
+    private bool isCoolTime;
     public void Init()
     {
         if (gameoverUI) gameoverUI.SetActive(false);
+        StopAllCoroutines();
+        coolTimeSlider.value = 0;
+        isCoolTime = false;
     }
 
     // 쿨타임 표기
-    public void DisplayCooltime(float timeRemaining)
+    public bool DisplayCooltime(float timeRemaining)
     {
+        if (isCoolTime) return false;
         StartCoroutine(CooltimeRountine(timeRemaining));
+        return true;
     }
 
     IEnumerator CooltimeRountine(float timeRemaining)
     {
+        isCoolTime = true;
         var totalTime = timeRemaining;
         var interval = 0.1f;
         while (timeRemaining > 0)
@@ -68,18 +75,23 @@ public class StageUIController : MonoBehaviour
             // 쿨타임 연출 시작
             coolTimeAnim.Play();
         }
+        isCoolTime = false;
     }
 
+    /*    public void SetHealthBar(float ratio)
+        {
+            healthLength = GetHealthLength(ratio);
+            //if (playerStatus.isHpFull) healthLength = defaultLength;
+
+            healthBar.sizeDelta = new Vector2(healthLength, 30);
+        }
+        private float GetHealthLength(float ratio)
+        {
+            return defaultLength * ratio;
+        }*/
     public void SetHealthBar(float ratio)
     {
-        healthLength = GetHealthLength(ratio);
-        //if (playerStatus.isHpFull) healthLength = defaultLength;
-
-        healthBar.sizeDelta = new Vector2(healthLength, 30);
-    }
-    private float GetHealthLength(float ratio)
-    {
-        return defaultLength * ratio;
+        if (healthSlider) healthSlider.value = ratio;
     }
 
     public void SetStaminaBar(float ratio)

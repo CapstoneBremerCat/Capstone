@@ -22,19 +22,18 @@ public class PartnerAI : Status
     [SerializeField] private float viewAngle; // 시야각
     [SerializeField] private float spinSpeed; // 포신 회전 속도
     [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private Transform tf_TopGun; // 포신
     [SerializeField] private ParticleSystem particle_MuzzleFlash; // 총구 섬광
     [SerializeField] private GameObject go_HitEffect_Prefab; // 적중 효과 이펙트
 
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float health; // 현재 체력.
     [SerializeField] private ParticleSystem hitEffect;  // 피격 이펙트.
     [SerializeField] private AudioClip hitSound; // 피격 효과음.
     private AudioSource audioSource;    // 효과음을 출력하는데 사용.
     private RaycastHit hitInfo;
-    private Animator anim;
+    [SerializeField] private Animator anim;
     private AudioSource theAudio;
+    [SerializeField] private PartnerHUD partnerHUD; // 현재 체력.
 
     private bool isFindTarget = false; // 적 타겟 발견시 True
     private bool isAttack = false; // 정확히 타겟을 향해 포신 회전 완료시 True (총구 방향과 적 방향이 일치할 때)
@@ -45,7 +44,7 @@ public class PartnerAI : Status
     void Start()
     {
         //gun = GetComponent<Gun>();
-        anim = GetComponent<Animator>();
+       // anim = GetComponent<Animator>();
     }
     protected override void OnEnable()
     {
@@ -53,10 +52,11 @@ public class PartnerAI : Status
         base.OnEnable();    // Status의 OnEnable() 호출.
         //if (collider) collider.enabled = true;  // 피격을 받을 수 있도록 collider를 활성화.
         InitStatus();
-        health = curHealth;
+        partnerHUD.SetHealthBar(GetHpRatio());
         // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
         if (agent) agent.isStopped = false;
         StartCoroutine(UpdatePath());
+
     }
 
     // Gizmo를 이용하여 target을 찾는 가시 범위를 벌 수 있다.
@@ -76,7 +76,7 @@ public class PartnerAI : Status
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
-        health = curHealth;
+        partnerHUD.SetHealthBar(GetHpRatio());
         if (anim && !isDead)
         {
             if (hitEffect)
@@ -129,7 +129,7 @@ public class PartnerAI : Status
                     }
                 }
                 // Enemy가 움직이는 속도(velocity)의 크기(magnitude)를 이용하여, 움직이는 애니메이션 처리를 한다.
-                if (anim) anim.SetFloat("Magnitude", agent.velocity.magnitude);
+                if (anim) anim.SetFloat("Magnitude", agent.velocity.normalized.magnitude);
             } // if(agent)
             yield return new WaitForSeconds(0.04f);
         } //while()

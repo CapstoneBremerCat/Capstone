@@ -22,7 +22,7 @@ MonoBehaviour:
       regenValue: 0.1
     staminaGauge:
       maxValue: 100
-      regenValue: 0.1
+      regenValue: 0.2
     moveSpeed: 6
     attackSpeed: 5
     attackPower: 10
@@ -30,6 +30,6 @@ MonoBehaviour:
     damageIncrease: 0
     damageReduction: 0
     runSpeedMult: 1.5
-    runStamina: 0.2
+    runStamina: 1
     jumpPower: 6
     exp: 0

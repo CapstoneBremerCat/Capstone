@@ -5,7 +5,6 @@ using UnityEngine;
 public class Player : Status
 {
     [Header("Scripts")]
-    [SerializeField] private PlayerInput playerInput;       // 입력 감지
     [SerializeField] private PlayerShooter playerShooter;   // 총 발사 
 
     [Header("PlayerMove")]
@@ -44,6 +43,11 @@ public class Player : Status
             GameManager.Instance.GameOver();
         };
     }
+
+    public void Init()
+    {
+        InitStatus();
+    }
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
@@ -72,15 +76,6 @@ public class Player : Status
         charController.enabled = true;
     }
 
-    public void UpdateMovement()
-    {
-        if (isDead || charController == null) return;
-        if (currentSpeed > 0.2f || playerInput.fire) Rotate();
-
-        Move(playerInput.moveInput);
-
-        if (playerInput.jump) Jump();
-    }
     public void UpdateAttack()
     {
         if (playerShooter) playerShooter.ShootUpdate();
@@ -91,8 +86,6 @@ public class Player : Status
 
     public void Move(Vector2 moveInput)
     {
-        // run 키 입력 시 animSpeed를 2로 변경
-        animSpeed = playerInput.run ? 2 : 1;
         var targetSpeed = moveSpeed * moveInput.magnitude * animSpeed;
         var moveDirection = Vector3.Normalize(transform.forward * moveInput.y + transform.right * moveInput.x);
 
@@ -110,6 +103,20 @@ public class Player : Status
         MoveAnim(moveDirection.x, moveDirection.z);
 
         if (charController.isGrounded) currentVelocityY = 0;
+    }
+
+    public void Run(bool isRun)
+    {
+        if (isRun)
+        {
+            animSpeed = (UseStamina(runStamina)) ? 2 : 1;
+        }
+        else
+        {
+            animSpeed = 1;
+            RestoreStamina(regenStamina);
+        }
+        StageUIController.Instance.SetStaminaBar(GetStaminaRatio());
     }
 
     public void Rotate()
@@ -132,6 +139,6 @@ public class Player : Status
     {
         float value = Mathf.Abs(v) > Mathf.Abs(h) ? v : h;
         // 달리기 입력 시 값 두배로 증가
-        if (anim && playerInput) anim.SetFloat("Magnitude", value * animSpeed);
+        if (anim) anim.SetFloat("Magnitude", value * animSpeed);
     }
 }

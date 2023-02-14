@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private DayAndNight sun; // 태양
     [SerializeField] private GameObject followCam;     // 플레이어 카메라
     [SerializeField] private Player player;     // 플레이어
+    [SerializeField] private PlayerInput playerInput;       // 입력 감지
+    [SerializeField] private Skill currentSkill;       // 등록중인 스킬
     [SerializeField] private PartnerAI partner;     // 플레이어
     [SerializeField] private Spawner spawner; // 스포너
     [SerializeField] private StageUIController stageUI; // 스테이지 UI
@@ -88,7 +90,7 @@ public class GameManager : MonoBehaviour
     {
         // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
         if (!isGameStart || isGameOver) return;
-        player.UpdateMovement();
+        UpdateMovement();
     }
 
     // Update is called once per frame
@@ -98,6 +100,7 @@ public class GameManager : MonoBehaviour
         if (!isGameStart || isGameOver) return;
         if(player) player.UpdateAttack();
         if(sun) sun.UpdateSun();
+        if (playerInput.skillSlot1) UseSkill(currentSkill);
     }
 
     private void DelayedUpdate()
@@ -149,7 +152,7 @@ public class GameManager : MonoBehaviour
             // 플레이어 위치를 시작지점으로 변경
             if (player) player.transform.position = startPoint.position;
             player.gameObject.SetActive(true);
-            player.InitStatus();
+            player.Init();
             // 파트너 위치도 변경
             if (partner)
             {
@@ -180,11 +183,13 @@ public class GameManager : MonoBehaviour
             stageUI.UpdateDateText(playTime.Day);
             // 웨이브 UI 비활성화
             stageUI.DisableWaveText();
-            stageUI.DisplayCooltime(10);
+            //stageUI.DisplayCooltime(10);
 
             stageUI.RestartEvent += () =>
             {
                 InitNewStage();
+                stageUI.SetHealthBar(player.GetHpRatio());
+                stageUI.SetStaminaBar(player.GetStaminaRatio());
             };
         }
 
@@ -264,7 +269,25 @@ public class GameManager : MonoBehaviour
             CurFatigue = Mathf.Max(0.0f, CurFatigue - recoverFatiguePerHour);
         }
     }
-    
+    public void UpdateMovement()
+    {
+        if (player.isDead) return;
+        if (player.currentSpeed > 0.2f || playerInput.fire) player.Rotate();
+        player.Run(playerInput.run);
+        player.Move(playerInput.moveInput);
+
+        if (playerInput.jump) player.Jump();
+    }
+
+    public void UseSkill(Skill skill)
+    {
+        if(stageUI.DisplayCooltime(skill.coolTime))
+        {
+            /*스킬 사용*/
+            Debug.Log("Use Skill");
+        }
+        Debug.Log("Cool time");
+    }
     public void OnPause()
     {
         Time.timeScale = 0;

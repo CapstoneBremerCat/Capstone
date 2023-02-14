@@ -79,7 +79,11 @@ public class Status : MonoBehaviour, IDamageable
         if (isDead) return; // 이미 죽은 상태에서는 체력회복 불가능.
         SetHealth(curHealth + value);
     }
-
+    public virtual void RestoreStamina(float value)
+    {
+        if (isDead) return; // 이미 죽은 상태라면 더 이상 처리하지 않는다.
+        SetStamina(curStamina + value);
+    }
     // sum of itemStats & unitStat
     public void SetTotalStat(StatusData StatusObject)
     {
@@ -92,7 +96,7 @@ public class Status : MonoBehaviour, IDamageable
     
     private void InitItemList()
     {
-        itemList.Clear();
+        if (itemList != null) itemList.Clear();
     }
     
     public void AddItemCodeToList(int itemCode)
@@ -137,6 +141,14 @@ public class Status : MonoBehaviour, IDamageable
         SetValue(value, totalStat.manaGauge.maxValue, out re);
         curMana = re;
     }
+    public virtual bool UseStamina(float value)
+    {
+        var stamina = curStamina;
+        if (stamina < value) return false; // 마나가 부족할 경우 false 반환 후 리턴.(스태미나 부족 메시지 호출)
+        SetStamina(stamina - value);
+        return true;
+    }
+
     public virtual void SetStamina(float value)
     {
         float re;
@@ -147,13 +159,5 @@ public class Status : MonoBehaviour, IDamageable
     private void SetValue(float value, float max, out float target)
     {
         target = Mathf.Clamp(value, 0, max);
-    }
-
-    private void Clear()
-    {
-        if (baseStat != null) totalStat = baseStat.status;
-        else Debug.LogWarning("Status : Can't found baseStat");
-        InitItemList();
-        curCondition = ConditionType.Default;
     }
 }
