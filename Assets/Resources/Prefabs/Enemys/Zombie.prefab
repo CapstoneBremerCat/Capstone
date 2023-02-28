@@ -179,7 +179,7 @@ MonoBehaviour:
   baseStat: {fileID: 11400000, guid: 3364f3de6e661a640aebf52d965d7bda, type: 2}
   targetLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 520
   searchRange: 15
   damagedSearchRange: 30
   agent: {fileID: 7245000872402905263}
