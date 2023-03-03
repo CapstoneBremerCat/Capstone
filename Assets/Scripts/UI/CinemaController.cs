@@ -27,4 +27,9 @@ public class CinemaController : MonoBehaviour
         yield return new WaitForSeconds(2.0f);
         skipButton.gameObject.SetActive(false);
     }
+
+    public void EndCinema()
+    {
+        GameManager.Instance.MextScene();
+    }
 }

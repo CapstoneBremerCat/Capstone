@@ -68,6 +68,7 @@ public class Enemy : Status
             //gameObject.SetActive(false);
         };
     }
+
     protected override void OnEnable()
     {
         base.OnEnable();    // Status의 OnEnable() 호출.
@@ -112,7 +113,6 @@ public class Enemy : Status
         }
     }
 
-
     private IEnumerator DamagedReact()
     {
         var originRange = searchRange;
@@ -138,7 +138,8 @@ public class Enemy : Status
                 var targets = Physics.OverlapSphere(transform.position, searchRange, targetLayer);  // 설정한 탐색 범위 내에 Target(Player)이 있는 지 확인.
                 if (null != targets && 0 < targets.Length)
                 {
-                    var livingEntity = targets[targets.Length - 1].GetComponent<Status>();
+                    // 수정 필요
+                    var livingEntity = targets[0].GetComponent<Status>();
                     if (livingEntity && !livingEntity.isHpZero)
                     { // 대상이 존재하고 죽지 않았을 경우.
                         var targetPos = livingEntity.transform.position;
