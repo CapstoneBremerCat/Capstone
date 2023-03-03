@@ -10,16 +10,16 @@ public class ItemMgr : MonoBehaviour
 
     private void Awake()
     {
-        // Scene¿¡ ÀÌ¹Ì ÀÎ½ºÅÏ½º°¡ Á¸Àç ÇÏ´ÂÁö È®ÀÎ ÈÄ Ã³¸®
+        // Sceneï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½
         if (instance)
         {
             Destroy(this.gameObject);
             return;
         }
-        // instance¸¦ À¯ÀÏ ¿ÀºêÁ§Æ®·Î ¸¸µç´Ù
+        // instanceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
         instance = this;
 
-        // Scene ÀÌµ¿ ½Ã »èÁ¦ µÇÁö ¾Êµµ·Ï Ã³¸®
+        // Scene ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         //DontDestroyOnLoad(this.gameObject);
     }
     #endregion
@@ -39,7 +39,8 @@ public class ItemMgr : MonoBehaviour
 
     // The item pool to search in
     [SerializeField] private List<Item> itemList;
-    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // »ý¼ºµÈ ¾ÆÀÌÅÛµéÀ» ´ã´Â ¸®½ºÆ®
+    [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
+    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 
     // Find an item identical to the given item in the item pool
     public bool FindIdenticalItem(Item poolItem)
@@ -58,7 +59,7 @@ public class ItemMgr : MonoBehaviour
 
     private GameObject CreateItem(GameObject itemPrefab)
     {
-        // Ç® ¾È¿¡ ºñÈ°¼ºÈ­µÈ ¿ÀºêÁ§Æ®°¡ ÀÖÀ¸¸é ÀçÈ°¿ë
+        // Ç® ï¿½È¿ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½
 /*        foreach (GameObject item in itemPool)
         {
             var found = FindIdenticalItem(item.GetComponent<Item>());
@@ -76,7 +77,7 @@ public class ItemMgr : MonoBehaviour
 
     public GameObject GetRandomItemPrefab()
     {
-        return itemPool[Random.Range(0, itemPool.Count)];
+        return itemObjList[Random.Range(0, itemObjList.Count)];
     }
 
     public bool SpawnItem(Vector3 position)

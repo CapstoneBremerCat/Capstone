@@ -38,10 +38,12 @@ public class GameManager : MonoBehaviour
     [Header("Component")]
     [SerializeField] private DayAndNight sun; // 태양
     [SerializeField] private GameObject followCam;     // 플레이어 카메라
+    [SerializeField] private GameObject playerPrefab;     // 플레이어 프리팹
     [SerializeField] private Player player;     // 플레이어
     [SerializeField] private PlayerInput playerInput;       // 입력 감지
     [SerializeField] private Skill currentSkill;       // 등록중인 스킬
-    [SerializeField] private PartnerAI partner;     // 플레이어
+    [SerializeField] private GameObject partnerPrefab;     // 파트너 프리팹
+    [SerializeField] private PartnerAI partner;     // 파트너
     [SerializeField] private Spawner spawner; // 스포너
     [SerializeField] private StageUIController stageUI; // 스테이지 UI
 
