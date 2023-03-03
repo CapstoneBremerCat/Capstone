@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> enemies = new List<GameObject>();  // 생성된 적들을 담는 리스트
+    [SerializeField] private List<GameObject> enemies = new List<GameObject>();  // 생성된 적들을 담는 리스트    [SerializeField] private List<GameObject> itemPrefabs = new List<GameObject>();  // 생성할 아이템들을 담는 리스트
 
     [SerializeField] private GameObject enemyPrefab;     // 생성할 적 AI
-
     [SerializeField] private Transform[] spawnPoints;   // 적 AI를 소환할 위치들
 
     // spawnCount만큼 적을 생성
@@ -44,6 +43,5 @@ public class Spawner : MonoBehaviour
     {
         var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
         enemyPrefab.transform.position = spawnPoint.position;
-
     }
 }

@@ -279,6 +279,12 @@ public class GameManager : MonoBehaviour
         if (playerInput.jump) player.Jump();
     }
 
+    public void KillEnemy(bool isWaveEnemy)
+    {
+        AddScore(100); // enemy 처치 시, 100 score 상승.
+        if (isWaveEnemy) DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
+    }
+
     public void UseSkill(Skill skill)
     {
         if(stageUI.DisplayCooltime(skill.coolTime))

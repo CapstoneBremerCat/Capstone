@@ -20,10 +20,9 @@ public class ItemMgr : MonoBehaviour
         instance = this;
 
         // Scene 이동 시 삭제 되지 않도록 처리
-        DontDestroyOnLoad(this.gameObject);
+        //DontDestroyOnLoad(this.gameObject);
     }
     #endregion
-
 
     public StatusData GetTotalItemStats(List<int> itemList)
     {
@@ -38,5 +37,53 @@ public class ItemMgr : MonoBehaviour
         return statusData;
     }
 
+    // The item pool to search in
+    [SerializeField] private List<Item> itemList;
+    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // 생성된 아이템들을 담는 리스트
 
+    // Find an item identical to the given item in the item pool
+    public bool FindIdenticalItem(Item poolItem)
+    {
+        // Loop through each item in the item pool
+/*        foreach (Item item in itemList)
+        {
+            // Check if the item names and types match
+            if (poolItem.itemName == item.itemName && poolItem.itemType == item.itemType)
+            {
+                return true;
+            }
+        }*/
+        return false;
+    }
+
+    private GameObject CreateItem(GameObject itemPrefab)
+    {
+        // 풀 안에 비활성화된 오브젝트가 있으면 재활용
+/*        foreach (GameObject item in itemPool)
+        {
+            var found = FindIdenticalItem(item.GetComponent<Item>());
+            if (found)
+            {
+                item.SetActive(true);
+                return item;
+            }
+        }*/
+        // If all objects in the pool are active, create a new one
+        var newItem = Instantiate(itemPrefab);
+        itemPool.Add(newItem);
+        return newItem;
+    }
+
+    public GameObject GetRandomItemPrefab()
+    {
+        return itemPool[Random.Range(0, itemPool.Count)];
+    }
+
+    public bool SpawnItem(Vector3 position)
+    {
+        var item = CreateItem(GetRandomItemPrefab());
+        if (!item) return false;
+        item.transform.position = position;
+        return true;
+    }
 }
