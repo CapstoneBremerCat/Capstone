@@ -37,10 +37,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Component")]
     [SerializeField] private DayAndNight sun; // 태양
-    [SerializeField] private GameObject followCam;     // 플레이어 카메라
     [SerializeField] private GameObject playerPrefab;     // 플레이어 프리팹
     [SerializeField] private Player player;     // 플레이어
-    [SerializeField] private PlayerInput playerInput;       // 입력 감지
     [SerializeField] private Skill currentSkill;       // 등록중인 스킬
     [SerializeField] private GameObject partnerPrefab;     // 파트너 프리팹
     [SerializeField] private PartnerAI partner;     // 파트너
@@ -80,7 +78,6 @@ public class GameManager : MonoBehaviour
         isGameOver = false;
 
         if (player) player.gameObject.SetActive(false);
-        if (followCam) followCam.SetActive(false);
         if (partner) partner.gameObject.SetActive(false);
 
         //InitNewStage();
@@ -92,7 +89,7 @@ public class GameManager : MonoBehaviour
     {
         // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
         if (!isGameStart || isGameOver) return;
-        UpdateMovement();
+        if(player) player.UpdateMovement();
     }
 
     // Update is called once per frame
@@ -102,7 +99,7 @@ public class GameManager : MonoBehaviour
         if (!isGameStart || isGameOver) return;
         if(player) player.UpdateAttack();
         if(sun) sun.UpdateSun();
-        if (playerInput.skillSlot1) UseSkill(currentSkill);
+        //if (playerInput.skillSlot1) UseSkill(currentSkill);
     }
 
     private void DelayedUpdate()
@@ -148,23 +145,23 @@ public class GameManager : MonoBehaviour
         spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
         stageUI = StageUIController.Instance;
 
+        player = LoadCharacter(playerPrefab).GetComponent<Player>();
         if (startPoint && player)
         {
-            player.gameObject.SetActive(false);
             // 플레이어 위치를 시작지점으로 변경
-            if (player) player.transform.position = startPoint.position;
+            player.transform.position = startPoint.position;
             player.gameObject.SetActive(true);
             player.Init();
             // 파트너 위치도 변경
+            partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
             if (partner)
             {
-                partner.gameObject.SetActive(false);
                 partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
                 partner.gameObject.SetActive(true);
             }
         }
         // 카메라 활성화
-        if (followCam) followCam.SetActive(true);
+        //if (followCam) followCam.SetActive(true);
         //CurFatigue = maxFatigue;
 
         // 게임모드 초기화
@@ -199,7 +196,20 @@ public class GameManager : MonoBehaviour
         isGameStart = true;
         
     }
+    private GameObject LoadCharacter(GameObject prefab)
+    {
+        // Check if the character prefab is assigned
+        if (prefab == null)
+        {
+            Debug.LogError("playerPrefab is not assigned.");
+            return null;
+        }
 
+        // Load the character prefab
+        GameObject character = Instantiate(prefab);
+
+        return character;
+    }
     public void DecreaseSpawnCount()
     {
         // spawnCount를 감소하고 UI정보를 갱신한다.
@@ -271,15 +281,6 @@ public class GameManager : MonoBehaviour
             CurFatigue = Mathf.Max(0.0f, CurFatigue - recoverFatiguePerHour);
         }
     }
-    public void UpdateMovement()
-    {
-        if (player.isDead) return;
-        if (player.currentSpeed > 0.2f || playerInput.fire) player.Rotate();
-        player.Run(playerInput.run);
-        player.Move(playerInput.moveInput);
-
-        if (playerInput.jump) player.Jump();
-    }
 
     public void KillEnemy(bool isWaveEnemy)
     {
@@ -289,7 +290,7 @@ public class GameManager : MonoBehaviour
 
     public void UseSkill(Skill skill)
     {
-        if(stageUI.DisplayCooltime(skill.coolTime))
+        if(StageUIController.Instance.DisplayCooltime(skill.coolTime))
         {
             /*스킬 사용*/
             Debug.Log("Use Skill");

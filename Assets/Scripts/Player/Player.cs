@@ -9,9 +9,10 @@ public class Player : Status
 
     [Header("PlayerMove")]
     [SerializeField] private Transform cam; // 메인 카메라
-    [SerializeField] private Transform cameraArm; // 카메라 축
+    //[SerializeField] private Transform cameraArm; // 카메라 축
     [SerializeField] private Transform charBody; //  캐릭터 몸체
     [SerializeField] private CharacterController charController;    //  캐릭터 컨트롤러
+    [SerializeField] private PlayerInput playerInput;       // 입력 감지
 
     [Range(0.01f, 1f)] public float airControlPercent;  // 체공 시 속도 보정
     [Range(0.01f, 2f)] public float gravityPercent;   // 중력 보정
@@ -83,6 +84,16 @@ public class Player : Status
 
     public float currentSpeed =>
      new Vector2(charController.velocity.x, charController.velocity.z).magnitude;
+
+    public void UpdateMovement()
+    {
+        if (isDead) return;
+        if (currentSpeed > 0.2f || playerInput.fire) Rotate();
+        Run(playerInput.run);
+        Move(playerInput.moveInput);
+
+        if (playerInput.jump) Jump();
+    }
 
     public void Move(Vector2 moveInput)
     {
