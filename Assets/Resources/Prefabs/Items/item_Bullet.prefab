@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: b7e90997ca986b147a9aed350113a65d, type: 2}
-  remainingTime: 10
+  remainingTime: 20
 --- !u!54 &-4288819978040850399
 Rigidbody:
   m_ObjectHideFlags: 0

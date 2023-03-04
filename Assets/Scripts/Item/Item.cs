@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 [CreateAssetMenu(fileName = "New Item",menuName = "New Item/item")]
 public class Item : ScriptableObject
 {
-
+    public int itemCode;
     public string itemName; // 아이템의 이름.
     public ItemType itemType; // 아이템의 유형.
     public Sprite itemImage; // 아이템의 이미지.
@@ -14,9 +13,9 @@ public class Item : ScriptableObject
 
     public enum ItemType 
     {
-        Equipment,
+        Weapon,
         Used,
-        Ingredient,
+        Ammo,
         ETC
     }
 }

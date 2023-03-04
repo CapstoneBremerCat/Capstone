@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class MinigunRotate : MonoBehaviour
 {
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private Gun gun;
     [SerializeField] private GameObject barrel; //회전시킬 총열
     [SerializeField] private float rotateSpeed; //회전속도
     // Update is called once per frame
     void Update()
     {
-        barrel.transform.Rotate(0f, 0f, rotateSpeed);
-/*        if (playerInput.fire)
+        //barrel.transform.Rotate(0f, 0f, rotateSpeed);
+        if (gun.IsFire)
         {
             barrel.transform.Rotate(0f, 0f, rotateSpeed);
-        }*/
+        }
     }
 }

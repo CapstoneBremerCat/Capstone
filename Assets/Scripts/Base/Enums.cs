@@ -10,9 +10,3 @@ public enum ConditionType
     Sturn,      // action unable
 }
 
-public enum ItemType
-{
-    Normal,         // Reset if die
-    Permanent       // Permanent apply until exit game
-}
-

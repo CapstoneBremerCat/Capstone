@@ -6,20 +6,23 @@ using UnityEngine.EventSystems;
 
 public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , IDragHandler , IEndDragHandler , IDropHandler
 {
-
     private Vector3 originPos;
 
-    public Item item; // 획득 아이템
-    public int itemCount; // 획득 아이템 개수
-    public Image itemImage; // 아이템의 이미지.
+    [SerializeField] private Item item; // 획득 아이템
+    [SerializeField] private Image itemImage; // 아이템의 이미지.
+    [SerializeField] private Image equippedImage; // 장착 중인 아이템을 표시하기 위한 이미지
+    public int itemCount { get; private set; } // 획득 아이템 개수
+
 
     // 필요한 컴포넌트
-    [SerializeField]
-    private Text text_Count;
+    [SerializeField] private Text text_Count;
 
     // 마우스 드래그가 끝났을 때 발생하는 이벤트
     private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
     private Transform player;  // 아이템을 떨어트릴 위치.
+
+    public Item Item { get { return item; } }
+
 
     // 무기 관리
     //private WeaponManager theWeaponManager;
@@ -75,8 +78,6 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
 
     }
 
-
-
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("click완료");
@@ -85,21 +86,24 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
             Debug.Log("if1완료");
             if (item != null)
             {
-                Debug.Log("if2완료");
-                if (item.itemType == Item.ItemType.Equipment)
-                {
-                    // 장착
-                    //StartCoroutine(theWeaponManager.ChangeWeaponCoroutine(item.weaponType, item.itemName));
-                    Debug.Log(item.itemName + " 을 장착했습니다.");
-                }
-                else
-                {
-                    // 소모
-                    Debug.Log(item.itemName + " 을 사용했습니다.");
-                    SetSlotCount(-1);
-
-                }
+                UseItem(item);
             }
+        }
+    }
+
+    public void UseItem(Item item)
+    {
+        switch (item.itemType)
+        {
+            case Item.ItemType.Weapon:
+                EquipManager.Instance.EquipWeapon(item);
+                break;
+            case Item.ItemType.Used:
+                // Use recovery item
+                break;
+            case Item.ItemType.Ammo:
+                // Add ammo to inventory
+                break;
         }
     }
 
@@ -162,4 +166,8 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
         }
     }
 
+    public void SetEquipped(bool isEquipped)
+    {
+        if(equippedImage) equippedImage.enabled = isEquipped;
+    }
 }

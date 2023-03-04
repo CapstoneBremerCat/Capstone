@@ -10,20 +10,22 @@ public class ItemMgr : MonoBehaviour
 
     private void Awake()
     {
-        // Scene�� �̹� �ν��Ͻ��� ���� �ϴ��� Ȯ�� �� ó��
+        // Check if the scene already contains an instance of this object
+        // If so, destroy this object and return
         if (instance)
         {
             Destroy(this.gameObject);
             return;
         }
-        // instance�� ���� ������Ʈ�� �����
+        // If not, assign this object to the instance variable
         instance = this;
 
-        // Scene �̵� �� ���� ���� �ʵ��� ó��
+        // Don't destroy this object when changing scenes
         //DontDestroyOnLoad(this.gameObject);
     }
     #endregion
 
+    // Get the total stats of a list of items
     public StatusData GetTotalItemStats(List<int> itemList)
     {
         StatusData statusData = new StatusData();
@@ -39,30 +41,30 @@ public class ItemMgr : MonoBehaviour
 
     // The item pool to search in
     [SerializeField] private List<Item> itemList;
-    [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // ������ �����۵��� ��� ����Ʈ
-    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // ������ �����۵��� ��� ����Ʈ
+    [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // The list of item prefabs
+    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // The list of item objects in the pool
 
     // Find an item identical to the given item in the item pool
     public bool FindIdenticalItem(Item poolItem)
     {
         // Loop through each item in the item pool
-/*        foreach (Item item in itemList)
+        foreach (Item item in itemList)
         {
             // Check if the item names and types match
             if (poolItem.itemName == item.itemName && poolItem.itemType == item.itemType)
             {
                 return true;
             }
-        }*/
+        }
         return false;
     }
 
     private GameObject CreateItem(GameObject itemPrefab)
     {
-        // Ǯ �ȿ� ��Ȱ��ȭ�� ������Ʈ�� ������ ��Ȱ��
+        // Find a usable item object in the item pool
 /*        foreach (GameObject item in itemPool)
         {
-            var found = FindIdenticalItem(item.GetComponent<Item>());
+            var found = FindIdenticalItem(item.GetComponent<ItemPickUp>().Item);
             if (found)
             {
                 item.SetActive(true);
@@ -75,11 +77,13 @@ public class ItemMgr : MonoBehaviour
         return newItem;
     }
 
+    // Get a random item prefab
     public GameObject GetRandomItemPrefab()
     {
         return itemObjList[Random.Range(0, itemObjList.Count)];
     }
 
+    // Spawn an item
     public bool SpawnItem(Vector3 position)
     {
         var item = CreateItem(GetRandomItemPrefab());

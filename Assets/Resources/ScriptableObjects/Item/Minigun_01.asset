@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5b0bedf6484088e4c8da86c2e4fa1154, type: 3}
-  m_Name: Bullet
+  m_Name: Minigun_01
   m_EditorClassIdentifier: 
-  itemCode: 100
-  itemName: Bullet
-  itemType: 2
-  itemImage: {fileID: 21300000, guid: 74ef721fef79c44489d4e3edb0ab0c01, type: 3}
-  itemPrefab: {fileID: 5253921546029323996, guid: 0d64257cc1f5d5e4ca3166a06087fc33, type: 3}
+  itemCode: 1
+  itemName: Minigun_01
+  itemType: 0
+  itemImage: {fileID: 21300000, guid: 1225aae5cdb5cfb4196e11d97df783b3, type: 3}
+  itemPrefab: {fileID: 9048133590967348848, guid: 880c0c896a2759a409c3b445ea73fd25, type: 3}

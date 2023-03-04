@@ -16,14 +16,7 @@ public class Gun : MonoBehaviour
     [Header("Gun")] //inspector에 표시, 해당 Data들의 사용처를 알려준다.
     [SerializeField] private Bullet bullet; // 총알
     [SerializeField] private Transform firePos; // 총알 발사 위치.
-    [SerializeField] private Transform leftHandMount; // 왼손 위치 지점.
-    [SerializeField] private Transform rightHandMount; // 오른손 위치 지점.
-
-    [Header("IK")] // [Range(a,b)] : 값의 범위를 제한(a~b).
-    [SerializeField] [Range(0, 1)] private float leftHandPosWeight = 1f;
-    [SerializeField] [Range(0, 1)] private float leftHandRoWeight = 1f;
-    [SerializeField] [Range(0, 1)] private float rightHandPosWeight = 1f;
-    [SerializeField] [Range(0, 1)] private float rightHandRoWeight = 1f;
+    [SerializeField] private Transform weaponOffset;
 
     [Header("Gun 속성")] // [Range(a,b)] : 값의 범위를 제한(a~b).
     [SerializeField] private string gunName;  // 총 이름
@@ -52,26 +45,22 @@ public class Gun : MonoBehaviour
 
     public Transform FirePos { get { return firePos; } }
     public Vector3 Pivot { get { return (pivot) ? pivot.position : Vector3.zero; } set { if (pivot) pivot.position = value; } }
-    public Vector3 LeftHandMountPos { get { return (leftHandMount) ? leftHandMount.position : Vector3.zero; } }
-    public Quaternion LeftHandMountRo { get { return (leftHandMount) ? leftHandMount.rotation : Quaternion.identity; } }
-    public Vector3 RightHandMountPos { get { return (rightHandMount) ? rightHandMount.position : Vector3.zero; } }
-    public Quaternion RightHandMountRo { get { return (rightHandMount) ? rightHandMount.rotation : Quaternion.identity; } }
-    public float LeftHandPosWeight { get { return leftHandPosWeight; } }
-    public float LeftHandRoWeight { get { return leftHandRoWeight; } }
-    public float RightHandPosWeight { get { return rightHandPosWeight; } }
-    public float RightHandRoWeight { get { return rightHandRoWeight; } }
+    public Transform WeaponOffset { get { return weaponOffset; } }
     public State GetState { get { return state; } } // 커스텀.
     public int AmmoRemain { get { return ammoRemain; } }
     public int MagAmmo { get { return magAmmo; } }
     public float HitRange { get { return hitRange; } }
     public string GunName { get { return gunName; } }
 
+    public bool IsFire { get; private set; }
+
+
     private void Awake()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
 
-        pivot = transform.parent;
+        //pivot = transform.parent;
 
         bulletLineRenderer = GetComponent<LineRenderer>();
         if (bulletLineRenderer)
@@ -86,8 +75,13 @@ public class Gun : MonoBehaviour
         magAmmo = magCapacity;  // 초기 탄창의 총알을 최대치로.
         state = State.Ready;
         lastFireTime = Time.time - timeBetFire;
+
+    }
+
+    public void SetOriginPos(Vector3 position)
+    {
         // 첫 위치 등록
-        originPos = transform.localPosition;
+        originPos = position;
     }
 
     public void Fire()
@@ -96,7 +90,9 @@ public class Gun : MonoBehaviour
         {
             lastFireTime = Time.time;   // 발사 시점 갱신.
             Shot(); //발사 처리
+            IsFire = true;
         }
+        IsFire = false;
     }
 
     private void Shot()
