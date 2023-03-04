@@ -7,9 +7,9 @@ public class EquipManager : MonoBehaviour
     public static EquipManager Instance { get; private set; }
 
     [SerializeField]
-    private Gun[] guns;  // 모든 종류의 총을 원소로 가지는 배열
+    private Gun[] guns;  // an arrangement with all kinds of guns as elements
 
-    // 관리 차원에서 이름으로 쉽게 무기 접근이 가능하도록 Dictionary 자료 구조 사용.
+    // Use a Dictionary data structure to provide easy access to weapons by name from a management perspective.
     private Dictionary<string, Gun> gunDictionary = new Dictionary<string, Gun>();
 
     [SerializeField] private Transform weaponSocket;
@@ -83,7 +83,8 @@ public class EquipManager : MonoBehaviour
         // Destroy the current weapon, if any
         if (equippedWeapon != null)
         {
-            Destroy(equippedWeapon);
+            Destroy(equippedWeapon.gameObject);
+            //equippedWeapon.gameObject.SetActive(false);
             equippedWeapon = null;
         }
     }

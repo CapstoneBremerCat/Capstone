@@ -109,7 +109,7 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (item != null)
+        if (item != null && item.itemType != Item.ItemType.Weapon)
         {
             DragSlot.instance.dragSlot = this;
             DragSlot.instance.DragSetImage(itemImage);
@@ -119,7 +119,7 @@ public class Slot : MonoBehaviour , IPointerClickHandler , IBeginDragHandler , I
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (item != null)
+        if (item != null && item.itemType != Item.ItemType.Weapon)
         {
             DragSlot.instance.transform.position = eventData.position;
         }
