@@ -44,6 +44,7 @@ public class ItemMgr : MonoBehaviour
     [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // The list of item prefabs
     [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // The list of item objects in the pool
 
+
     // Find an item identical to the given item in the item pool
     public bool FindIdenticalItem(Item poolItem)
     {
@@ -51,7 +52,7 @@ public class ItemMgr : MonoBehaviour
         foreach (Item item in itemList)
         {
             // Check if the item names and types match
-            if (poolItem.itemName == item.itemName && poolItem.itemType == item.itemType)
+            if (poolItem.name == item.name && poolItem.itemType == item.itemType)
             {
                 return true;
             }

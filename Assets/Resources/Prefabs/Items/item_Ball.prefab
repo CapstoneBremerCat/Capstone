@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5484697901130826240}
   - component: {fileID: -2913152944946383502}
   m_Layer: 7
-  m_Name: item_SubMGun_01
+  m_Name: item_Ball
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36964dc141d68543843594f867ebfa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 2dfed2649a8fdd64998b45074d1d9784, type: 2}
+  item: {fileID: 11400000, guid: 999c0b237252a6e4d9ca6e17425cfae5, type: 2}
   remainingTime: 30
 --- !u!65 &5484697901130826240
 BoxCollider:

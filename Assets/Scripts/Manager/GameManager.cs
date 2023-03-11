@@ -39,7 +39,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private DayAndNight sun; // 태양
     [SerializeField] private GameObject playerPrefab;     // 플레이어 프리팹
     [SerializeField] private Player player;     // 플레이어
-    [SerializeField] private Skill currentSkill;       // 등록중인 스킬
+    private PlayerInput playerInput;
+
     [SerializeField] private GameObject partnerPrefab;     // 파트너 프리팹
     [SerializeField] private PartnerAI partner;     // 파트너
     [SerializeField] private Spawner spawner; // 스포너
@@ -96,10 +97,19 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
-        if (!isGameStart || isGameOver) return;
-        if(player) player.UpdateAttack();
-        if(sun) sun.UpdateSun();
-        //if (playerInput.skillSlot1) UseSkill(currentSkill);
+        if (isGameStart && !isGameOver) stageUpdate();
+        
+    }
+
+    private void stageUpdate()
+    {
+        if (player) player.UpdateAttack();
+        if (sun) sun.UpdateSun();
+        if (playerInput.skillSlot1)
+        {
+            SkillData SkillData = partner.GetPartnerSkill();
+            UseSkill(SkillData);
+        }
     }
 
     private void DelayedUpdate()
@@ -152,6 +162,7 @@ public class GameManager : MonoBehaviour
             player.transform.position = startPoint.position;
             player.gameObject.SetActive(true);
             player.Init();
+            playerInput = player.GetPlayerInput();
             // 파트너 위치도 변경
             partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
             if (partner)
@@ -160,8 +171,7 @@ public class GameManager : MonoBehaviour
                 partner.gameObject.SetActive(true);
             }
         }
-        // 카메라 활성화
-        //if (followCam) followCam.SetActive(true);
+
         //CurFatigue = maxFatigue;
 
         // 게임모드 초기화
@@ -210,6 +220,15 @@ public class GameManager : MonoBehaviour
 
         return character;
     }
+    public void UseSkill(SkillData SkillData)
+    {
+        if (stageUI.DisplayCooltime(SkillData.coolTime))
+        {
+            /*스킬 사용*/
+            Debug.Log("Use SkillData");
+        }
+    }
+
     public void DecreaseSpawnCount()
     {
         // spawnCount를 감소하고 UI정보를 갱신한다.
@@ -288,15 +307,6 @@ public class GameManager : MonoBehaviour
         if (isWaveEnemy) DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
     }
 
-    public void UseSkill(Skill skill)
-    {
-        if(StageUIController.Instance.DisplayCooltime(skill.coolTime))
-        {
-            /*스킬 사용*/
-            Debug.Log("Use Skill");
-        }
-        Debug.Log("Cool time");
-    }
     public void OnPause()
     {
         Time.timeScale = 0;

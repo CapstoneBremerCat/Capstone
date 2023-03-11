@@ -71,7 +71,7 @@ public class Inventory : MonoBehaviour
                 if (slots[i].Item != null)
                 {
                     // If the item in the slot has the same name as the acquired item
-                    if (slots[i].Item.itemName == _item.itemName)
+                    if (slots[i].Item.name == _item.name)
                     {
                         // Increase the count of the item in the slot by the acquired count
                         slots[i].SetSlotCount(_count);

@@ -13,14 +13,14 @@ public enum PArtnerMode
 
 public class PartnerAI : Status
 {
-    [SerializeField] private Gun gun; // 총
+    [SerializeField] private Weapon weapon; // 총
     [SerializeField] [Range(0, 100)] private float followRange;
     [SerializeField] [Range(0, 100)] private float searchRange;
     [SerializeField] private float rateOfAccuracy; // 정확도(0에 가까울 수록 정확도 높음)
     [SerializeField] private float rateOfFire; // 연사속도(rateOfFire초마다 발사)
     private float currentRateOfFire; // 연사속도 계산(갱신됨)
     [SerializeField] private float viewAngle; // 시야각
-    [SerializeField] private float spinSpeed; // 포신 회전 속도
+    [SerializeField] private float spinSpeed; // 회전 속도
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private ParticleSystem particle_MuzzleFlash; // 총구 섬광
     [SerializeField] private GameObject go_HitEffect_Prefab; // 적중 효과 이펙트
@@ -34,6 +34,7 @@ public class PartnerAI : Status
     [SerializeField] private Animator anim;
     private AudioSource theAudio;
     [SerializeField] private PartnerHUD partnerHUD; // 현재 체력.
+    [SerializeField] private SkillData partnerSkill; // 파트너 고유 스킬.
 
     private bool isFindTarget = false; // 적 타겟 발견시 True
     private bool isAttack = false; // 정확히 타겟을 향해 포신 회전 완료시 True (총구 방향과 적 방향이 일치할 때)
@@ -43,7 +44,7 @@ public class PartnerAI : Status
     // Start is called before the first frame update
     void Start()
     {
-        //gun = GetComponent<Gun>();
+        //weapon = GetComponent<Projectile>();
        // anim = GetComponent<Animator>();
     }
     protected override void OnEnable()
@@ -52,7 +53,7 @@ public class PartnerAI : Status
         base.OnEnable();    // Status의 OnEnable() 호출.
         //if (collider) collider.enabled = true;  // 피격을 받을 수 있도록 collider를 활성화.
         InitStatus();
-        partnerHUD.SetHealthBar(GetHpRatio());
+        if(partnerHUD) partnerHUD.SetHealthBar(GetHpRatio());
         // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
         if (agent) agent.isStopped = false;
         StartCoroutine(UpdatePath());
@@ -76,7 +77,7 @@ public class PartnerAI : Status
     public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
     {
         base.OnDamage(damage, hitPoint, hitNormal);
-        partnerHUD.SetHealthBar(GetHpRatio());
+        if (partnerHUD) partnerHUD.SetHealthBar(GetHpRatio());
         if (anim && !isDead)
         {
             if (hitEffect)
@@ -176,8 +177,8 @@ public class PartnerAI : Status
             Quaternion _lookRotation = Quaternion.LookRotation(_direction);
             Quaternion _rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 0.2f);
             transform.rotation = _rotation;
-            gun.Fire();
-            if ((gun.GetState.Equals(State.Empty)) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+            weapon.Fire();
+            if ((weapon.GetState.Equals(State.Empty)) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
 
         }
     }
@@ -201,9 +202,9 @@ public class PartnerAI : Status
                 {
                     /*                    GameObject _HitEffect = Instantiate(go_HitEffect_Prefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                                         Destroy(_HitEffect, 1f);*/
-                    gun.Fire();   // 총알 발사.  
+                    weapon.Fire();   // 총알 발사.  
                                   // 총알이 비었으면 재장전 시도.
-                    if ((gun.GetState.Equals(State.Empty)) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+                    if ((weapon.GetState.Equals(State.Empty)) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
 
                     if (hitInfo.transform.name == "Player")
                     {
@@ -213,4 +214,10 @@ public class PartnerAI : Status
             }
         }
     }
+
+    public SkillData GetPartnerSkill()
+    {
+        return partnerSkill;
+    }
+
 }

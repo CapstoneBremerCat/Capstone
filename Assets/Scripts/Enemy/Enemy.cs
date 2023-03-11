@@ -59,10 +59,10 @@ public class Enemy : Status
             if (agent && agent.enabled) agent.isStopped = true;  // navigation 정지.
             if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
-            GameManager.Instance.KillEnemy(isWaveEnemy);
+            if(GameManager.Instance) GameManager.Instance.KillEnemy(isWaveEnemy);
             //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
             //gameObject.SetActive(false);
-            ItemMgr.Instance.SpawnItem(transform.position + Vector3.up);
+            if(ItemMgr.Instance) ItemMgr.Instance.SpawnItem(transform.position + Vector3.up);
         };
     }
 

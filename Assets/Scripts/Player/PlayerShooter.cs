@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
 {
-    [SerializeField] private Gun gun;   // 총 오브젝트
+    [SerializeField] private Weapon weapon;   // 총 오브젝트
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Vector3 ScreenCenter;    // 에임 위치(정중앙)
     private Animator anim;
@@ -18,26 +18,26 @@ public class PlayerShooter : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
     }
 
-    public void SetGun(Gun gun)
+    public void SetWeapon(Weapon weapon)
     {
-        this.gun = gun;
+        this.weapon = weapon;
     }
 
     // Update is called once per frame
     public void ShootUpdate()
     {
-        if (!gun) return;
+        if (!weapon) return;
         Look();
         if(!playerInput) playerInput = GetComponent<PlayerInput>();
-        if (playerInput.fire) gun.Fire();   // 총알 발사.  
+        if (playerInput.fire) weapon.Fire();   // 총알 발사.  
                                             // 총알이 비었으면 재장전 시도.
-        if ((gun.GetState.Equals(State.Empty) || playerInput.reload) && gun.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
-        StageUIController.Instance.UpdateAmmoText(gun.MagAmmo, gun.AmmoRemain);  // ? 보호 수준
+        if ((weapon.GetState.Equals(State.Empty) || playerInput.reload) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+        StageUIController.Instance.UpdateAmmoText(weapon.MagAmmo, weapon.AmmoRemain);  // ? 보호 수준
     }
 
     public void AddAmmo(int value)
     {
-        if (gun) gun.AddAmmo(value);
+        if (weapon) weapon.AddAmmo(value);
     }
 
     // 총 회전
@@ -45,6 +45,6 @@ public class PlayerShooter : MonoBehaviour
     {
         // 스크린 상의 에임 위치를 참조하여 총을 해당 위치로 회전시킨다.
         Ray cameraRay = Camera.main.ScreenPointToRay(ScreenCenter);
-        if(gun) gun.transform.LookAt(gun.FirePos.position + cameraRay.direction * gun.HitRange);
+        if(weapon) weapon.transform.LookAt(weapon.FirePos.position + cameraRay.direction * weapon.HitRange);
     }
 }

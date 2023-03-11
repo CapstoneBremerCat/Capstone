@@ -81,6 +81,10 @@ public class Player : Status
     {
         if (playerShooter) playerShooter.ShootUpdate();
     }
+    public PlayerInput GetPlayerInput()
+    {
+        return playerInput;
+    }
 
     public float currentSpeed =>
      new Vector2(charController.velocity.x, charController.velocity.z).magnitude;

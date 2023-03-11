@@ -68,7 +68,7 @@ public class ActionController : MonoBehaviour
     {
         pickupActivated = true;
         actionText.gameObject.SetActive(true);
-        actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().Item.itemName + " È¹µæ " + "<color=yellow>" + "(E)" + "</color>";
+        actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().Item.name + " È¹µæ " + "<color=yellow>" + "(E)" + "</color>";
 
     }
 

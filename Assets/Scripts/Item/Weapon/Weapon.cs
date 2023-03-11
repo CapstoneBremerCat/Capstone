@@ -8,49 +8,45 @@ public enum State
     Reloading   // 재장전 중
 }
 
-public class Gun : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
     private Transform pivot;
-    private State state = State.Ready;  // 총의 현재 상태 정보.
+    private State state = State.Ready;
 
-    [Header("Gun")] //inspector에 표시, 해당 Data들의 사용처를 알려준다.
-    [SerializeField] private Bullet bullet; // 총알
-    [SerializeField] private Transform firePos; // 총알 발사 위치.
-    [SerializeField] private Transform weaponOffset;
+    [Header("Projectile")] //inspector에 표시, 해당 Data들의 사용처를 알려준다.
+    [SerializeField] private Projectile Projectile; // 투사체
+    [SerializeField] private Transform firePos; // 투사체 발사 위치.
+    [SerializeField] private string weaponName;  // 무기 이름.
 
-    [Header("Gun 속성")] // [Range(a,b)] : 값의 범위를 제한(a~b).
-    [SerializeField] private string gunName;  // 총 이름
+    [Header("Projectile Attribute")] // [Range(a,b)] : 값의 범위를 제한(a~b).
     [SerializeField] private float hitRange = 100f;  // 사정거리.
-    [SerializeField] private float timeBetFire = 0.12f;    // 총알 발사 간격.
-    private float lastFireTime; // 총을 마지막으로 발사한 시점.
-    private LineRenderer bulletLineRenderer;    // 총알 궤적을 그리기 위한 도구.
+    [SerializeField] private float timeBetFire = 0.12f;    // 투사체 발사 간격.
+    private float lastFireTime; // 마지막으로 발사한 시점.
 
     [SerializeField] private readonly int magCapacity = 50;  // 탄창 용량.
-    [SerializeField] private int ammoRemain = 900; // 소지하고 있는 총알의 수.
-    private int magAmmo;    // 현재 탄창에 남아있는 총알의 수.
+    [SerializeField] private int ammoRemain = 900; // 소지하고 있는 투사체의 수.
+    private int magAmmo;    // 현재 탄창에 남아있는 투사체의 수.
 
     [SerializeField] private float reloadTime = 0.9f;   // 재장전 소요 시간.
 
     [SerializeField] private float damage = 25;   // 무기의 공격력
 
     [Header("SFX")]
-    [SerializeField] private ParticleSystem muzzleFlashEffect;  // 총구의 화염 효과.
-    [SerializeField] private ParticleSystem shellEjectEffect;  // 탄피 배출 효과.
-    [SerializeField] private AudioClip shootSound;  // 총 발포 효과음.
+    [SerializeField] private ParticleSystem muzzleFlashEffect;  // 발사체 입구 효과.
+    [SerializeField] private AudioClip shootSound;  // 발사 효과음.
     [SerializeField] private AudioClip reloadSound; // 탄창 재장전 효과음.
     private AudioSource audioSource;
 
-    private Vector3 originPos;  // 원래 총의 위치
-    [SerializeField] private float retroActionForce;  // 반동 세기. 총의 종류마다 다름.
+    private Vector3 originPos;  // 원래 위치
+    [SerializeField] private float retroActionForce;  // 반동 세기
 
     public Transform FirePos { get { return firePos; } }
     public Vector3 Pivot { get { return (pivot) ? pivot.position : Vector3.zero; } set { if (pivot) pivot.position = value; } }
-    public Transform WeaponOffset { get { return weaponOffset; } }
     public State GetState { get { return state; } } // 커스텀.
     public int AmmoRemain { get { return ammoRemain; } }
     public int MagAmmo { get { return magAmmo; } }
     public float HitRange { get { return hitRange; } }
-    public string GunName { get { return gunName; } }
+    public string WeaponName { get { return weaponName; } }
 
     public bool IsFire { get; private set; }
 
@@ -61,13 +57,6 @@ public class Gun : MonoBehaviour
         audioSource.playOnAwake = false;
 
         //pivot = transform.parent;
-
-        bulletLineRenderer = GetComponent<LineRenderer>();
-        if (bulletLineRenderer)
-        {
-            bulletLineRenderer.positionCount = 2; // 선을 그리기 위한 두 점을 설정.
-            bulletLineRenderer.enabled = false;   // 총을 쏘기 전까지 궤적이 보이지 않도록 비활성화.
-        }
     }
 
     private void OnEnable()
@@ -78,10 +67,15 @@ public class Gun : MonoBehaviour
 
     }
 
-    public void SetOriginPos(Vector3 position)
+    public void SetPos(Vector3 position)
     {
         // 첫 위치 등록
         originPos = position;
+    }
+
+    public void SetFirePos(Transform transform)
+    {
+        firePos = transform;
     }
 
     public void Fire()
@@ -115,7 +109,7 @@ public class Gun : MonoBehaviour
             StartCoroutine(RetroActionCoroutine());
             StartCoroutine(ShotEffect(hitPos)); // 총알 발사 이펙트.
 
-            //Instantiate(bullet.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
+            Instantiate(Projectile.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
 
             magAmmo--;  // 탄창의 총알을 감소.
             if (0 >= magAmmo) state = State.Empty;  // 남은 총알 수 확인. 총알이 없다면, 총의 상태를 Empty로 변경.
@@ -145,40 +139,14 @@ public class Gun : MonoBehaviour
                 yield return null;
             }
         }
-        /*        else  // 정조준 상태
-                {
-                    transform.localPosition = fineSightOriginPos;
-
-                    // 반동 시작
-                    while (transform.localPosition.x <= retroActionFineSightForce - 0.02f)
-                    {
-                        transform.localPosition = Vector3.Lerp(transform.localPosition, retroActionRecoilBack, 0.4f);
-                        yield return null;
-                    }
-
-                    // 원위치
-                    while (transform.localPosition != fineSightOriginPos)
-                    {
-                        transform.localPosition = Vector3.Lerp(transform.localPosition, fineSightOriginPos, 0.1f);
-                        yield return null;
-                    }
-                }*/
     }
 
     private IEnumerator ShotEffect(Vector3 hitPosition)
     {
         if (muzzleFlashEffect) muzzleFlashEffect.Play();
-        if (shellEjectEffect) shellEjectEffect.Play();
         if (audioSource && shootSound) audioSource.PlayOneShot(shootSound);
 
-        if (bulletLineRenderer)
-        {
-            bulletLineRenderer.SetPosition(0, firePos.position); // 총알의 발사 지점에서,
-            bulletLineRenderer.SetPosition(1, hitPosition); // 총알이 맞은 위치까지 선을 그린다.
-            bulletLineRenderer.enabled = true; // 그림을 그리기위해 LineRenderer를 활성화 시킨다.
-        }
         yield return new WaitForSeconds(0.03f); // 0.03초 동안 잠시 처리를 대기.
-        if (bulletLineRenderer) bulletLineRenderer.enabled = false; // LineRenderer를 비활성화하여 총알 궤적을 지운다.
     }
 
 
