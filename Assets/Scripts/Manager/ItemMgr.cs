@@ -25,6 +25,30 @@ public class ItemMgr : MonoBehaviour
     }
     #endregion
 
+    // The item pool to search in
+    [SerializeField] private List<Item> itemList;
+    [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // The list of item prefabs
+    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // The list of item objects in the pool
+
+    [SerializeField] private Weapon[] weapons;  // an arrangement with all kinds of weapons as elements
+
+    // Use a Dictionary data structure to provide easy access to weapons by name from a management perspective.
+    private Dictionary<string, Weapon> weaponDictionary = new Dictionary<string, Weapon>();
+
+
+    void Start()
+    {
+        for (int i = 0; i < weapons.Length; i++)
+        {
+            weaponDictionary.Add(weapons[i].WeaponName, weapons[i]);
+        }
+    }
+
+    public Weapon GetWeaponByName(string weaponName)
+    {
+        return weaponDictionary[weaponName];
+    }
+
     // Get the total stats of a list of items
     public StatusData GetTotalItemStats(List<int> itemList)
     {
@@ -38,11 +62,6 @@ public class ItemMgr : MonoBehaviour
         }
         return statusData;
     }
-
-    // The item pool to search in
-    [SerializeField] private List<Item> itemList;
-    [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // The list of item prefabs
-    [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // The list of item objects in the pool
 
 
     // Find an item identical to the given item in the item pool

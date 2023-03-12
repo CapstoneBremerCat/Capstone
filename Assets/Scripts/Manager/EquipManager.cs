@@ -6,12 +6,6 @@ public class EquipManager : MonoBehaviour
 {
     public static EquipManager Instance { get; private set; }
 
-    [SerializeField]
-    private Weapon[] weapons;  // an arrangement with all kinds of weapons as elements
-
-    // Use a Dictionary data structure to provide easy access to weapons by name from a management perspective.
-    private Dictionary<string, Weapon> weaponDictionary = new Dictionary<string, Weapon>();
-
     [SerializeField] private Transform weaponSocket;
     // The inventory to update when equipping/unequipping weapons
     [SerializeField] private Inventory inventory;
@@ -32,14 +26,6 @@ public class EquipManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-        for (int i = 0; i < weapons.Length; i++)
-        {
-            weaponDictionary.Add(weapons[i].WeaponName, weapons[i]);
-        }
-    }
-
     public void Equip(Item item)
     {
         if (item.itemType == Item.ItemType.Weapon)
@@ -51,7 +37,7 @@ public class EquipManager : MonoBehaviour
 
     public void EquipWeapon(Item weaponItem)
     {
-        Weapon weaponPrefab = weaponDictionary[weaponItem.name];
+        Weapon weaponPrefab = ItemMgr.Instance.GetWeaponByName(weaponItem.name);
         if(!weaponPrefab)
         {
             Debug.Log("Can't found weapon from Dictionary");

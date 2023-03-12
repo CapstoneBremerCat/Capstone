@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerShooter : MonoBehaviour
 {
-    [SerializeField] private Weapon weapon;   // 총 오브젝트
+    [SerializeField] private Weapon weapon;   // 무기 오브젝트
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private Vector3 ScreenCenter;    // 에임 위치(정중앙)
     private Animator anim;
