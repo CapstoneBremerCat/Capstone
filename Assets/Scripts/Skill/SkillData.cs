@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[CreateAssetMenu(fileName = "New SkillData", menuName = "SkillData")]
-public class SkillData : ScriptableObject
+using Game;
+namespace Game
 {
-    public string skillName;
-    public float coolTime;
-    public float damage;
+    [CreateAssetMenu(fileName = "New SkillData", menuName = "SkillData")]
+    public class SkillData : ScriptableObject
+    {
+        public string skillName;
+        public float coolTime;
+        public float damage;
+    }
 }

@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class StageArea : MonoBehaviour
+using Game;
+namespace Game
 {
-    private void OnTriggerEnter(Collider other)
+    public class StageArea : MonoBehaviour
     {
-        if(other.tag == "Player")
+        private void OnTriggerEnter(Collider other)
         {
-            GameManager.Instance.StageClear();
+            if (other.tag == "Player")
+            {
+                GameManager.Instance.StageClear();
+            }
         }
     }
 }

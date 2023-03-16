@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Quest : MonoBehaviour
+using Game;
+namespace Game
 {
+    public class Quest : MonoBehaviour
+    {
+
+    }
 
 }

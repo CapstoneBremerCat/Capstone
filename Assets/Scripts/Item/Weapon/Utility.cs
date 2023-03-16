@@ -1,23 +1,26 @@
 using UnityEngine;
 using UnityEngine.AI;
-
-public static class Utility
+using Game;
+namespace Game
 {
-    public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float distance, int areaMask)
+    public static class Utility
     {
-        var randomPos = Random.insideUnitSphere * distance + center;
+        public static Vector3 GetRandomPointOnNavMesh(Vector3 center, float distance, int areaMask)
+        {
+            var randomPos = Random.insideUnitSphere * distance + center;
 
-        NavMeshHit hit;
+            NavMeshHit hit;
 
-        NavMesh.SamplePosition(randomPos, out hit, distance, areaMask);
+            NavMesh.SamplePosition(randomPos, out hit, distance, areaMask);
 
-        return hit.position;
-    }
+            return hit.position;
+        }
 
-    public static float GetRandomNormalDistribution(float mean, float standard)  // 정규 분포로 부터 랜덤값을 가져오는 함수 
-    {
-        var x1 = Random.Range(0f, 1f);
-        var x2 = Random.Range(0f, 1f);
-        return mean + standard * (Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Sin(2.0f * Mathf.PI * x2));
+        public static float GetRandomNormalDistribution(float mean, float standard)  // 정규 분포로 부터 랜덤값을 가져오는 함수 
+        {
+            var x1 = Random.Range(0f, 1f);
+            var x2 = Random.Range(0f, 1f);
+            return mean + standard * (Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Sin(2.0f * Mathf.PI * x2));
+        }
     }
 }

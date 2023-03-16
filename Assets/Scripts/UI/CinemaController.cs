@@ -2,34 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class CinemaController : MonoBehaviour
+using Game;
+namespace Game
 {
-    [SerializeField] private Button skipButton;
-
-    private void Start()
+    public class CinemaController : MonoBehaviour
     {
-        skipButton.onClick.AddListener(() => GameManager.Instance.MextScene());
-    }
+        [SerializeField] private Button skipButton;
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        private void Start()
         {
-            StartCoroutine(OnSkip());
+            skipButton.onClick.AddListener(() => GameManager.Instance.MextScene());
         }
-    }
 
-    // 스킵 버튼 활성화
-    public IEnumerator OnSkip()
-    {
-        skipButton.gameObject.SetActive(true);
-        yield return new WaitForSeconds(2.0f);
-        skipButton.gameObject.SetActive(false);
-    }
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                StartCoroutine(OnSkip());
+            }
+        }
 
-    public void EndCinema()
-    {
-        GameManager.Instance.MextScene();
+        // 스킵 버튼 활성화
+        public IEnumerator OnSkip()
+        {
+            skipButton.gameObject.SetActive(true);
+            yield return new WaitForSeconds(2.0f);
+            skipButton.gameObject.SetActive(false);
+        }
+
+        public void EndCinema()
+        {
+            GameManager.Instance.MextScene();
+        }
     }
 }

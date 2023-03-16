@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class ItemData
+using Game;
+namespace Game
 {
-    public int ItemCode;
-    public string Name;
-    public string Description;
-    public int StatCode;
-    public int EffectCode;
+    public class ItemData
+    {
+        public int ItemCode;
+        public string Name;
+        public string Description;
+        public int StatCode;
+        public int EffectCode;
+    }
 }

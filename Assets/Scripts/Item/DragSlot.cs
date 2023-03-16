@@ -2,33 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
-public class DragSlot : MonoBehaviour
+using Game;
+namespace Game
 {
-
-    static public DragSlot instance;
-
-    public Slot dragSlot;
-
-
-    [SerializeField]
-    private Image imageItem;
-
-    void Start()
+    public class DragSlot : MonoBehaviour
     {
-        instance = this;
-    }
 
-    public void DragSetImage(Image _itemImage)
-    {
-        imageItem.sprite = _itemImage.sprite;
-        SetColor(1);
-    }
+        static public DragSlot instance;
 
-    public void SetColor(float _alpha)
-    {
-        Color color = imageItem.color;
-        color.a = _alpha;
-        imageItem.color = color;
+        public Slot dragSlot;
+
+
+        [SerializeField]
+        private Image imageItem;
+
+        void Start()
+        {
+            instance = this;
+        }
+
+        public void DragSetImage(Image _itemImage)
+        {
+            imageItem.sprite = _itemImage.sprite;
+            SetColor(1);
+        }
+
+        public void SetColor(float _alpha)
+        {
+            Color color = imageItem.color;
+            color.a = _alpha;
+            imageItem.color = color;
+        }
     }
 }

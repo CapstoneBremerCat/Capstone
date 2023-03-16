@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-[CreateAssetMenu(fileName = "StatusObject", menuName = "ScriptableObjects/StatusObject", order = 0)]
-public class StatusObject : ScriptableObject
+using Game;
+namespace Game
 {
-    public int idCode;           // StatusObject id code
+    [CreateAssetMenu(fileName = "StatusObject", menuName = "ScriptableObjects/StatusObject", order = 0)]
+    public class StatusObject : ScriptableObject
+    {
+        public int idCode;           // StatusObject id code
 
-    public StatusData status;
+        public StatusData status;
+    }
 }

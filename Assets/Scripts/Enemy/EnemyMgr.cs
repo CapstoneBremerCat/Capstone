@@ -1,19 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class EnemyMgr : MonoBehaviour
+using Game;
+namespace Game
 {
-    public static EnemyMgr instance = null;
-    public static EnemyMgr Instance { get; private set; }
-    private void Awake()
+    public class EnemyMgr : MonoBehaviour
     {
-        if (!Instance)
+        public static EnemyMgr instance = null;
+        public static EnemyMgr Instance { get; private set; }
+        private void Awake()
         {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            return;
+            if (!Instance)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+                return;
+            }
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
     }
 }

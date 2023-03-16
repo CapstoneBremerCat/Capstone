@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Skill : MonoBehaviour
+using Game;
+namespace Game
 {
-    protected SkillData skillData;
-
-    public Skill(SkillData skillData)
+    public class Skill : MonoBehaviour
     {
-        this.skillData = skillData;
-    }
+        protected SkillData skillData;
 
-    public virtual void UseSkill()
-    {
-        Debug.Log("Use Skill: " + skillData.skillName);
+        public Skill(SkillData skillData)
+        {
+            this.skillData = skillData;
+        }
+
+        public virtual void UseSkill()
+        {
+            Debug.Log("Use Skill: " + skillData.skillName);
+        }
     }
 }
