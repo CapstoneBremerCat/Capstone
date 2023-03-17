@@ -29,12 +29,10 @@ namespace BlockChain
         public Sprite image;
     }
 
-
     public class _packet
     {
         public int errorno;
     }
-
 
     public class Test_req_upload
     {
@@ -47,7 +45,6 @@ namespace BlockChain
         public string code;
         public string message;
     }
-
     public class UpdateNFT_req_upload
     {
         public string addr; // totalsupply, ownedTokens
@@ -62,12 +59,10 @@ namespace BlockChain
         public int[] ownedTokens;
         public float balanceOfKlay;
     }
-
     public class getNFT_req_upload
     {
         public int tokenId;
     }
-
 
     // 받아와서 json에 넣을 거임
     public class getNFT_res_upload : _packet
@@ -81,7 +76,6 @@ namespace BlockChain
         public float price;
         public bool isSelling;
     }
-
 
     public class JsonCID
     {
@@ -97,7 +91,6 @@ namespace BlockChain
         public float price;
     }
 
-
     // 받아와서 json에 넣을 거임
     public class sellNFT_res_upload : _packet
     {
@@ -110,26 +103,20 @@ namespace BlockChain
         public GameObject itemButtonPrefab;
         public Transform itemPanelContainer;
         public GameObject itemDetailsPanel;
-        public Image itemDetailsImage;
-        public TextMeshProUGUI itemDetailsName;
-        public TextMeshProUGUI itemDetailsPrice;
-        public TextMeshProUGUI itemDetailsDescription;
         public TextMeshProUGUI shopKlay;
         public Button buyButton;
         public Button sellButton;
         public InputField priceInput;
         public Button checkButton;
 
-        private List<Item> items = new List<Item>();
+        private List<Item> items = new List<Item>();    // 모든 아이템들을 저장하는 배열
+        private List<Item> notSellingItems = new List<Item>(); // isSelling이 false인 모든 아이템들을 저장하는 배열
         private int selectedItemId = 0;
-
-        //public List<ItemSlot> itemSlots;
 
         private void Start()
         {
             Debug.Log("FirstLoadItems");
             StartCoroutine(FirstLoadItems());
-            //StartCoroutine(Test());
         }
 
         public void StoreButtonOnClick()
@@ -147,35 +134,12 @@ namespace BlockChain
 
             var _totalSupply = TotalSupply.GetTotalSupply();
 
-            //Debug.Log("_totalSupply getNFT" + _totalSupply);
-            //yield return StartCoroutine(LoadNFT(1));
             // totalSupply 받아왔으니 이걸로 이제 for문 돌려서 데이터 받아옴.
             for (int i = 1; i <= _totalSupply; i++)
             {
-                //Debug.Log("start - LoadNFT");
                 yield return StartCoroutine(LoadNFT(i));
-                //Debug.Log("end - LoadNFT");
             }
-
             // 이후 코드 실행
-        }
-
-        private IEnumerator Test()
-        {
-            var Testrequpload = new Test_req_upload();
-            //UpdateNFTrequpload.addr = LoginManager.Instance.GetAddr();
-            Testrequpload.req = "sibul";
-            var json = JsonConvert.SerializeObject(Testrequpload);
-
-            // 결과를 기다리는 yield return 추가
-            yield return StartCoroutine(Upload222("http://localhost:5000/Test", json, (result) =>
-            {
-                var Testresupload = JsonConvert.DeserializeObject<Test_res_upload>(result);
-
-                Debug.Log(Testresupload.code);
-                Debug.Log(Testresupload.message);
-
-            }));
         }
 
         IEnumerator LoadTotalSupply()
@@ -200,7 +164,7 @@ namespace BlockChain
                 Debug.Log("BalanceOfKlay : " + updateNFTresponseResult.balanceOfKlay);
                 Debug.Log(BalanceOfKlay.GetBalanceOfKlay());
 
-                shopKlay.text = updateNFTresponseResult.balanceOfKlay.ToString() + " KLAY";
+                shopKlay.text = updateNFTresponseResult.balanceOfKlay.ToString();
 
             }));
             //Debug.Log("LoadTotalSupply");
@@ -295,7 +259,7 @@ namespace BlockChain
             var _OwnedTokens = OwnedTokens.GetOwnedTokens();
             var _balanceOfKlay = BalanceOfKlay.GetBalanceOfKlay();
 
-            shopKlay.text = _balanceOfKlay.ToString() + " KLAY";
+            shopKlay.text = _balanceOfKlay.ToString();
 
 
             if (_totalSupply > preTotalSupply)
@@ -325,6 +289,26 @@ namespace BlockChain
             }
         }
 
+        // isSelling 값이 false인 모든 아이템들을 가져온다.
+        public List<Item> GetNotSellingItems()
+        {
+            // notSellingItems 리스트가 생성되지 않은 경우,
+            // 새로운 리스트를 생성하고 모든 아이템 중에서 isSelling 값이 false인 아이템들을 추가.
+            if (notSellingItems == null)
+            {
+                notSellingItems = new List<Item>();
+                foreach (var item in items)
+                {
+                    if (!item.isSelling)
+                    {
+                        notSellingItems.Add(item);
+                    }
+                }
+            }
+            // notSellingItems 리스트를 반환.
+            return notSellingItems;
+        }
+
         private void DisplayItems()
         {
             foreach (Item item in items)
@@ -338,17 +322,12 @@ namespace BlockChain
             }
         }
 
-
         private void ShowItemDetails(int itemId)
         {
             selectedItemId = itemId;
 
             Item selectedItem = items.Find(item => item.tokenId == selectedItemId);
-            itemDetailsImage.sprite = selectedItem.image;
-            itemDetailsName.text = selectedItem.name;
-            itemDetailsDescription.text = selectedItem.description;
-            itemDetailsPrice.text = selectedItem.price.ToString() + " KLAY";
-
+            itemDetailsPanel.GetComponent<ItemDetailsPanel>().SetItemDetails(selectedItem);
             itemDetailsPanel.SetActive(true);
 
             var preOwnedTokens = OwnedTokens.GetOwnedTokens();
@@ -406,7 +385,6 @@ namespace BlockChain
         {
 
         }
-
         IEnumerator Upload(string URL, string json, System.Action<string> OnCompleteUpload)
         {
             using (UnityWebRequest request = UnityWebRequest.Post(URL, json))
@@ -439,42 +417,6 @@ namespace BlockChain
                 }
             }
         }
-
-        IEnumerator Upload222(string URL, string json, System.Action<string> OnCompleteUpload)
-        {
-            using (UnityWebRequest request = UnityWebRequest.Post(URL, json))
-            {
-                try
-                {
-                    byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
-
-                    request.uploadHandler.Dispose();
-                    request.uploadHandler = new UploadHandlerRaw(jsonToSend);
-                    request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
-                    request.SetRequestHeader("Content-Type", "application/json");
-
-                    yield return request.SendWebRequest();
-
-                    if (request.result != UnityWebRequest.Result.Success)
-                    {
-                        Debug.Log("Error uploading data: " + request.error);
-                    }
-                    else
-                    {
-                        OnCompleteUpload(request.downloadHandler.text);
-                        request.Dispose();
-                    }
-                }
-                finally
-                {
-                    if (request != null)
-                    {
-                        request.Dispose();
-                    }
-                }
-            }
-        }
-
         IEnumerator GetImgCID(string URL, System.Action<string> OnCompleteUpload)
         {
             using (WWW www = new WWW(URL))
@@ -497,7 +439,6 @@ namespace BlockChain
             }
 
         }
-
         IEnumerator GetTexture(string URL, System.Action<Sprite> OnCompleteUpload)
         {
 
@@ -528,12 +469,8 @@ namespace BlockChain
                 }
             }
         }
-
-
-
         //1. getKlay 가져오고 이제 float로 다 바꿔서 결제 가능하도록 해야함.
         //2. buy 끝나면, 계산하고 확인 버튼 만들어서 다시 돌아가게 해야함.
         //3. sell 버튼 누르면 얼마에 팔건지 입력해야함.
-
     }
 }
