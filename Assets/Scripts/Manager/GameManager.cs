@@ -110,8 +110,8 @@ namespace Game
             if (sun) sun.UpdateSun();
             if (playerInput.skillSlot1)
             {
-                SkillData SkillData = partner.GetPartnerSkill();
-                UseSkill(SkillData);
+/*                SkillData SkillData = partner.GetPartnerSkill();
+                UseSkill(SkillData);*/
             }
         }
 
@@ -223,9 +223,9 @@ namespace Game
 
             return character;
         }
-        public void UseSkill(SkillData SkillData)
+        public void UseSkill(ActiveSkill activeSkill)
         {
-            if (stageUI.DisplayCooltime(SkillData.coolTime))
+            if (stageUI.DisplayCooltime(activeSkill.cooldown))
             {
                 /*스킬 사용*/
                 Debug.Log("Use SkillData");

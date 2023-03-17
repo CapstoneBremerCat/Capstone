@@ -36,7 +36,6 @@ namespace Game
         [SerializeField] private Animator anim;
         private AudioSource theAudio;
         [SerializeField] private PartnerHUD partnerHUD; // 현재 체력.
-        [SerializeField] private SkillData partnerSkill; // 파트너 고유 스킬.
 
         private bool isFindTarget = false; // 적 타겟 발견시 True
         private bool isAttack = false; // 정확히 타겟을 향해 포신 회전 완료시 True (총구 방향과 적 방향이 일치할 때)
@@ -216,11 +215,5 @@ namespace Game
                 }
             }
         }
-
-        public SkillData GetPartnerSkill()
-        {
-            return partnerSkill;
-        }
-
     }
 }

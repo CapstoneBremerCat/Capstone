@@ -6,16 +6,9 @@ namespace Game
 {
     public class Skill : MonoBehaviour
     {
-        protected SkillData skillData;
-
-        public Skill(SkillData skillData)
-        {
-            this.skillData = skillData;
-        }
-
-        public virtual void UseSkill()
-        {
-            Debug.Log("Use Skill: " + skillData.skillName);
-        }
+        public int skillId;
+        public string skillName;
+        public float skillDescription;
+        public Sprite skillImage;
     }
 }

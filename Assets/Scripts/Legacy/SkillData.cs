@@ -7,8 +7,9 @@ namespace Game
     [CreateAssetMenu(fileName = "New SkillData", menuName = "SkillData")]
     public class SkillData : ScriptableObject
     {
+        public int skillId;
         public string skillName;
-        public float coolTime;
-        public float damage;
+        public float skillDescription;
+        public Sprite skillImage;
     }
 }
