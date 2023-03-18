@@ -38,7 +38,7 @@ namespace Game
             go_Base.SetActive(true);
             activated = true;
             if_text.text = "";
-            text_Preview.text = DragSlot.instance.dragSlot.itemCount.ToString();
+            text_Preview.text = DragSlot.instance.dragSlot.GetComponent<Slot>().itemCount.ToString();
         }
 
         public void Cancel()
@@ -59,8 +59,9 @@ namespace Game
                 if (CheckNumber(text_Input.text))
                 {
                     num = int.Parse(text_Input.text);
-                    if (num > DragSlot.instance.dragSlot.itemCount)
-                        num = DragSlot.instance.dragSlot.itemCount;
+                    var slot = DragSlot.instance.dragSlot.GetComponent<Slot>();
+                    if (num > slot.itemCount)
+                        num = slot.itemCount;
                 }
                 else
                     num = 1;
@@ -75,10 +76,11 @@ namespace Game
         {
             for (int i = 0; i < _num; i++)
             {
-                Instantiate(DragSlot.instance.dragSlot.Item.itemPrefab,
+                var slot = DragSlot.instance.dragSlot.GetComponent<Slot>();
+                Instantiate(slot.Item.itemPrefab,
                     thePlayer.transform.position + thePlayer.transform.forward,
                     Quaternion.identity);
-                DragSlot.instance.dragSlot.SetSlotCount(-1);
+                slot.SetSlotCount(-1);
                 yield return new WaitForSeconds(0.05f);
             }
 

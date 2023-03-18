@@ -9,7 +9,6 @@ namespace Game
     {
         public string unitName { get; private set; } // name
         public int level { get; private set; }   // level
-        public List<int> itemList { get; private set; } // �������� �������ڵ� ����Ʈ
 
         [SerializeField] private StatusObject baseStat; // default Stat
         private StatusData totalStat; // sum of all stats
@@ -67,7 +66,8 @@ namespace Game
         // �����۵� �ʱ�ȭ�� �ؾ��ұ�? �������� ��������?
         public void InitStatus()
         {
-            if (baseStat) totalStat = baseStat.status;
+            totalStat = new StatusData();
+            if (baseStat) totalStat.AddStat(baseStat.status);
 
             SetHealth(totalStat.healthGauge.maxValue);
             SetMana(totalStat.manaGauge.maxValue);
@@ -92,6 +92,9 @@ namespace Game
             if (totalStat != null && status != null)
             {
                 totalStat.AddStat(status);
+                curHealth += status.healthGauge.maxValue;
+                curStamina += status.staminaGauge.maxValue;
+                curMana += status.manaGauge.maxValue;
             }
         }
 
@@ -100,21 +103,10 @@ namespace Game
             if (totalStat != null && status != null)
             {
                 totalStat.SubStat(status);
+                curHealth = Mathf.Min(curHealth, totalStat.healthGauge.maxValue);
+                curStamina = Mathf.Min(curHealth, totalStat.staminaGauge.maxValue);
+                curMana = Mathf.Min(curHealth, totalStat.manaGauge.maxValue);
             }
-        }
-
-        private void InitItemList()
-        {
-            if (itemList != null) itemList.Clear();
-        }
-
-        public void AddItemCodeToList(int itemCode)
-        {
-            itemList.Add(itemCode);
-        }
-        public void RemoveItemCodeToList(int itemCode)
-        {
-            itemList.Remove(itemCode);
         }
 
         public void OnGodMode()

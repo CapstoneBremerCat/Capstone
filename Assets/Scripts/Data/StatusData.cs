@@ -44,7 +44,10 @@ namespace Game
 
             healthGauge.maxValue += target.healthGauge.maxValue;
             healthGauge.regenValue += target.healthGauge.regenValue;
-
+            manaGauge.maxValue += target.manaGauge.maxValue;
+            manaGauge.regenValue += target.manaGauge.regenValue;
+            staminaGauge.maxValue += target.staminaGauge.maxValue;
+            staminaGauge.regenValue += target.staminaGauge.regenValue;
             moveSpeed += target.moveSpeed;
             attackSpeed += target.attackSpeed;
             attackPower += target.attackPower;
@@ -63,7 +66,10 @@ namespace Game
 
             healthGauge.maxValue -= target.healthGauge.maxValue;
             healthGauge.regenValue -= target.healthGauge.regenValue;
-
+            manaGauge.maxValue -= target.manaGauge.maxValue;
+            manaGauge.regenValue -= target.manaGauge.regenValue;
+            staminaGauge.maxValue -= target.staminaGauge.maxValue;
+            staminaGauge.regenValue -= target.staminaGauge.regenValue;
             moveSpeed -= target.moveSpeed;
             attackSpeed -= target.attackSpeed;
             attackPower -= target.attackPower;

@@ -10,7 +10,7 @@ namespace Game
 
         static public DragSlot instance;
 
-        public Slot dragSlot;
+        public GameObject dragSlot;
 
 
         [SerializeField]

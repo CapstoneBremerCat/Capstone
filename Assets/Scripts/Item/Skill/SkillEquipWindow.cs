@@ -55,7 +55,7 @@ namespace Game
             }
 
             SkillSlot skillSlot = null;
-            skillSlot = Array.Find(skillSlots, slot => slot.SlotType == skill.skillType);
+            skillSlot = Array.Find(skillSlots, slot => slot.SkillType == skill.skillType);
 
             if (skillSlot == null)
             {
@@ -69,6 +69,7 @@ namespace Game
             }
 
             skillSlot.SetSlot(skill);
+            GameManager.Instance.EquipSkill(skill);
             return true;
         }
 
@@ -80,7 +81,7 @@ namespace Game
             }
 
             SkillSlot skillSlot = null;
-            skillSlot = Array.Find(skillSlots, slot => slot.SlotType == skill.skillType);
+            skillSlot = Array.Find(skillSlots, slot => slot.SkillType == skill.skillType);
 
             if (skillSlot == null)
             {
@@ -89,6 +90,7 @@ namespace Game
             }
 
             skillSlot.ClearSlot();
+            GameManager.Instance.UnEquipSkill(skill);
             return true;
         }
     }

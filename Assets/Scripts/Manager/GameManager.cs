@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Game;
+using BlockChain;
 namespace Game
 {
     public enum GAMEMODE
@@ -71,7 +72,7 @@ namespace Game
         private int lastSavedHour;   // 마지막으로 저장된 시간
 
         private const float sleepWaitPeriod = 0.5f;    // 수면 시 매 시간이 변하는 간격
-
+        private const int MAX_EQUIPPED_PASSIVE_SKILLS = 4;
         public bool isGameOver { get; private set; }    // 게임오버 여부
         public bool isGameStart { get; private set; }    // 게임시작 여부
 
@@ -204,7 +205,7 @@ namespace Game
                     stageUI.SetStaminaBar(player.GetStaminaRatio());
                 };
             }
-
+            NFTManager.Instance.SetOwnedSkillToInventory();
             // 게임 시작 신호 활성화.
             isGameStart = true;
 
@@ -222,6 +223,44 @@ namespace Game
             GameObject character = Instantiate(prefab);
 
             return character;
+        }
+        public void EquipSkill(Skill skill)
+        {
+            if (skill != null && skill.skillType == SkillType.Passive && player.GetEquippedPassiveSkillCount() < MAX_EQUIPPED_PASSIVE_SKILLS)
+            {
+                PassiveSkill passiveSkill = skill as PassiveSkill;
+                if (passiveSkill != null)
+                {
+                    player.EquipPassiveSkill(passiveSkill);
+                }
+            }
+            else if (skill != null && skill.skillType == SkillType.Active && player.equippedActiveSkill == null)
+            {
+                ActiveSkill activeSkill = skill as ActiveSkill;
+                if (activeSkill != null)
+                {
+                    player.EquipActiveSkill(activeSkill);
+                }
+            }
+        }
+        public void UnEquipSkill(Skill skill)
+        {
+            if (skill != null && skill.skillType == SkillType.Passive)
+            {
+                PassiveSkill passiveSkill = skill as PassiveSkill;
+                if (passiveSkill != null)
+                {
+                    player.UnequipPassiveSkill(passiveSkill);
+                }
+            }
+            else if (skill != null && skill.skillType == SkillType.Active)
+            {
+                ActiveSkill activeSkill = skill as ActiveSkill;
+                if (activeSkill != null && player.equippedActiveSkill == activeSkill)
+                {
+                    player.UnequipActiveSkill();
+                }
+            }
         }
         public void UseSkill(ActiveSkill activeSkill)
         {

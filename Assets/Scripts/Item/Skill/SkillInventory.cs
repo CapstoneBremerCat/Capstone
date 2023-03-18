@@ -7,21 +7,28 @@ using System;
 
 namespace Game
 {
-    public class SkillInventory : MonoBehaviour, IDropHandler
+    public class SkillInventory : MonoBehaviour
     {
         // Singleton instance
-        private static SkillInventory instance;
-        public static SkillInventory Instance
+        #region instance
+        private static SkillInventory instance = null;
+        public static SkillInventory Instance { get { return instance; } }
+
+        private void Awake()
         {
-            get
+            // Scene에 이미 인스턴스가 존재 하는지 확인 후 처리
+            if (instance)
             {
-                if (instance == null)
-                {
-                    instance = FindObjectOfType<SkillInventory>();
-                }
-                return instance;
+                Destroy(this.gameObject);
+                return;
             }
+            // instance를 유일 오브젝트로 만든다
+            instance = this;
+
+            // Scene 이동 시 삭제 되지 않도록 처리
+            DontDestroyOnLoad(this.gameObject);
         }
+        #endregion
 
         // UI elements
         [SerializeField] private GameObject go_SkillInventoryBase;
@@ -59,28 +66,7 @@ namespace Game
         {
             go_SkillInventoryBase.SetActive(false);
         }
-        // Called when a skill slot is dropped onto another skill slot
-        public void OnDrop(PointerEventData eventData)
-        {
-            if (eventData.pointerDrag != null)
-            {
-                SkillSlot draggedSlot = eventData.pointerDrag.GetComponent<SkillSlot>();
-                SkillSlot targetSlot = eventData.pointerEnter.GetComponent<SkillSlot>();
 
-                if (draggedSlot != null && targetSlot != null)
-                {
-                    // Swap the equipped skill between the two slots
-                    Skill draggedSkill = draggedSlot.equippedSkill;
-                    Skill targetSkill = targetSlot.equippedSkill;
-
-                    if (draggedSkill != null && targetSkill != null)
-                    {
-                        draggedSlot.SetSlot(targetSkill);
-                        targetSlot.SetSlot(draggedSkill);
-                    }
-                }
-            }
-        }
         // Add a skill to the inventory
         public bool AddSkill(Skill skill)
         {

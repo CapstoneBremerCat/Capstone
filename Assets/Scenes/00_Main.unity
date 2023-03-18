@@ -4316,31 +4316,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 971886932}
-  - component: {fileID: 971886931}
+  - component: {fileID: 971886933}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: SkillManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &971886931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971886930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b425e8784c0bf9f41b7e03ed33d7680d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillId: 0
-  skillName: 
-  skillDescription: 0
-  skillImage: {fileID: 0}
-  buffValue: 0
 --- !u!4 &971886932
 Transform:
   m_ObjectHideFlags: 0
@@ -4356,6 +4339,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &971886933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971886930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4b79f6b704f4684784fe785301904c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillList: []
 --- !u!1 &978189930
 GameObject:
   m_ObjectHideFlags: 0
@@ -15093,3 +15089,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2144742977}
   m_CullTransparentMesh: 1
+--- !u!1001 &7436977621794056098
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7436977623556576877, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_Name
+      value: DummySkill
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 26.790594
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.075125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 47.163055
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7436977623556576883, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0a30b09dabd709440b472b7d8f7a3008, type: 3}

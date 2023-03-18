@@ -33,7 +33,7 @@ namespace Game
         private AudioSource audioSource;    // ȿ������ ����ϴµ� ���.
         private int animSpeed = 0;   // �ִϸ��̼� �ӵ�
 
-        private List<PassiveSkill> equippedPassiveSkills;
+        private List<PassiveSkill> equippedPassiveSkills = new List<PassiveSkill>();
         public ActiveSkill equippedActiveSkill { get; private set; }
         public int GetEquippedPassiveSkillCount()
         {
@@ -42,16 +42,20 @@ namespace Game
         public void EquipPassiveSkill(PassiveSkill passive)
         {
             equippedPassiveSkills.Add(passive);
-            ApplyStatus(passive.statusObject.status);
+            ApplyStatus(passive.statusData);
         }
         public void UnequipPassiveSkill(PassiveSkill passive)
         {
             equippedPassiveSkills.Remove(passive);
-            RemoveStatus(passive.statusObject.status);
+            RemoveStatus(passive.statusData);
         }
         public void EquipActiveSkill(ActiveSkill active)
         {
             equippedActiveSkill = active;
+        }
+        public void UnequipActiveSkill()
+        {
+            equippedActiveSkill = null;
         }
         private void Awake()
         {

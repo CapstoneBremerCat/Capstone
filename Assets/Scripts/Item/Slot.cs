@@ -113,7 +113,7 @@ namespace Game
         {
             if (item != null && item.itemType != Item.ItemType.Weapon)
             {
-                DragSlot.instance.dragSlot = this;
+                DragSlot.instance.dragSlot = this.gameObject;
                 DragSlot.instance.DragSetImage(itemImage);
                 DragSlot.instance.transform.position = eventData.position;
             }
@@ -134,9 +134,10 @@ namespace Game
         || DragSlot.instance.transform.localPosition.y < baseRect.yMin
         || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
             {
-                Instantiate(DragSlot.instance.dragSlot.item.itemPrefab, player.position + player.forward * 2 + new Vector3(0, 0.5f, 0),
+                var slot = DragSlot.instance.dragSlot.GetComponent<Slot>();
+                Instantiate(slot.item.itemPrefab, player.position + player.forward * 2 + new Vector3(0, 0.5f, 0),
                     Quaternion.identity);
-                DragSlot.instance.dragSlot.ClearSlot();
+                slot.ClearSlot();
 
             }
             DragSlot.instance.SetColor(0);
@@ -155,16 +156,17 @@ namespace Game
         {
             Item _tempItem = item;
             int _tempItemCount = itemCount;
-
-            AddItem(DragSlot.instance.dragSlot.item, DragSlot.instance.dragSlot.itemCount);
+            var slot = DragSlot.instance.dragSlot.GetComponent<Slot>();
+            if (!slot) return;
+            AddItem(slot.item, slot.itemCount);
 
             if (_tempItem != null)
             {
-                DragSlot.instance.dragSlot.AddItem(_tempItem, _tempItemCount);
+                slot.AddItem(_tempItem, _tempItemCount);
             }
             else
             {
-                DragSlot.instance.dragSlot.ClearSlot();
+                slot.ClearSlot();
             }
         }
 

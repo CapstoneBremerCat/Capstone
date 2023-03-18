@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;	// UnityWebRequest사용을 위해서 적어준다.
 using Newtonsoft.Json;
 using BlockChain;
+using Game;
 namespace BlockChain
 {
     public class Item
@@ -106,6 +107,8 @@ namespace BlockChain
         private float _balanceOfKlay;
         private List<Item> items = new List<Item>();    // 모든 아이템들을 저장하는 배열
         private List<Item> notSellingItems = new List<Item>(); // isSelling이 false인 모든 아이템들을 저장하는 배열
+        private List<Skill> skillList = new List<Skill>();
+        private Dictionary<int, Skill> skillDictionary = new Dictionary<int, Skill>();
         private bool isLoaded = false; // 모든 아이템이 로딩되었는지 여부를 저장할 변수
         public float balanceOfKlay { get { return _balanceOfKlay; } }
         private IEnumerator FirstLoadItems()
@@ -123,6 +126,8 @@ namespace BlockChain
             // 이후 코드 실행
             // 모든 아이템이 로딩되었다는 플래그를 true로 변경
             isLoaded = true;
+            LoadNFTSkills();
+
         }
 
         IEnumerator LoadTotalSupply()
@@ -299,6 +304,66 @@ namespace BlockChain
             // notSellingItems 리스트를 반환.
             return notSellingItems;
         }
+
+        private void LoadNFTSkills()
+        {
+            // Create Skill objects from the filtered skill items and add them to the skill list and dictionary
+            foreach (Item skillItem in items)
+            {
+                // Check if the item is in the items list
+                if (items.Contains(skillItem))
+                {
+                    continue; // Skip adding this item as a skill
+                }
+                // Create a new SkillInfo object with the item's information
+                SkillInfo skillInfo = new SkillInfo(skillItem.tokenId, skillItem.name, skillItem.description, skillItem.image);
+
+                // Create a new Skill object with the SkillInfo and add it to the skillList and skillDictionary
+                Skill skill = new Skill(skillInfo);
+                skillList.Add(skill);
+                skillDictionary.Add(skill.skillInfo.skillId, skill);
+            }
+        }
+        public Skill GetNFTSkillByID(int skillID)
+        {
+            // Check if the skillDictionary contains a Skill with the given skillID
+            if (skillDictionary.ContainsKey(skillID))
+            {
+                // Return the Skill object with the given skillID
+                return skillDictionary[skillID];            
+            }
+            else
+            {
+                // If the skill is not found, log a warning and return null
+                Debug.LogWarning($"NFTManager: Skill with ID {skillID} not found.");
+                return null;
+            }
+        }
+
+        public void SetOwnedSkillToInventory()
+        {
+            int[] ownedSkillids = OwnedTokens.GetOwnedTokens();
+            if (ownedSkillids == null)
+            {
+                Debug.LogWarning("Failed to get owned skill IDs from OwnedTokens");
+                return;
+            }
+
+            foreach (int skillID in ownedSkillids)
+            {
+                Skill skill = GetNFTSkillByID(skillID);
+
+                if (skill != null)
+                {
+                    SkillInventory.Instance.AddSkill(skill);
+                }
+                else
+                {
+                    Debug.LogWarning($"Skill with ID {skillID} not found.");
+                }
+            }
+        }
+
 
         public IEnumerator Upload(string URL, string json, System.Action<string> OnCompleteUpload)
         {

@@ -6,7 +6,8 @@ namespace Game
 {
     public class PassiveSkill : Skill
     {
-        public StatusObject statusObject { get; private set; }
+        [SerializeField] private StatusObject statusObject;
+        public StatusData statusData { get { return statusObject.status; } }
 
         public PassiveSkill(SkillInfo skillInfo, StatusObject statusObject) : base(skillInfo)
         {
