@@ -7,8 +7,7 @@ namespace Game
     [CreateAssetMenu(fileName = "StatusObject", menuName = "ScriptableObjects/StatusObject", order = 0)]
     public class StatusObject : ScriptableObject
     {
-        public int idCode;           // StatusObject id code
-
+        public int id;           // StatusObject id code
         public StatusData status;
     }
 }

@@ -42,12 +42,12 @@ namespace Game
         public void EquipPassiveSkill(PassiveSkill passive)
         {
             equippedPassiveSkills.Add(passive);
-            ApplyStatus(passive.status);
+            ApplyStatus(passive.statusObject.status);
         }
         public void UnequipPassiveSkill(PassiveSkill passive)
         {
             equippedPassiveSkills.Remove(passive);
-            RemoveStatus(passive.status);
+            RemoveStatus(passive.statusObject.status);
         }
         public void EquipActiveSkill(ActiveSkill active)
         {

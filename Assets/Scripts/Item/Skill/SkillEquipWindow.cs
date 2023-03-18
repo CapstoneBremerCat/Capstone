@@ -9,7 +9,11 @@ namespace Game
 {
     public class SkillEquipWindow : MonoBehaviour
     {
+        [SerializeField] private Slot weaponSlot;
         [SerializeField] private SkillSlot[] skillSlots;
+        [SerializeField] private GameObject windowBase;
+        private bool windowActivated = false;
+
 
         public void Initialize()
         {
@@ -19,6 +23,30 @@ namespace Game
             }
         }
 
+        void Update()
+        {
+            // Toggle the inventory on/off with the K key
+            if (Input.GetKeyDown(KeyCode.U))
+            {
+                windowActivated = !windowActivated;
+
+                if (windowActivated)
+                    OpenInventory();
+                else
+                    CloseInventory();
+            }
+        }
+        // Open the skill inventory UI
+        public void OpenInventory()
+        {
+            windowBase.SetActive(true);
+        }
+        // Close the skill inventory UI
+        public void CloseInventory()
+        {
+            windowBase.SetActive(false);
+        }
+        // Ca
         public bool EquipSkill(Skill skill)
         {
             if (skill == null)
@@ -37,8 +65,7 @@ namespace Game
 
             if (skillSlot.equippedSkill != null)
             {
-                Debug.LogWarning($"Equip slot {skillSlot.SlotType} is already occupied.");
-                return false;
+                UnequipSkill(skillSlot.equippedSkill);
             }
 
             skillSlot.SetSlot(skill);

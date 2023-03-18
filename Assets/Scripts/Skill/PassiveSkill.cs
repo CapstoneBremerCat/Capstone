@@ -6,12 +6,12 @@ namespace Game
 {
     public class PassiveSkill : Skill
     {
-        public StatusData status { get; private set; }
+        public StatusObject statusObject { get; private set; }
 
-        public PassiveSkill(SkillInfo skillInfo, StatusData status) : base(skillInfo)
+        public PassiveSkill(SkillInfo skillInfo, StatusObject statusObject) : base(skillInfo)
         {
             this.skillInfo = skillInfo;
-            this.status = status;
+            this.statusObject = statusObject;
         }
     }
 }

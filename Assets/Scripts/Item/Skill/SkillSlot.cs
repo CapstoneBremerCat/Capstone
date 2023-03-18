@@ -9,8 +9,10 @@ namespace Game
 {
     public class SkillSlot : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
-        public SkillType SlotType { get; private set; } // Slot type
-        public Image icon { get; private set; }  // Slot icon
+        [SerializeField] private Image icon;
+        [SerializeField] private SkillType slotType;    // Slot type
+
+        public SkillType SlotType { get { return slotType; } } 
         public Skill equippedSkill  { get; private set; }    // Equipped skill
         // Original parent and position for drag and drop
         private Transform originalParent;

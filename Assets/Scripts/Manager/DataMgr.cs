@@ -12,16 +12,16 @@ namespace Game
 
         private void Awake()
         {
-            // Scene¿¡ ÀÌ¹Ì ÀÎ½ºÅÏ½º°¡ Á¸Àç ÇÏ´ÂÁö È®ÀÎ ÈÄ Ã³¸®
+            // Sceneï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½
             if (instance)
             {
                 Destroy(this.gameObject);
                 return;
             }
-            // instance¸¦ À¯ÀÏ ¿ÀºêÁ§Æ®·Î ¸¸µç´Ù
+            // instanceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
             instance = this;
 
-            // Scene ÀÌµ¿ ½Ã »èÁ¦ µÇÁö ¾Êµµ·Ï Ã³¸®
+            // Scene ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
             DontDestroyOnLoad(this.gameObject);
         }
         #endregion
@@ -30,7 +30,7 @@ namespace Game
         private Dictionary<int, ItemData> itemDataMap = new Dictionary<int, ItemData>();
         private Dictionary<int, StatusObject> itemStatMap = new Dictionary<int, StatusObject>();
 
-        // µÎ°³°¡ µ¿ÀÏÇÑ ·ÎÁ÷ÀÎµ¥.. ÇÕÄ¥ ¹æ¹ýÀº ¾ø´Â°É±î ¤Ì
+        // ï¿½Î°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Îµï¿½.. ï¿½ï¿½Ä¥ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°É±ï¿½ ï¿½ï¿½
         private void LoadItemData()
         {
             List<ItemData> itemDataList = XML<ItemData>.Read("ItemTable");
@@ -39,10 +39,10 @@ namespace Game
                 itemDataMap.Add(itemDataList[i].ItemCode, itemDataList[i]);
             }
 
-            itemStatArr = Resources.LoadAll<StatusObject>("ScriptableObjects/ItemStats");
+            itemStatArr = Resources.LoadAll<StatusObject>("ScriptableObjects/NFT_Passive");
             for (int i = 0; i < itemStatArr.Length; i++)
             {
-                itemStatMap.Add(itemStatArr[i].idCode, itemStatArr[i]);
+                itemStatMap.Add(itemStatArr[i].id, itemStatArr[i]);
             }
         }
 
