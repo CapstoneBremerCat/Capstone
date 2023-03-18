@@ -22,7 +22,7 @@ namespace Game
 
         public static bool inventoryActivated = false;
 
-        // ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ®
+        // ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         [SerializeField]
         private GameObject go_InventoryBase;
         [SerializeField]
@@ -30,7 +30,7 @@ namespace Game
 
         // The currently equipped item
         private Item equippedItem;
-        // ½½·Ôµé
+        // ï¿½ï¿½ï¿½Ôµï¿½
         [SerializeField] private Slot[] slots;
 
         // Start is called before the first frame update
@@ -100,7 +100,7 @@ namespace Game
             }
         }
 
-        // ÀÎº¥Åä¸® ÃÊ±âÈ­
+        // ï¿½Îºï¿½ï¿½ä¸® ï¿½Ê±ï¿½È­
         public void InitInventory()
         {
             for (int i = 0; i < slots.Length; i++)

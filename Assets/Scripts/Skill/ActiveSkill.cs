@@ -8,8 +8,15 @@ namespace Game
     {
         public float cooldown;
 
+        public ActiveSkill(SkillInfo skillInfo, float cooldown) : base(skillInfo)
+        {
+            this.skillInfo = skillInfo;
+            this.cooldown = cooldown;
+        }
+
         public virtual void UseSkill()
         {
+            
         }
     }
 }

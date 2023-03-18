@@ -6,12 +6,12 @@ namespace Game
 {
     public class PassiveSkill : Skill
     {
-        protected bool isActive;
-        public float buffValue;
+        public StatusData status { get; private set; }
 
-        public virtual void ApplyPassiveEffect(Status status)
+        public PassiveSkill(SkillInfo skillInfo, StatusData status) : base(skillInfo)
         {
-            // 스킬 효과를 적용하는 로직 구현
+            this.skillInfo = skillInfo;
+            this.status = status;
         }
     }
 }

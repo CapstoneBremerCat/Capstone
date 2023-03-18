@@ -7,42 +7,62 @@ namespace Game
     public class Player : Status
     {
         [Header("Scripts")]
-        [SerializeField] private PlayerShooter playerShooter;   // ÃÑ ¹ß»ç 
+        [SerializeField] private PlayerShooter playerShooter;   // ï¿½ï¿½ ï¿½ß»ï¿½ 
 
         [Header("PlayerMove")]
-        [SerializeField] private Transform cam; // ¸ÞÀÎ Ä«¸Þ¶ó
-                                                //[SerializeField] private Transform cameraArm; // Ä«¸Þ¶ó Ãà
-        [SerializeField] private Transform charBody; //  Ä³¸¯ÅÍ ¸öÃ¼
-        [SerializeField] private CharacterController charController;    //  Ä³¸¯ÅÍ ÄÁÆ®·Ñ·¯
-        [SerializeField] private PlayerInput playerInput;       // ÀÔ·Â °¨Áö
+        [SerializeField] private Transform cam; // ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½Þ¶ï¿½
+                                                //[SerializeField] private Transform cameraArm; // Ä«ï¿½Þ¶ï¿½ ï¿½ï¿½
+        [SerializeField] private Transform charBody; //  Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼
+        [SerializeField] private CharacterController charController;    //  Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ®ï¿½Ñ·ï¿½
+        [SerializeField] private PlayerInput playerInput;       // ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-        [Range(0.01f, 1f)] public float airControlPercent;  // Ã¼°ø ½Ã ¼Óµµ º¸Á¤
-        [Range(0.01f, 2f)] public float gravityPercent;   // Áß·Â º¸Á¤
-        [SerializeField] private float speedSmoothTime = 0.1f;    // ½º¹«½ºÇÏ°Ô ÀÌµ¿ÇÏ´Â Áö¿¬ ½Ã°£
-        [SerializeField] private float turnSmoothTime = 0.1f;     // ½º¹«½ºÇÏ°Ô È¸ÀüÇÏ´Â Áö¿¬ ½Ã°£
+        [Range(0.01f, 1f)] public float airControlPercent;  // Ã¼ï¿½ï¿½ ï¿½ï¿½ ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½
+        [Range(0.01f, 2f)] public float gravityPercent;   // ï¿½ß·ï¿½ ï¿½ï¿½ï¿½ï¿½
+        [SerializeField] private float speedSmoothTime = 0.1f;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ìµï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+        [SerializeField] private float turnSmoothTime = 0.1f;     // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ È¸ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
 
-        private float speedSmoothVelocity;  // ÀÌµ¿ º¸Á¤ ¼Óµµ
-        private float turnSmoothVelocity;   // È¸Àü º¸Á¤ ¼Óµµ
-        private float currentVelocityY;     // Áß·Â¿¡ ÀÇÇØ¼­ ¹Ù´Ú¿¡ ¶³¾îÁö´Â y¹æÇâ ¼Óµµ
+        private float speedSmoothVelocity;  // ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
+        private float turnSmoothVelocity;   // È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
+        private float currentVelocityY;     // ï¿½ß·Â¿ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Ù´Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ yï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½
 
         [Header("SFX")]
-        [SerializeField] private AudioClip deathSound;  // »ç¸Á È¿°úÀ½.
-        [SerializeField] private AudioClip hitSound; // ÇÇ°Ý È¿°úÀ½.
-        [SerializeField] private ParticleSystem hitEffect;  // ÇÇ°Ý ÀÌÆåÆ®.
-        [SerializeField] private Animator anim; // ¾Ö´Ï¸ÞÀÌ¼Ç
-        private AudioSource audioSource;    // È¿°úÀ½À» Ãâ·ÂÇÏ´Âµ¥ »ç¿ë.
-        private int animSpeed = 0;   // ¾Ö´Ï¸ÞÀÌ¼Ç ¼Óµµ
+        [SerializeField] private AudioClip deathSound;  // ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½.
+        [SerializeField] private AudioClip hitSound; // ï¿½Ç°ï¿½ È¿ï¿½ï¿½ï¿½ï¿½.
+        [SerializeField] private ParticleSystem hitEffect;  // ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®.
+        [SerializeField] private Animator anim; // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
+        private AudioSource audioSource;    // È¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´Âµï¿½ ï¿½ï¿½ï¿½.
+        private int animSpeed = 0;   // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Óµï¿½
 
+        private List<PassiveSkill> equippedPassiveSkills;
+        public ActiveSkill equippedActiveSkill { get; private set; }
+        public int GetEquippedPassiveSkillCount()
+        {
+            return equippedPassiveSkills.Count;
+        }
+        public void EquipPassiveSkill(PassiveSkill passive)
+        {
+            equippedPassiveSkills.Add(passive);
+            ApplyStatus(passive.status);
+        }
+        public void UnequipPassiveSkill(PassiveSkill passive)
+        {
+            equippedPassiveSkills.Remove(passive);
+            RemoveStatus(passive.status);
+        }
+        public void EquipActiveSkill(ActiveSkill active)
+        {
+            equippedActiveSkill = active;
+        }
         private void Awake()
         {
             OnDeath += () =>
             {
-            // ´õ ÀÌ»ó ÇÇ°Ý ÆÇÁ¤ÀÌ µÇÁö ¾Ê°Ô collider¸¦ ²ö´Ù.
+            // ï¿½ï¿½ ï¿½Ì»ï¿½ ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½ colliderï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
             //if (collider) collider.enabled = false;
-            if (anim) anim.SetBool("isDead", isDead);   // Zombie Death ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà.
-            if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // »ç¸Á È¿°úÀ½ 1È¸ Àç»ý.
-                                                                                    //GameMgr.instance.AddScore(100); // enemy Ã³Ä¡ ½Ã, 100 score »ó½Â.
-                                                                                    //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy Ã³Ä¡ ½Ã, Spawn Count °¨¼Ò.
+            if (anim) anim.SetBool("isDead", isDead);   // Zombie Death ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½.
+            if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ 1È¸ ï¿½ï¿½ï¿½.
+                                                                                    //GameMgr.instance.AddScore(100); // enemy Ã³Ä¡ ï¿½ï¿½, 100 score ï¿½ï¿½ï¿½.
+                                                                                    //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy Ã³Ä¡ ï¿½ï¿½, Spawn Count ï¿½ï¿½ï¿½ï¿½.
             GameManager.Instance.GameOver();
             };
         }
@@ -60,15 +80,15 @@ namespace Game
                 if (hitEffect)
                 {
                     var hitEffectTR = hitEffect.transform;
-                    hitEffectTR.position = hitPoint;    // ÀÌÆåÆ®¸¦ ÇÇ°Ý ÁöÁ¡À¸·Î ÀÌµ¿.
-                                                        // ÇÇ°Ý ´çÇÑ ¹æÇâÀ¸·Î È¸Àü.
+                    hitEffectTR.position = hitPoint;    // ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½.
+                                                        // ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½.
                     hitEffectTR.rotation = Quaternion.LookRotation(hitNormal);
-                    hitEffect.Play();   // ÀÌÆåÆ® Àç»ý.
+                    hitEffect.Play();   // ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½.
                 }
 
-                // ÇÇ°Ý È¿°úÀ½ 1È¸ Àç»ý.
+                // ï¿½Ç°ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ 1È¸ ï¿½ï¿½ï¿½.
                 if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
-                anim.SetTrigger("Damaged"); // µ¥¹ÌÁö¸¦ ÀÔ°í Á×Áö ¾Ê¾Ò´Ù¸é, ÇÇ°Ý ¾Ö´Ï¸ÞÀÌ¼Ç ½ÇÇà.
+                anim.SetTrigger("Damaged"); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò´Ù¸ï¿½, ï¿½Ç°ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½.
             }
         }
 
@@ -106,7 +126,7 @@ namespace Game
             var targetSpeed = moveSpeed * moveInput.magnitude * animSpeed;
             var moveDirection = Vector3.Normalize(transform.forward * moveInput.y + transform.right * moveInput.x);
 
-            // ÀÌµ¿ ÀÔ·ÂÀÌ ÀÖÀ» °æ¿ì Ä³¸¯ÅÍ ¹Ùµð ¹æÇâÀ» ½ÇÁ¦ ÀÌµ¿¹æÇâÀ¸·Î º¯°æ
+            // ï¿½Ìµï¿½ ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ùµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (moveInput.magnitude != 0) charBody.forward = moveDirection;
 
             var smoothTime = charController.isGrounded ? speedSmoothTime : speedSmoothTime / airControlPercent;
@@ -146,7 +166,7 @@ namespace Game
 
         public void Jump()
         {
-            // Ä³¸¯ÅÍ°¡ ¶¥¿¡ ºÙ¾îÀÖ´Â °æ¿ì¿¡¸¸ ÀÛµ¿ 
+            // Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¾ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½Ûµï¿½ 
             if (!charController.isGrounded) return;
 
             currentVelocityY = jumpPower;
@@ -155,7 +175,7 @@ namespace Game
         public void MoveAnim(float h, float v)
         {
             float value = Mathf.Abs(v) > Mathf.Abs(h) ? v : h;
-            // ´Þ¸®±â ÀÔ·Â ½Ã °ª µÎ¹è·Î Áõ°¡
+            // ï¿½Þ¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Î¹ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (anim) anim.SetFloat("Magnitude", value * animSpeed);
         }
     }

@@ -74,5 +74,6 @@ namespace Game
                 equippedWeapon = null;
             }
         }
+
     }
 }

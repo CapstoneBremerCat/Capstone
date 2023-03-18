@@ -9,7 +9,7 @@ namespace Game
     {
         public string unitName { get; private set; } // name
         public int level { get; private set; }   // level
-        public List<int> itemList { get; private set; } // Àû¿ëÁßÀÎ ¾ÆÀÌÅÛÄÚµå ¸®½ºÆ®
+        public List<int> itemList { get; private set; } // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 
         [SerializeField] private StatusObject baseStat; // default Stat
         private StatusData totalStat; // sum of all stats
@@ -26,7 +26,7 @@ namespace Game
         public float regenStamina { get { return totalStat.staminaGauge.regenValue; } }
 
         public bool isHpFull { get { return totalStat.healthGauge.maxValue <= curHealth; } }
-        public bool isHpZero { get { return 0 >= curHealth; } }    // Á×À½ »óÅÂ È®ÀÎ.
+        public bool isHpZero { get { return 0 >= curHealth; } }    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½.
         public bool isMpFull { get { return totalStat.manaGauge.maxValue <= curMana; } }
         public bool isMpZero { get { return 0 >= curMana; } }
         public bool isSpFull { get { return totalStat.staminaGauge.maxValue <= curStamina; } }
@@ -43,9 +43,9 @@ namespace Game
         public float jumpPower { get { return totalStat.jumpPower; } }
         public float runStamina { get { return totalStat.runStamina; } }
 
-        public ConditionType curCondition { get; private set; }    // ÇöÀç »óÅÂ(±âº», Ä§¹¬, ±âÀý)
-        public bool isDead { get { return (0 >= curHealth); } }    // Á×À½ »óÅÂ È®ÀÎ.
-        public event Action OnDeath; // »ç¸Á ½Ã ¹ßµ¿ÇÒ ÀÌº¥Æ®
+        public ConditionType curCondition { get; private set; }    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½âº», Ä§ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½)
+        public bool isDead { get { return (0 >= curHealth); } }    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½.
+        public event Action OnDeath; // ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ßµï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®
 
         protected virtual void OnEnable()
         {
@@ -54,17 +54,17 @@ namespace Game
 
         public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
-            if (isDead) return; // ÀÌ¹Ì Á×Àº »óÅÂ¶ó¸é ´õ ÀÌ»ó Ã³¸®ÇÏÁö ¾Ê´Â´Ù.
+            if (isDead) return; // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì»ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´ï¿½.
 
-            curHealth -= damage;   // µ¥¹ÌÁö ¸¸Å­ Ã¼·Â °¨¼Ò.
-            if (isDead) Die();  // µ¥¹ÌÁö¸¦ ÀÔ¾î Ã¼·ÂÀÌ 0ÀÌÇÏ(»ç¸Á »óÅÂ) ¶ó¸é »ç¸Á ÀÌº¥Æ® ½ÇÇà.
+            curHealth -= damage;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å­ Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+            if (isDead) Die();  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¾ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½.
         }
         private void Die()
         {
-            if (null != OnDeath) OnDeath(); // µî·ÏµÈ »ç¸Á ÀÌº¥Æ® ½ÇÇà.
+            if (null != OnDeath) OnDeath(); // ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½.
         }
 
-        // ¾ÆÀÌÅÛµµ ÃÊ±âÈ­¸¦ ÇØ¾ßÇÒ±î? ¿µ±¸ÀûÀÎ ¾ÆÀÌÅÛÀº?
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ûµï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½Ò±ï¿½? ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
         public void InitStatus()
         {
             if (baseStat) totalStat = baseStat.status;
@@ -78,21 +78,28 @@ namespace Game
         }
         public virtual void RestoreHealth(float value)
         {
-            if (isDead) return; // ÀÌ¹Ì Á×Àº »óÅÂ¿¡¼­´Â Ã¼·ÂÈ¸º¹ ºÒ°¡´É.
+            if (isDead) return; // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½È¸ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½.
             SetHealth(curHealth + value);
         }
         public virtual void RestoreStamina(float value)
         {
-            if (isDead) return; // ÀÌ¹Ì Á×Àº »óÅÂ¶ó¸é ´õ ÀÌ»ó Ã³¸®ÇÏÁö ¾Ê´Â´Ù.
+            if (isDead) return; // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì»ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´Â´ï¿½.
             SetStamina(curStamina + value);
         }
-        // sum of itemStats & unitStat
-        public void SetTotalStat(StatusData StatusObject)
+        
+        public void ApplyStatus(StatusData status)
         {
-            if (totalStat != null)
+            if (totalStat != null && status != null)
             {
-                if (StatusObject != null) totalStat.AddStat(StatusObject);
-                if (itemList != null) totalStat.AddStat(ItemMgr.Instance.GetTotalItemStats(itemList));
+                totalStat.AddStat(status);
+            }
+        }
+
+        public void RemoveStatus(StatusData status)
+        {
+            if (totalStat != null && status != null)
+            {
+                totalStat.SubStat(status);
             }
         }
 
@@ -146,7 +153,7 @@ namespace Game
         public virtual bool UseStamina(float value)
         {
             var stamina = curStamina;
-            if (stamina < value) return false; // ¸¶³ª°¡ ºÎÁ·ÇÒ °æ¿ì false ¹ÝÈ¯ ÈÄ ¸®ÅÏ.(½ºÅÂ¹Ì³ª ºÎÁ· ¸Þ½ÃÁö È£Ãâ)
+            if (stamina < value) return false; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ false ï¿½ï¿½È¯ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.(ï¿½ï¿½ï¿½Â¹Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½ï¿½ï¿½ï¿½ È£ï¿½ï¿½)
             SetStamina(stamina - value);
             return true;
         }
