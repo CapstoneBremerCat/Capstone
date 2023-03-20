@@ -8,6 +8,7 @@ namespace Game
     {
         [Header("Scripts")]
         [SerializeField] private PlayerShooter playerShooter;   // �� �߻� 
+        [SerializeField] private PlayerStatusWindow playerStatusWindow;   // �� �߻� 
 
         [Header("PlayerMove")]
         [SerializeField] private Transform cam; // ���� ī�޶�
@@ -43,11 +44,13 @@ namespace Game
         {
             equippedPassiveSkills.Add(passive);
             ApplyStatus(passive.statusData);
+            playerStatusWindow.RefreshStatusUI(this);
         }
         public void UnequipPassiveSkill(PassiveSkill passive)
         {
             equippedPassiveSkills.Remove(passive);
             RemoveStatus(passive.statusData);
+            playerStatusWindow.RefreshStatusUI(this);
         }
         public void EquipActiveSkill(ActiveSkill active)
         {
@@ -74,6 +77,7 @@ namespace Game
         public void Init()
         {
             InitStatus();
+            playerStatusWindow.RefreshStatusUI(this);
         }
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
@@ -114,6 +118,15 @@ namespace Game
 
         public float currentSpeed =>
          new Vector2(charController.velocity.x, charController.velocity.z).magnitude;
+
+        public void UpdateUI()
+        {
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                bool value = playerStatusWindow.gameObject.activeSelf ? false : true;
+                playerStatusWindow.gameObject.SetActive(value);
+            }
+        }
 
         public void UpdateMovement()
         {

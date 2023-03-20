@@ -11,7 +11,7 @@ namespace Game
         public int level { get; private set; }   // level
 
         [SerializeField] private StatusObject baseStat; // default Stat
-        private StatusData totalStat; // sum of all stats
+        public StatusData totalStat { get; private set; } // sum of all stats
         public float curHealth { get; private set; }    // current Hp
         public float curMana { get; private set; }      // current Mp
         public float curStamina { get; private set; }   // current Sp

@@ -94,7 +94,11 @@ namespace Game
         {
             // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
             if (!isGameStart || isGameOver) return;
-            if (player) player.UpdateMovement();
+            if (player)
+            {
+                player.UpdateMovement();
+                player.UpdateUI();
+            }
         }
 
         // Update is called once per frame
