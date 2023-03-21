@@ -7,7 +7,6 @@ namespace Game
     public class PlayerShooter : MonoBehaviour
     {
         [SerializeField] private Weapon weapon;   // 무기 오브젝트
-        [SerializeField] private PlayerInput playerInput;
         [SerializeField] private Vector3 ScreenCenter;    // 에임 위치(정중앙)
         private Animator anim;
 
@@ -17,7 +16,6 @@ namespace Game
         {
             ScreenCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
             anim = GetComponent<Animator>();
-            playerInput = GetComponent<PlayerInput>();
         }
 
         public void SetWeapon(Weapon weapon)
@@ -26,14 +24,13 @@ namespace Game
         }
 
         // Update is called once per frame
-        public void ShootUpdate()
+        public void ShootUpdate(bool fire, bool reload)
         {
             if (!weapon) return;
             Look();
-            if (!playerInput) playerInput = GetComponent<PlayerInput>();
-            if (playerInput.fire) weapon.Fire();   // 총알 발사.  
+            if (fire) weapon.Fire();   // 총알 발사.  
                                                    // 총알이 비었으면 재장전 시도.
-            if ((weapon.GetState.Equals(State.Empty) || playerInput.reload) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+            if ((weapon.GetState.Equals(State.Empty) || reload) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
             StageUIController.Instance.UpdateAmmoText(weapon.MagAmmo, weapon.AmmoRemain);  // ? 보호 수준
         }
 

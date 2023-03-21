@@ -19,7 +19,7 @@ namespace Game
             if (startButton) startButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
 
             /* 수정 필요 */
-            if (shopButton) shopButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
+            //if (shopButton) shopButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
 
             // 종료 버튼
             if (quitButton) quitButton.onClick.AddListener(() => Application.Quit());

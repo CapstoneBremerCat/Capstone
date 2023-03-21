@@ -39,7 +39,7 @@ namespace Game
             slots = go_SlotsParent.GetComponentsInChildren<Slot>();
         }
 
-        // Update is called once per frame
+/*        // Update is called once per frame
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.I))
@@ -51,16 +51,16 @@ namespace Game
                 else
                     CloseInventory();
             }
-        }
+        }*/
 
-        private void OpenInventory()
+/*        private void OpenInventory()
         {
             go_InventoryBase.SetActive(true);
         }
         private void CloseInventory()
         {
             go_InventoryBase.SetActive(false);
-        }
+        }*/
 
         public void AcquireItem(Item _item, int _count = 1)
         {

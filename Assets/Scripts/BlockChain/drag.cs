@@ -5,14 +5,20 @@ using UnityEngine.EventSystems;
 using BlockChain;
 namespace BlockChain
 {
-    public class drag : MonoBehaviour, IDragHandler
+    public class Drag : MonoBehaviour, IPointerDownHandler, IDragHandler
     {
         [SerializeField] private RectTransform dragRectTransform; //움직일대상지정
         [SerializeField] private Canvas canvas;//캔버스지정
 
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            dragRectTransform.SetAsLastSibling();
+        }
+
         public void OnDrag(PointerEventData eventData)
         {
             dragRectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;//드래그
+            canvas.sortingOrder++;
         }
     }
 }

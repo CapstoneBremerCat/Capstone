@@ -23,7 +23,7 @@ namespace Game
             }
         }
 
-        void Update()
+/*        void Update()
         {
             // Toggle the inventory on/off with the K key
             if (Input.GetKeyDown(KeyCode.U))
@@ -35,7 +35,7 @@ namespace Game
                 else
                     CloseInventory();
             }
-        }
+        }*/
         // Open the skill inventory UI
         public void OpenInventory()
         {

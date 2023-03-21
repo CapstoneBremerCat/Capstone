@@ -340,28 +340,22 @@ namespace BlockChain
             }
         }
 
-        public void SetOwnedSkillToInventory()
+        public List<Skill> GetOwnedSkills()
         {
             int[] ownedSkillids = OwnedTokens.GetOwnedTokens();
+            List<Skill> skillList = new List<Skill>();
             if (ownedSkillids == null)
             {
                 Debug.LogWarning("Failed to get owned skill IDs from OwnedTokens");
-                return;
+                return null;
             }
 
             foreach (int skillID in ownedSkillids)
             {
                 Skill skill = GetNFTSkillByID(skillID);
-
-                if (skill != null)
-                {
-                    SkillInventory.Instance.AddSkill(skill);
-                }
-                else
-                {
-                    Debug.LogWarning($"Skill with ID {skillID} not found.");
-                }
+                if (skill) skillList.Add(skill);
             }
+            return skillList;
         }
 
 

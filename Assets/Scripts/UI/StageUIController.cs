@@ -25,46 +25,74 @@ namespace Game
         }
         #endregion
 
-        /*    [SerializeField] private RectTransform healthBar;   // 체력 바
-            [SerializeField] private float defaultLength = 400f;    // 체력 바 길이*/
+        [Header("Player UI")]
         [SerializeField] private Slider healthSlider;
         [SerializeField] private Slider staminaSlider;
-        [SerializeField] private Text waveText; // 적 웨이브 표시용 텍스트.
-        [SerializeField] private TextMeshProUGUI ammoText; // 탄약 표시용 텍스트.
-        [SerializeField] private GameObject gameoverUI; // 게임 오버시 활성화할 UI.
-        [SerializeField] private GameObject sleepUI; // 수면 UI.
-        [SerializeField] private Animator waveStartUI; // 웨이브 시작 UI.
-        [SerializeField] private Animator waveClearUI; // 웨이브 클리어 UI.
-        [SerializeField] private Animator stageClearUI; // 스테이지 클리어 UI.
-        [SerializeField] private Animator nextDayUI; // 다음 날 연출 UI.
-        [SerializeField] private TextMeshProUGUI beforeDayText; // 이전 요일 텍스트
-        [SerializeField] private TextMeshProUGUI afterDayText;  // 다음 요일 텍스트
-        [SerializeField] private Text scoreText; // 점수 표시용 텍스트.
-        [SerializeField] private Text dayText; // 날짜 표시용 텍스트.
-        public event System.Action RestartEvent;
-        private float healthLength;
-        [SerializeField] private Slider coolTimeSlider; // 스킬 쿨타임 슬라이더
-        [SerializeField] private Animation coolTimeAnim; // 스킬 쿨타임 애니메이션
-        private bool isCoolTime;
-        public void Init()
+        [SerializeField] private TextMeshProUGUI ammoText; // Text for displaying ammo count
+        [SerializeField] private Slider coolTimeSlider; // Slider for displaying the skill cooldown time
+        [SerializeField] private Animation coolTimeAnim; // Animation for the skill cooldown time
+
+        [Header("UI Animators")]
+        [SerializeField] private Animator waveStartUI; // Wave start UI animator
+        [SerializeField] private Animator waveClearUI; // Wave clear UI animator
+        [SerializeField] private Animator stageClearUI; // Stage clear UI animator
+        [SerializeField] private Animator nextDayUI; // Next day UI animator
+
+        [Header("Stage UI")]
+        [SerializeField] private Text scoreText; // Text for displaying the score
+        [SerializeField] private Text waveText; // Text for displaying the enemy wave count
+        [SerializeField] private TextMeshProUGUI beforeDayText; // Text for displaying the previous day
+        [SerializeField] private TextMeshProUGUI afterDayText;  // Text for displaying the next day
+        [SerializeField] private Text dayText;   // Text for displaying the day
+
+        [Header("Game Over UI")]
+        [SerializeField] private GameObject gameOverUI; // UI to display when the game is over
+
+        [Header("Windows")]
+        [SerializeField] private GameObject statusWindowUI; // Status window UI
+        [SerializeField] private GameObject inventoryUI; // Inventory UI
+        [SerializeField] private GameObject skillWindowUI; // Skill window UI
+        [SerializeField] private GameObject equipWindowUI; // Equipment window UI
+        [SerializeField] private GameObject sleepUI; // Sleep UI
+
+
+        public void InitUI()
         {
-            if (gameoverUI) gameoverUI.SetActive(false);
+            if (gameOverUI) gameOverUI.SetActive(false);
             StopAllCoroutines();
             coolTimeSlider.value = 0;
-            isCoolTime = false;
+            Mediator.Instance.RegisterEventHandler(GameEvent.SKILL_ACTIVATED, DisplayCooltime);
+            Mediator.Instance.RegisterEventHandler(GameEvent.RESTART, DisplayCooltime);
         }
-
-        // 쿨타임 표기
-        public bool DisplayCooltime(float timeRemaining)
+        public void ToggleStatusUI()
         {
-            if (isCoolTime) return false;
-            StartCoroutine(CooltimeRountine(timeRemaining));
-            return true;
+            if (statusWindowUI) ToggleUI(statusWindowUI);
+        }
+        public void ToggleInventoryUI()
+        {
+            if (inventoryUI) ToggleUI(inventoryUI);
+        }
+        public void ToggleSkillWindowUI()
+        {
+            if (skillWindowUI) ToggleUI(skillWindowUI);
+        }
+        public void ToggleEquipWindowUI()
+        {
+            if (equipWindowUI) ToggleUI(equipWindowUI);
+        }
+        private void ToggleUI(GameObject ui)
+        {
+            if (ui) ui.SetActive(!ui.activeSelf);
+        }
+        // 쿨타임 표기
+        public void DisplayCooltime(object activeSkillObj)
+        {
+            ActiveSkill skill = activeSkillObj as ActiveSkill;
+            StartCoroutine(CooltimeRountine(skill.cooldown));
         }
 
         IEnumerator CooltimeRountine(float timeRemaining)
         {
-            isCoolTime = true;
             var totalTime = timeRemaining;
             var interval = 0.1f;
             while (timeRemaining > 0)
@@ -73,25 +101,14 @@ namespace Game
                 timeRemaining -= interval;
                 yield return new WaitForSeconds(interval);
             }
+            coolTimeSlider.value = 0;
             if (coolTimeAnim)
             {
                 // 쿨타임 연출 시작
                 coolTimeAnim.Play();
             }
-            isCoolTime = false;
         }
 
-        /*    public void SetHealthBar(float ratio)
-            {
-                healthLength = GetHealthLength(ratio);
-                //if (playerStatus.isHpFull) healthLength = defaultLength;
-
-                healthBar.sizeDelta = new Vector2(healthLength, 30);
-            }
-            private float GetHealthLength(float ratio)
-            {
-                return defaultLength * ratio;
-            }*/
         public void SetHealthBar(float ratio)
         {
             if (healthSlider) healthSlider.value = ratio;
@@ -139,7 +156,7 @@ namespace Game
 
         public void GameOver()
         {
-            if (gameoverUI) gameoverUI.SetActive(true);
+            if (gameOverUI) gameOverUI.SetActive(true);
         }
 
         public void WaveStart()
@@ -174,12 +191,6 @@ namespace Game
                 yield return null;
             };
             anim.gameObject.SetActive(false);
-        }
-
-        public void Restart()
-        {
-            Init();
-            if (null != RestartEvent) RestartEvent();
         }
     }
 }

@@ -10,8 +10,14 @@ namespace Game
         [SerializeField] private TextMeshProUGUI[] texts;
         // Start is called before the first frame update
 
-        public void RefreshStatusUI(Player player)
+        private void Start()
         {
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
+        }
+
+        public void RefreshStatusUI(object playerObject)
+        {
+            Player player = playerObject as Player;
             texts[0].text = player.totalStat.healthGauge.maxValue.ToString();
             texts[1].text = player.totalStat.healthGauge.regenValue.ToString();
             texts[2].text = player.totalStat.staminaGauge.maxValue.ToString();
@@ -20,6 +26,11 @@ namespace Game
             texts[5].text = player.totalStat.attackSpeed.ToString();
             texts[6].text = player.totalStat.attackPower.ToString();
             texts[7].text = player.totalStat.defense.ToString();
+        }
+
+        private void OnDestroy()
+        {
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
         }
     }
 }

@@ -7,35 +7,48 @@ namespace Game
     public class Player : Status
     {
         [Header("Scripts")]
-        [SerializeField] private PlayerShooter playerShooter;   // �� �߻� 
-        [SerializeField] private PlayerStatusWindow playerStatusWindow;   // �� �߻� 
+        [SerializeField] private PlayerShooter playerShooter;
 
         [Header("PlayerMove")]
-        [SerializeField] private Transform cam; // ���� ī�޶�
-                                                //[SerializeField] private Transform cameraArm; // ī�޶� ��
-        [SerializeField] private Transform charBody; //  ĳ���� ��ü
-        [SerializeField] private CharacterController charController;    //  ĳ���� ��Ʈ�ѷ�
-        [SerializeField] private PlayerInput playerInput;       // �Է� ����
+        [SerializeField] private Transform cam; // Camera object
+                                                //[SerializeField] private Transform cameraArm; // Camera arm
+        [SerializeField] private Transform charBody; // Character body object
+        [SerializeField] private CharacterController charController;    // Character controller
+        [SerializeField] private PlayerInput playerInput;       // Input class
 
-        [Range(0.01f, 1f)] public float airControlPercent;  // ü�� �� �ӵ� ����
-        [Range(0.01f, 2f)] public float gravityPercent;   // �߷� ����
-        [SerializeField] private float speedSmoothTime = 0.1f;    // �������ϰ� �̵��ϴ� ���� �ð�
-        [SerializeField] private float turnSmoothTime = 0.1f;     // �������ϰ� ȸ���ϴ� ���� �ð�
+        [Range(0.01f, 1f)] public float airControlPercent;  // Movement ratio in the air
+        [Range(0.01f, 2f)] public float gravityPercent;   // Gravity ratio
+        [SerializeField] private float speedSmoothTime = 0.1f;    // Time to smoothly change speed
+        [SerializeField] private float turnSmoothTime = 0.1f;     // Time to smoothly change rotation
 
-        private float speedSmoothVelocity;  // �̵� ���� �ӵ�
-        private float turnSmoothVelocity;   // ȸ�� ���� �ӵ�
-        private float currentVelocityY;     // �߷¿� ���ؼ� �ٴڿ� �������� y���� �ӵ�
+        private float speedSmoothVelocity;  // Current value of movement speed
+        private float turnSmoothVelocity;   // Current value of rotation speed
+        private float currentVelocityY;     // Current y-axis movement speed constantly updated by gravity
+        public float currentSpeed =>
+         new Vector2(charController.velocity.x, charController.velocity.z).magnitude;
 
         [Header("SFX")]
-        [SerializeField] private AudioClip deathSound;  // ��� ȿ����.
-        [SerializeField] private AudioClip hitSound; // �ǰ� ȿ����.
-        [SerializeField] private ParticleSystem hitEffect;  // �ǰ� ����Ʈ.
-        [SerializeField] private Animator anim; // �ִϸ��̼�
-        private AudioSource audioSource;    // ȿ������ ����ϴµ� ���.
-        private int animSpeed = 0;   // �ִϸ��̼� �ӵ�
+        [SerializeField] private AudioClip deathSound;  // Sound effect for death
+        [SerializeField] private AudioClip hitSound; // Sound effect for getting hit
+        [SerializeField] private ParticleSystem hitEffect;  // Particle effect for getting hit
+        [SerializeField] private Animator anim; // Animation
+        private AudioSource audioSource;    // Audio source for playing sounds
+        private int animSpeed = 0;   // Animation speed
 
         private List<PassiveSkill> equippedPassiveSkills = new List<PassiveSkill>();
         public ActiveSkill equippedActiveSkill { get; private set; }
+        private bool isCoolTime;
+        private void Awake()
+        {
+            OnDeath += () =>
+            {
+                // If dead, disable collider
+                //if (collider) collider.enabled = false;
+                if (anim) anim.SetBool("isDead", isDead);   // Set Death animation.
+                if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
+                GameManager.Instance.GameOver();
+            };
+        }
         public int GetEquippedPassiveSkillCount()
         {
             return equippedPassiveSkills.Count;
@@ -44,13 +57,17 @@ namespace Game
         {
             equippedPassiveSkills.Add(passive);
             ApplyStatus(passive.statusData);
-            playerStatusWindow.RefreshStatusUI(this);
+            // Notify the mediator that equipment was equipped
+            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_PASSIVE, this);
+
+            //playerStatusWindow.RefreshStatusUI(this);
         }
         public void UnequipPassiveSkill(PassiveSkill passive)
         {
             equippedPassiveSkills.Remove(passive);
             RemoveStatus(passive.statusData);
-            playerStatusWindow.RefreshStatusUI(this);
+            // Notify the mediator that equipment was equipped
+            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_PASSIVE, this);
         }
         public void EquipActiveSkill(ActiveSkill active)
         {
@@ -60,24 +77,45 @@ namespace Game
         {
             equippedActiveSkill = null;
         }
-        private void Awake()
-        {
-            OnDeath += () =>
-            {
-            // �� �̻� �ǰ� ������ ���� �ʰ� collider�� ����.
-            //if (collider) collider.enabled = false;
-            if (anim) anim.SetBool("isDead", isDead);   // Zombie Death �ִϸ��̼� ����.
-            if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // ��� ȿ���� 1ȸ ���.
-                                                                                    //GameMgr.instance.AddScore(100); // enemy óġ ��, 100 score ���.
-                                                                                    //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy óġ ��, Spawn Count ����.
-            GameManager.Instance.GameOver();
-            };
-        }
 
-        public void Init()
+
+        public void Init(Vector3 initPos)
         {
             InitStatus();
-            playerStatusWindow.RefreshStatusUI(this);
+            SetPlayerPosition(initPos);
+            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_PASSIVE, this);
+
+            //playerStatusWindow.RefreshStatusUI(this);
+        }
+
+        public void SetPlayerPosition(Vector3 pos)
+        {
+            charController.enabled = false;
+            this.transform.position = pos;
+            charController.enabled = true;
+        }
+
+        private void OnDestroy()
+        {
+
+        }
+        public void OnInputUpdated()
+        {
+            // 입력값에 따라 적절한 처리를 수행합니다.
+            if (playerShooter && playerInput.fire) playerShooter.ShootUpdate(playerInput.fire, playerInput.reload);
+            if (equippedActiveSkill && playerInput.skillSlot1) UseSkill(equippedActiveSkill);
+            if (playerInput.inventory) UIManager.Instance.ToggleInventoryUI();
+            if (playerInput.skillWindow) UIManager.Instance.ToggleSkillWindowUI();
+            if (playerInput.equipWindow) UIManager.Instance.ToggleEquipWindowUI();
+            if (playerInput.statusWindow) UIManager.Instance.ToggleStatusUI();
+        }
+
+        // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
+        private void FixedUpdate()
+        {
+            // 게임오버되지 않았을 경우에만 실행
+            if (isDead) return;
+            UpdateMovement();
         }
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
@@ -88,15 +126,15 @@ namespace Game
                 if (hitEffect)
                 {
                     var hitEffectTR = hitEffect.transform;
-                    hitEffectTR.position = hitPoint;    // ����Ʈ�� �ǰ� �������� �̵�.
-                                                        // �ǰ� ���� �������� ȸ��.
+                    hitEffectTR.position = hitPoint;    // Move the effect to the hit point.
+                    // Orient the effect towards the hit normal.
                     hitEffectTR.rotation = Quaternion.LookRotation(hitNormal);
-                    hitEffect.Play();   // ����Ʈ ���.
+                    hitEffect.Play();   // Play the effect.
                 }
 
-                // �ǰ� ȿ���� 1ȸ ���.
+                // Play hit sound.
                 if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
-                anim.SetTrigger("Damaged"); // �������� �԰� ���� �ʾҴٸ�, �ǰ� �ִϸ��̼� ����.
+                anim.SetTrigger("Damaged"); // Trigger the damaged animation.
             }
         }
 
@@ -107,30 +145,8 @@ namespace Game
             charController.enabled = true;
         }
 
-        public void UpdateAttack()
-        {
-            if (playerShooter) playerShooter.ShootUpdate();
-        }
-        public PlayerInput GetPlayerInput()
-        {
-            return playerInput;
-        }
-
-        public float currentSpeed =>
-         new Vector2(charController.velocity.x, charController.velocity.z).magnitude;
-
-        public void UpdateUI()
-        {
-            if (Input.GetKeyDown(KeyCode.C))
-            {
-                bool value = playerStatusWindow.gameObject.activeSelf ? false : true;
-                playerStatusWindow.gameObject.SetActive(value);
-            }
-        }
-
         public void UpdateMovement()
         {
-            if (isDead) return;
             if (currentSpeed > 0.2f || playerInput.fire) Rotate();
             Run(playerInput.run);
             Move(playerInput.moveInput);
@@ -187,6 +203,28 @@ namespace Game
             if (!charController.isGrounded) return;
 
             currentVelocityY = jumpPower;
+        }
+
+        private void UseSkill(ActiveSkill skill)
+        {
+            // 쿨타임 중에는 스킬을 사용할 수 없습니다.
+            if (isCoolTime) return;
+
+            Mediator.Instance.Notify(this, GameEvent.SKILL_ACTIVATED, skill);
+            // 쿨타임을 시작합니다.
+            StartCoroutine(CooltimeRoutine(skill.cooldown));
+        }
+        private IEnumerator CooltimeRoutine(float timeRemaining)
+        {
+            isCoolTime = true;
+            float totalTime = timeRemaining;
+            float interval = 0.1f;
+            while (timeRemaining > 0)
+            {
+                timeRemaining -= interval;
+                yield return new WaitForSeconds(interval);
+            }
+            isCoolTime = false;
         }
 
         public void MoveAnim(float h, float v)

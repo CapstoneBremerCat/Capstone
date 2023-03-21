@@ -13,10 +13,10 @@ namespace Game
         [SerializeField] private string fireBtnName = "Fire1";
         [SerializeField] private string reloadBtnName = "Reload";
         [SerializeField] private string SkillSlot1ButtonName = "SkillSlot 1";
-        //[SerializeField] private string SkillSlot2ButtonName = "SkillSlot 2";
-        //[SerializeField] private string SkillSlot3ButtonName = "SkillSlot 3";
-        //[SerializeField] private string SkillSlot4ButtonName = "SkillSlot 4";
-        //[SerializeField] private string ItemSlotButtonName = "ItemSlot";
+        [SerializeField] private string InventoryButtonName = "Inventory";
+        [SerializeField] private string SkillWindowButtonName = "SkillWindow";
+        [SerializeField] private string EquipWindowButtonName = "EquipWindow";
+        [SerializeField] private string StatusWindowButtonName = "StatusWindow";
 
         public Vector2 moveInput { get; private set; }  // Horizontal, Vertical
         public bool run { get; private set; }
@@ -24,13 +24,12 @@ namespace Game
         public bool fire { get; private set; }
         public bool reload { get; private set; }
         public bool skillSlot1 { get; private set; }
-        //public bool skillSlot2 { get; private set; }
-        //public bool skillSlot3 { get; private set; }
-        //public bool skillSlot4 { get; private set; }
-        //public bool itemSlot { get; private set; }
+        public bool inventory { get; private set; }
+        public bool skillWindow { get; private set; }
+        public bool equipWindow { get; private set; }
+        public bool statusWindow { get; private set; }
 
         //public event System.Action<float, float> MoveHandler;
-
 
         // Update is called once per frame
         void Update()
@@ -43,24 +42,28 @@ namespace Game
                 fire = false;
                 reload = false;
                 jump = false;
-
+                skillSlot1 = false;
+                inventory = false;
+                skillWindow = false;
+                equipWindow = false;
+                statusWindow = false;
                 return;
             }
-
-            //MoveHandler?.Invoke(Input.GetAxis(moveAxisName), Input.GetAxis(horizontalAxisName));
             moveInput = new Vector2(Input.GetAxis(horizontalAxisName), Input.GetAxis(verticalAxisName));
 
             if (moveInput.sqrMagnitude > 1) moveInput = moveInput.normalized;
 
             run = Input.GetButton(runButtonName);
-            jump = Input.GetButton(jumpButtonName);
+            jump = Input.GetButtonDown(jumpButtonName);
             fire = Input.GetButton(fireBtnName);
-            reload = Input.GetButton(reloadBtnName);
-            skillSlot1 = Input.GetButton(SkillSlot1ButtonName);
-            //skillSlot2 = Input.GetButton(SkillSlot2ButtonName);
-            //skillSlot3 = Input.GetButton(SkillSlot3ButtonName);
-            //skillSlot4 = Input.GetButton(SkillSlot4ButtonName);
-            //itemSlot = Input.GetButton(ItemSlotButtonName);
+            reload = Input.GetButtonDown(reloadBtnName);
+            skillSlot1 = Input.GetButtonDown(SkillSlot1ButtonName);
+            inventory = Input.GetButtonDown(InventoryButtonName);
+            skillWindow = Input.GetButtonDown(SkillWindowButtonName);
+            equipWindow = Input.GetButtonDown(EquipWindowButtonName);
+            statusWindow = Input.GetButtonDown(StatusWindowButtonName);
+
+            Mediator.Instance.Notify(this, GameEvent.INPUT_UPDATED, null);
         }
     }
 }

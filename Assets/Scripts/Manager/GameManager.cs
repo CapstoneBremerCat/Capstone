@@ -43,12 +43,10 @@ namespace Game
         [SerializeField] private DayAndNight sun; // 태양
         [SerializeField] private GameObject playerPrefab;     // 플레이어 프리팹
         [SerializeField] private Player player;     // 플레이어
-        private PlayerInput playerInput;
 
         [SerializeField] private GameObject partnerPrefab;     // 파트너 프리팹
         [SerializeField] private PartnerAI partner;     // 파트너
         [SerializeField] private Spawner spawner; // 스포너
-        [SerializeField] private StageUIController stageUI; // 스테이지 UI
 
         [SerializeField] private Transform startPoint; // 스테이지 시작 지점
 
@@ -84,21 +82,7 @@ namespace Game
 
             if (player) player.gameObject.SetActive(false);
             if (partner) partner.gameObject.SetActive(false);
-
-            //InitNewStage();
-
-        }
-
-        // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
-        private void FixedUpdate()
-        {
-            // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
-            if (!isGameStart || isGameOver) return;
-            if (player)
-            {
-                player.UpdateMovement();
-                player.UpdateUI();
-            }
+            UIManager.Instance.SwitchCanvas(CavasIndex.Main);
         }
 
         // Update is called once per frame
@@ -106,18 +90,12 @@ namespace Game
         {
             // 게임이 시작됐을 경우, 게임오버되지 않았을 경우에만 실행
             if (isGameStart && !isGameOver) stageUpdate();
-
+            if (player) player.OnInputUpdated();
         }
 
         private void stageUpdate()
         {
-            if (player) player.UpdateAttack();
             if (sun) sun.UpdateSun();
-            if (playerInput.skillSlot1)
-            {
-/*                SkillData SkillData = partner.GetPartnerSkill();
-                UseSkill(SkillData);*/
-            }
         }
 
         private void DelayedUpdate()
@@ -153,7 +131,10 @@ namespace Game
             // 마지막 시간 저장
             lastSavedHour = playTime.Hour;
         }
-
+        public void DebugPlayer()
+        {
+            player.Init(startPoint.position);
+        }
         // 스테이지 시작 세팅
         public void InitNewStage()
         {
@@ -161,16 +142,15 @@ namespace Game
             sun = GameObject.FindWithTag("Sun").GetComponent<DayAndNight>();
             startPoint = GameObject.FindWithTag("Start").transform;
             spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-            stageUI = StageUIController.Instance;
 
-            player = LoadCharacter(playerPrefab).GetComponent<Player>();
+            player = FindObjectOfType<Player>();
+            if(!player) player = LoadCharacter(playerPrefab).GetComponent<Player>();
             if (startPoint && player)
             {
                 // 플레이어 위치를 시작지점으로 변경
-                player.transform.position = startPoint.position;
+                //player.transform.position = startPoint.position;
                 player.gameObject.SetActive(true);
-                player.Init();
-                playerInput = player.GetPlayerInput();
+                player.Init(startPoint.position);
                 // 파트너 위치도 변경
                 partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
                 if (partner)
@@ -192,24 +172,16 @@ namespace Game
             // 태양 초기화
             sun.InitSun();
 
-            // UI 초기화
-            if (stageUI)
-            {
-                stageUI.Init();
-                // 현재 날짜 UI 정보를 갱신.
-                stageUI.UpdateDateText(playTime.Day);
-                // 웨이브 UI 비활성화
-                stageUI.DisableWaveText();
-                //stageUI.DisplayCooltime(10);
+            // 현재 날짜 UI 정보를 갱신.
+            UIManager.Instance.UpdateDateUI(playTime.Day);
+            // 웨이브 UI 비활성화
+            UIManager.Instance.DisableWaveUI();
 
-                stageUI.RestartEvent += () =>
-                {
-                    InitNewStage();
-                    stageUI.SetHealthBar(player.GetHpRatio());
-                    stageUI.SetStaminaBar(player.GetStaminaRatio());
-                };
-            }
-            NFTManager.Instance.SetOwnedSkillToInventory();
+            UIManager.Instance.RestartEvent += () =>
+            {
+                UIManager.Instance.UpdateHealthBar(player.GetHpRatio());
+                UIManager.Instance.UpdateStaminaBar(player.GetStaminaRatio());
+            };
             // 게임 시작 신호 활성화.
             isGameStart = true;
 
@@ -266,19 +238,11 @@ namespace Game
                 }
             }
         }
-        public void UseSkill(ActiveSkill activeSkill)
-        {
-            if (stageUI.DisplayCooltime(activeSkill.cooldown))
-            {
-                /*스킬 사용*/
-                Debug.Log("Use SkillData");
-            }
-        }
 
         public void DecreaseSpawnCount()
         {
             // spawnCount를 감소하고 UI정보를 갱신한다.
-            if (stageUI) stageUI.UpdateWaveText(Wave, --spawnCount);
+            UIManager.Instance.UpdateWaveUI(Wave, --spawnCount);
 
             // 소환된 웨이브 적을 모두 처치하였을 경우 웨이브 종료
             if (spawnCount <= 0)
@@ -289,14 +253,11 @@ namespace Game
 
         public IEnumerator StartWave()
         {
-            if (stageUI)
-            {
-                // 웨이브 시작 연출 실행
-                if (stageUI) stageUI.WaveStart();
-                // 웨이브 UI 활성화
-                stageUI.EnableWaveText();
-                stageUI.UpdateWaveText(Wave, spawnCount);
-            }
+            // 웨이브 시작 연출 실행
+            UIManager.Instance.PlayWaveStartUI();
+            // 웨이브 UI 활성화
+            UIManager.Instance.EnableWaveUI();
+            UIManager.Instance.UpdateWaveUI(Wave, --spawnCount);
 
             /* 연출이 끝날 때 까지 대기 */
             yield return null;
@@ -311,26 +272,19 @@ namespace Game
 
         public IEnumerator EndWave()
         {
-            if (stageUI)
-            {
-                // 웨이브 클리어 연출 실행
-                stageUI.WaveClear();
-                // 웨이브 UI 비활성화
-                stageUI.DisableWaveText();
-            }
-
+            // 웨이브 클리어 연출 실행
+            UIManager.Instance.PlayWaveClearUI();
+            // 웨이브 UI 비활성화
+            UIManager.Instance.DisableWaveUI();
             // 연출이 끝날 때 까지 대기
             yield return null;
         }
 
         public void NextDay()
         {
-            if (stageUI)
-            {
-                // 다음 날 연출 실행
-                stageUI.DisplayNextDay(playTime.Day);
-                stageUI.UpdateDateText(playTime.Day);
-            }
+            // 다음 날 연출 실행
+            UIManager.Instance.PlayNextDayUI(playTime.Day);
+            UIManager.Instance.UpdateDateUI(playTime.Day);
         }
 
         // 지정한 시간동안 대기(수면)
@@ -338,7 +292,7 @@ namespace Game
         {
             for (int repeat = 0; repeat < hours; repeat++)
             {
-                // UIMgr.Instance.DisplaySleepUI(hours);
+                // UIManager.Instance.DisplaySleepUI(hours);
                 yield return new WaitForSeconds(sleepWaitPeriod);
                 // 매 루프마다 1시간씩 추가
                 playTime.AddTime(0, 1, 0, 0);
@@ -366,26 +320,27 @@ namespace Game
         {
             player.OnGodMode();
             isGameStart = false;
-            if (stageUI) stageUI.StageClear();
+            UIManager.Instance.PlayStageClearUI();
         }
 
         public void GameOver()
         {
             isGameOver = true;
             isGameStart = false;
-            if (stageUI) stageUI.GameOver();
+            UIManager.Instance.EnableGameOverUI();
         }
 
         public void RestartGame()
         {
-            isGameStart = true;
+            InitNewStage();
+            Mediator.Instance.Notify(this, GameEvent.RESTART, null) ;
         }
 
         public void AddScore(int value)
         {
             score += value;
             // UI의 ScoreText를 갱신.
-            if (stageUI) stageUI.UpdateScoreText(score);
+            UIManager.Instance.UpdateScoreText(score);
         }
 
         public void MextScene()
@@ -408,10 +363,21 @@ namespace Game
                 yield return null;
             }
 
+            // 이동한 씬이 Main 면 스테이지 초기화
+            if (sceneList[sceneIndex].Contains("Main"))
+            {
+                UIManager.Instance.SwitchCanvas(CavasIndex.Main);
+            }
             // 이동한 씬이 Stage 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Stage"))
             {
                 InitNewStage();
+                UIManager.Instance.SwitchCanvas(CavasIndex.Stage);
+            }
+            // 이동한 씬이 Cinema 면 스테이지 초기화
+            if (sceneList[sceneIndex].Contains("Cinema"))
+            {
+                UIManager.Instance.SwitchCanvas(CavasIndex.Cinema);
             }
         }
         public void LoadScene()
