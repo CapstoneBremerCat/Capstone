@@ -63,6 +63,10 @@ namespace Game
             coolTimeSlider.value = 0;
             Mediator.Instance.RegisterEventHandler(GameEvent.SKILL_ACTIVATED, DisplayCooltime);
         }
+        private void OnDestroy()
+        {
+            Mediator.Instance.UnregisterEventHandler(GameEvent.SKILL_ACTIVATED, DisplayCooltime);
+        }
         public void ToggleStatusUI()
         {
             if (statusWindowUI) ToggleUI(statusWindowUI);

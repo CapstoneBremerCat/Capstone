@@ -13,6 +13,7 @@ namespace Game
         private void Start()
         {
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);
         }
 
         public void RefreshStatusUI(object playerObject)
@@ -31,6 +32,7 @@ namespace Game
         private void OnDestroy()
         {
             Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);
         }
     }
 }

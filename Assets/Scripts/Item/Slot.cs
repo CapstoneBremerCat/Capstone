@@ -12,7 +12,6 @@ namespace Game
 
         [SerializeField] private Item item; // 획득 아이템
         [SerializeField] private Image itemImage; // 아이템의 이미지.
-        [SerializeField] private Image equippedImage; // 장착 중인 아이템을 표시하기 위한 이미지
         public int itemCount { get; private set; } // 획득 아이템 개수
 
 
@@ -170,9 +169,5 @@ namespace Game
             }
         }
 
-        public void SetEquipped(bool isEquipped)
-        {
-            if (equippedImage) equippedImage.enabled = isEquipped;
-        }
     }
 }

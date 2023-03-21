@@ -7,45 +7,54 @@ using System;
 
 namespace Game
 {
-    public class SkillEquipWindow : MonoBehaviour
+    public class EquipWindow : MonoBehaviour
     {
         [SerializeField] private Slot weaponSlot;
         [SerializeField] private SkillSlot[] skillSlots;
         [SerializeField] private GameObject windowBase;
         private bool windowActivated = false;
 
+        private void Start()
+        {
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, RefreshEquippedWeapon);
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshEquippedSkills);
+        }
 
         public void Initialize()
         {
+            ClearAllSlots();
+        }
+        private void ClearAllSlots()
+        {
+            weaponSlot.ClearSlot();
+
             foreach (SkillSlot skillSlot in skillSlots)
             {
                 skillSlot.ClearSlot();
             }
         }
-
-/*        void Update()
+        private void RefreshEquippedWeapon(object weaponItemObject)
         {
-            // Toggle the inventory on/off with the K key
-            if (Input.GetKeyDown(KeyCode.U))
+            if (EquipManager.Instance.EquippedWeapon == null)
             {
-                windowActivated = !windowActivated;
-
-                if (windowActivated)
-                    OpenInventory();
-                else
-                    CloseInventory();
+                weaponSlot.ClearSlot();
+                return;
             }
-        }*/
-        // Open the skill inventory UI
-        public void OpenInventory()
-        {
-            windowBase.SetActive(true);
+            Item weaponItem = weaponItemObject as Item;
+            weaponSlot.AddItem(weaponItem);
         }
-        // Close the skill inventory UI
-        public void CloseInventory()
+        private void RefreshEquippedSkills(object playerObject)
         {
-            windowBase.SetActive(false);
+            ClearAllSlots();
+            Player player = playerObject as Player;
+            
+            foreach (Skill skill in player.equippedPassiveSkills)
+            {
+                EquipSkill(skill);
+            }
+            EquipSkill(player.equippedActiveSkill);
         }
+
         // Ca
         public bool EquipSkill(Skill skill)
         {
@@ -92,6 +101,11 @@ namespace Game
             skillSlot.ClearSlot();
             GameManager.Instance.UnEquipSkill(skill);
             return true;
+        }
+        private void OnDestroy()
+        {            
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshEquippedSkills);
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshEquippedWeapon);
         }
     }
 }

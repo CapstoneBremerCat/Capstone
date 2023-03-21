@@ -6,20 +6,6 @@ namespace Game
 {
     public class Inventory : MonoBehaviour
     {
-        // Singleton instance
-        private static Inventory instance;
-        public static Inventory Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = FindObjectOfType<Inventory>();
-                }
-                return instance;
-            }
-        }
-
         public static bool inventoryActivated = false;
 
         // �ʿ��� ������Ʈ
@@ -28,8 +14,6 @@ namespace Game
         [SerializeField]
         private GameObject go_SlotsParent;
 
-        // The currently equipped item
-        private Item equippedItem;
         // ���Ե�
         [SerializeField] private Slot[] slots;
 
@@ -37,70 +21,10 @@ namespace Game
         void Start()
         {
             slots = go_SlotsParent.GetComponentsInChildren<Slot>();
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, RemoveItemFronInventory);
+            Mediator.Instance.RegisterEventHandler(GameEvent.ITEM_PICKED_UP, AcquireItem);
         }
 
-/*        // Update is called once per frame
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                inventoryActivated = !inventoryActivated;
-
-                if (inventoryActivated)
-                    OpenInventory();
-                else
-                    CloseInventory();
-            }
-        }*/
-
-/*        private void OpenInventory()
-        {
-            go_InventoryBase.SetActive(true);
-        }
-        private void CloseInventory()
-        {
-            go_InventoryBase.SetActive(false);
-        }*/
-
-        public void AcquireItem(Item _item, int _count = 1)
-        {
-            // If the acquired item is not a weapon, look for existing slots with the same item
-            if (Item.ItemType.Weapon != _item.itemType)
-            {
-                for (int i = 0; i < slots.Length; i++)
-                {
-                    // If the slot already contains an item
-                    if (slots[i].Item != null)
-                    {
-                        // If the item in the slot has the same name as the acquired item
-                        if (slots[i].Item.name == _item.name)
-                        {
-                            // Increase the count of the item in the slot by the acquired count
-                            slots[i].SetSlotCount(_count);
-                            return;
-                        }
-                    }
-                }
-            }
-            // If there are no slots with the acquired item, find an empty slot to add it
-            for (int i = 0; i < slots.Length; i++)
-            {
-                if (slots[i].Item == null)
-                {
-                    // Add the acquired item with the acquired count to the empty slot
-                    slots[i].AddItem(_item, _count);
-
-                    // If the acquired item is a weapon and there is no equipped weapon, equip the weapon
-                    if (Item.ItemType.Weapon == _item.itemType && EquipManager.Instance.EquippedWeapon == null)
-                    {
-                        EquipManager.Instance.Equip(_item);
-                    }
-                    return;
-                }
-            }
-        }
-
-        // �κ��丮 �ʱ�ȭ
         public void InitInventory()
         {
             for (int i = 0; i < slots.Length; i++)
@@ -109,25 +33,78 @@ namespace Game
             }
         }
 
-        public void SetEquippedItem(Item item)
+        private void AcquireItem(object itemObject)
         {
-            // Update the equipped item
-            equippedItem = item;
+            AcquireItem(itemObject as Item);
+        }
 
-            // Update the equipped image for the appropriate slot
+        public void AcquireItem(Item _item, int _count = 1)
+        {
+            //if the acquired item is not a weapon, looks for an existing slot that contains the same item.
+            if (_item.itemType != Item.ItemType.Weapon)
+            {
+                Slot sameItemSlot = GetSameItemSlot(_item);
+                if (sameItemSlot != null)
+                {
+                    // Increase the count of the item in the slot by the acquired count
+                    sameItemSlot.SetSlotCount(_count);
+                }
+            }
+            // find an empty slot to add it
+            Slot emptySlot = GetEmptySlot();
+            if (emptySlot == null) return;
+            // Add the acquired item with the acquired count to the empty slot
+            emptySlot.AddItem(_item, _count);
+            // If the acquired item is a weapon and there is no equipped weapon, equip the weapon
+            if (_item.itemType == Item.ItemType.Weapon && EquipManager.Instance.EquippedWeapon == null)
+            {
+                EquipManager.Instance.Equip(_item);
+            }
+        }
+
+        private Slot GetEmptySlot()
+        {
+            foreach (Slot slot in slots)
+            {
+                if (slot.Item == null)
+                {
+                    return slot;
+                }
+            }
+            return null;
+        }
+
+        private Slot GetSameItemSlot(Item _item)
+        {
+            foreach (Slot slot in slots)
+            {
+                if (slot.Item != null && slot.Item.name == _item.name)
+                {
+                    return slot;
+                }
+            }
+            return null;
+        }
+        public void RemoveItemFronInventory(object itemObject)
+        {
+            // If there is no equipped weapon, return.
+            if (!EquipManager.Instance.EquippedWeapon) return;
+            // Otherwise, search for the item in the inventory slots and clear the slot.
+            Item item = itemObject as Item;
             for (int i = 0; i < slots.Length; i++)
             {
                 Slot slot = slots[i];
 
                 if (slot.Item == item)
                 {
-                    slot.SetEquipped(true);
-                }
-                else
-                {
-                    slot.SetEquipped(false);
+                    slot.ClearSlot();
                 }
             }
+        }
+        private void OnDisable()
+        {
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_WEAPON, RemoveItemFronInventory);
+            Mediator.Instance.UnregisterEventHandler(GameEvent.ITEM_PICKED_UP, AcquireItem);
         }
     }
 }

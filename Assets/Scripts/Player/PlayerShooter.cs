@@ -16,11 +16,18 @@ namespace Game
         {
             ScreenCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
             anim = GetComponent<Animator>();
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, RefreshWeapon);
         }
 
-        public void SetWeapon(Weapon weapon)
+        // Refreshes the currently equipped weapon based on the weaponItemObject passed in.
+        private void RefreshWeapon(object weaponItemObject)
         {
-            this.weapon = weapon;
+            Item weaponItem = weaponItemObject as Item;
+            // Retrieves the Weapon instance corresponding to the weaponItem's itemCode using the ItemMgr.
+            Weapon weapon = ItemMgr.Instance.GetWeaponById(weaponItem.itemCode);
+            if(EquipManager.Instance.EquippedWeapon) this.weapon = weapon;
+            // If there is no currently equipped weapon, sets weapon to null.
+            else this.weapon = null;
         }
 
         // Update is called once per frame
@@ -45,6 +52,10 @@ namespace Game
             // 스크린 상의 에임 위치를 참조하여 총을 해당 위치로 회전시킨다.
             Ray cameraRay = Camera.main.ScreenPointToRay(ScreenCenter);
             if (weapon) weapon.transform.LookAt(weapon.FirePos.position + cameraRay.direction * weapon.HitRange);
+        }
+        private void OnDestroy()
+        {
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_WEAPON, RefreshWeapon);
         }
     }
 }

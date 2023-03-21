@@ -35,50 +35,35 @@ namespace Game
         [SerializeField] private Weapon[] weapons;  // an arrangement with all kinds of weapons as elements
 
         // Use a Dictionary data structure to provide easy access to weapons by name from a management perspective.
-        private Dictionary<string, Weapon> weaponDictionary = new Dictionary<string, Weapon>();
+        private Dictionary<int, Weapon> weaponDictionary = new Dictionary<int, Weapon>();
 
 
         void Start()
         {
             for (int i = 0; i < weapons.Length; i++)
             {
-                weaponDictionary.Add(weapons[i].WeaponName, weapons[i]);
+                weaponDictionary.Add(weapons[i].weaponId, weapons[i]);
             }
         }
 
-        public Weapon GetWeaponByName(string weaponName)
+        public Weapon GetWeaponById(int weaponId)
         {
-            return weaponDictionary[weaponName];
+            return weaponDictionary[weaponId];
         }
-
-        // Get the total stats of a list of items
-        public StatusData GetTotalItemStats(List<int> itemList)
-        {
-            StatusData statusData = new StatusData();
-            for (int i = 0; i < itemList.Count; i++)
-            {
-                int code = DataMgr.Instance.GetItemData(itemList[i]).StatCode;
-                StatusData stat = DataMgr.Instance.GetItemStat(code);
-
-                statusData.AddStat(stat);
-            }
-            return statusData;
-        }
-
 
         // Find an item identical to the given item in the item pool
-        public bool FindIdenticalItem(Item poolItem)
+        public Item GetItemById(int itemCode)
         {
             // Loop through each item in the item pool
             foreach (Item item in itemList)
             {
-                // Check if the item names and types match
-                if (poolItem.name == item.name && poolItem.itemType == item.itemType)
+                // Check if the itemCodes match
+                if (item.itemCode == itemCode)
                 {
-                    return true;
+                    return item;
                 }
             }
-            return false;
+            return null;
         }
 
         private GameObject CreateItem(GameObject itemPrefab)

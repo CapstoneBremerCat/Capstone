@@ -7,16 +7,13 @@ namespace Game
 
     public class EquipManager : MonoBehaviour
     {
+        private const string EQUIPPED_WEAPON_KEY = "equipped_weapon_id";
         public static EquipManager Instance { get; private set; }
 
-        [SerializeField] private Transform weaponSocket;
-        // The inventory to update when equipping/unequipping weapons
-        [SerializeField] private Inventory inventory;
-        [SerializeField] private PlayerShooter playerShooter;
+        private Transform weaponSocket;
 
         private Weapon equippedWeapon;
         public Weapon EquippedWeapon { get { return equippedWeapon; } }
-
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -27,6 +24,21 @@ namespace Game
             {
                 Instance = this;
             }
+        }
+
+        private void Start()
+        {
+            // PlayerPrefs에서 저장된 장착중인 무기 정보를 불러옴
+            if (PlayerPrefs.HasKey(EQUIPPED_WEAPON_KEY))
+            {
+                int weaponId = PlayerPrefs.GetInt(EQUIPPED_WEAPON_KEY);
+                EquipWeapon(ItemMgr.Instance.GetItemById(weaponId));
+            }
+        }
+
+        public void SetWeaponSocket(Transform socketTransform)
+        {
+            weaponSocket = socketTransform;
         }
 
         public void Equip(Item item)
@@ -40,28 +52,27 @@ namespace Game
 
         public void EquipWeapon(Item weaponItem)
         {
-            Weapon weaponPrefab = ItemMgr.Instance.GetWeaponByName(weaponItem.name);
+            Weapon weaponPrefab = ItemMgr.Instance.GetWeaponById(weaponItem.itemCode);
             if (!weaponPrefab)
             {
                 Debug.Log("Can't found weapon from Dictionary");
                 return;
             }
-            if (equippedWeapon && weaponPrefab.WeaponName == equippedWeapon.WeaponName)
+            if (equippedWeapon && weaponPrefab.weaponId == equippedWeapon.weaponId)
             {
                 // Clicked on the currently equipped weapon, so unequip it
-                if (inventory) inventory.SetEquippedItem(null);
                 UnequipWeapon();
-                playerShooter.SetWeapon(null);
             }
             else
             {
                 // Unequip the previous one  and equip the new weapon
                 UnequipWeapon();
-                //equippedWeapon = weaponPrefab;
                 equippedWeapon = Instantiate(weaponPrefab, weaponSocket);
-                if (inventory) inventory.SetEquippedItem(weaponItem);
-                playerShooter.SetWeapon(equippedWeapon);
+                // PlayerPrefs에 장착중인 무기 정보 저장
+                PlayerPrefs.SetInt(EQUIPPED_WEAPON_KEY, weaponItem.itemCode);
+                PlayerPrefs.Save();
             }
+            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_WEAPON, weaponItem);
         }
 
         public void UnequipWeapon()

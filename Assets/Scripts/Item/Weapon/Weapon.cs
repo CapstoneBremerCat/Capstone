@@ -20,6 +20,7 @@ namespace Game
         [SerializeField] private Projectile Projectile; // 투사체
         [SerializeField] private Transform firePos; // 투사체 발사 위치.
         [SerializeField] private string weaponName;  // 무기 이름.
+        public int weaponId { get; private set; }  // 무기 ID.
 
         [Header("Projectile Attribute")] // [Range(a,b)] : 값의 범위를 제한(a~b).
         [SerializeField] private float hitRange = 100f;  // 사정거리.

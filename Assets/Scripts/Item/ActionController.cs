@@ -19,8 +19,6 @@ namespace Game
         // 필요한 컴포넌트
         [SerializeField]
         private Text actionText;
-        [SerializeField]
-        private Inventory theInventory;
 
         // Update is called once per frame
         void Update()
@@ -45,7 +43,7 @@ namespace Game
             {
                 if (hitInfo.transform != null)
                 {
-                    theInventory.AcquireItem(hitInfo.transform.GetComponent<ItemPickUp>().Item);
+                    Mediator.Instance.Notify(this, GameEvent.ITEM_PICKED_UP, hitInfo.transform.GetComponent<ItemPickUp>().Item);
                     Destroy(hitInfo.transform.gameObject);
                     InfoDisappear();
 

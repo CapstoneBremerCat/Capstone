@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game;
+using BlockChain;
 namespace Game
 {
     public class Player : Status
@@ -35,7 +36,9 @@ namespace Game
         private AudioSource audioSource;    // Audio source for playing sounds
         private int animSpeed = 0;   // Animation speed
 
-        private List<PassiveSkill> equippedPassiveSkills = new List<PassiveSkill>();
+        [Header("Game")]
+        [SerializeField] private Transform weaponSocket;
+        public List<PassiveSkill> equippedPassiveSkills { get; private set; }
         public ActiveSkill equippedActiveSkill { get; private set; }
         private bool isCoolTime;
         private void Awake()
@@ -53,6 +56,7 @@ namespace Game
                 UIManager.Instance.UpdateHealthBar(GetHpRatio());
                 UIManager.Instance.UpdateStaminaBar(GetStaminaRatio());
             };
+            EquipManager.Instance.SetWeaponSocket(weaponSocket);
         }
         public int GetEquippedPassiveSkillCount()
         {
@@ -86,11 +90,10 @@ namespace Game
 
         public void Init(Vector3 initPos)
         {
+            if(equippedPassiveSkills == null) equippedPassiveSkills = new List<PassiveSkill>();
             InitStatus();
             SetPlayerPosition(initPos);
-            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_PASSIVE, this);
-
-            //playerStatusWindow.RefreshStatusUI(this);
+            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_SKILL, this);
         }
 
         public void SetPlayerPosition(Vector3 pos)
@@ -102,8 +105,41 @@ namespace Game
 
         private void OnDestroy()
         {
-
+            DataMgr.Instance.SaveEquipmentsById(GetEquipmentIds());
         }
+
+        private List<int> GetEquipmentIds()
+        {
+            List<int> equippedEquipmentIds = new List<int>();
+            if(equippedActiveSkill) equippedEquipmentIds.Add(equippedActiveSkill.skillInfo.skillId);
+            foreach (Skill skill in equippedPassiveSkills)
+            {
+                equippedEquipmentIds.Add(skill.skillInfo.skillId);
+            }
+            return equippedEquipmentIds;
+        }
+
+        public void LoadSavedEquipments()
+        {
+            List<int> equippedEquipmentIds = DataMgr.Instance.LoadEquipmentsById();
+            foreach (int id in equippedEquipmentIds)
+            {
+                Skill skill = NFTManager.Instance.GetNFTSkillByID(id);
+                switch (skill.skillType)
+                {
+                    case SkillType.Active:
+                        equippedActiveSkill = skill as ActiveSkill;
+                        break;
+                    case SkillType.Passive:
+                        equippedPassiveSkills.Add(skill as PassiveSkill);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_SKILL, this);
+        }
+
         public void OnInputUpdated()
         {
             // 입력값에 따라 적절한 처리를 수행합니다.

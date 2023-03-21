@@ -6,7 +6,7 @@ using UnityEngine;
 public class SkillTest : MonoBehaviour
 {
     [SerializeField] private Skill[] skills;
-    public SkillInventory skillInventory;
+    public SkillWindow skillInventory;
     // Start is called before the first frame update
     public void DebugSkill()
     {

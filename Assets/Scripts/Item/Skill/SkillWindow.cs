@@ -7,7 +7,7 @@ using Game;
 using BlockChain;
 namespace Game
 {
-    public class SkillInventory : MonoBehaviour
+    public class SkillWindow : MonoBehaviour
     {
         // UI elements
         [SerializeField] private GameObject go_SkillInventoryBase;
@@ -66,5 +66,6 @@ namespace Game
                 slot.ClearSlot();
             }
         }
+
     }
 }
