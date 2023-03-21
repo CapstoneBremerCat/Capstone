@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +18,7 @@ namespace Game
             // 시작 버튼
             if (startButton) startButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
 
-            /* 수정 필요 */
+            *//* 수정 필요 *//*
             //if (shopButton) shopButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
 
             // 종료 버튼
@@ -26,4 +26,4 @@ namespace Game
         }
 
     }
-}
+}*/

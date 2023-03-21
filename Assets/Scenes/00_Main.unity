@@ -2828,9 +2828,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 112208957}
-        m_TargetAssemblyTypeName: StageUIController, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1791438762}
+        m_TargetAssemblyTypeName: Game.GameManager, Assembly-CSharp
+        m_MethodName: RestartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

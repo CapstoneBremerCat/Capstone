@@ -139,27 +139,25 @@ namespace Game
         public void InitNewStage()
         {
             // 태양, 시작지점, 스포너 가져오기
-            sun = GameObject.FindWithTag("Sun").GetComponent<DayAndNight>();
-            startPoint = GameObject.FindWithTag("Start").transform;
-            spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+            if(!sun) sun = GameObject.FindWithTag("Sun").GetComponent<DayAndNight>();
+            if(!startPoint) startPoint = GameObject.FindWithTag("Start").transform;
+            if(!spawner) spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
 
             player = FindObjectOfType<Player>();
             if(!player) player = LoadCharacter(playerPrefab).GetComponent<Player>();
             if (startPoint && player)
             {
                 // 플레이어 위치를 시작지점으로 변경
-                //player.transform.position = startPoint.position;
-                player.gameObject.SetActive(true);
                 player.Init(startPoint.position);
-                // 파트너 위치도 변경
-                partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
-                if (partner)
-                {
-                    partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
-                    partner.gameObject.SetActive(true);
-                }
+                player.gameObject.SetActive(true);
             }
-
+            // 파트너 위치도 변경
+            if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
+            if (partner)
+            {
+                partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
+                partner.gameObject.SetActive(true);
+            }
             //CurFatigue = maxFatigue;
 
             // 게임모드 초기화
@@ -177,11 +175,7 @@ namespace Game
             // 웨이브 UI 비활성화
             UIManager.Instance.DisableWaveUI();
 
-            UIManager.Instance.RestartEvent += () =>
-            {
-                UIManager.Instance.UpdateHealthBar(player.GetHpRatio());
-                UIManager.Instance.UpdateStaminaBar(player.GetStaminaRatio());
-            };
+
             // 게임 시작 신호 활성화.
             isGameStart = true;
 
@@ -330,17 +324,32 @@ namespace Game
             UIManager.Instance.EnableGameOverUI();
         }
 
-        public void RestartGame()
-        {
-            InitNewStage();
-            Mediator.Instance.Notify(this, GameEvent.RESTART, null) ;
-        }
 
         public void AddScore(int value)
         {
             score += value;
             // UI의 ScoreText를 갱신.
             UIManager.Instance.UpdateScoreText(score);
+        }
+        public void RestartGame()
+        {
+            StartCoroutine(RestartScene());
+        }
+
+        public IEnumerator RestartScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+
+            // 씬 로드가 완료될 때까지 대기
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+
+            // 로드 완료 후 실행할 코드
+            InitNewStage();
+            UIManager.Instance.RestartGame();
+            Mediator.Instance.Notify(this, GameEvent.RESTART, null);
         }
 
         public void MextScene()
@@ -380,6 +389,7 @@ namespace Game
                 UIManager.Instance.SwitchCanvas(CavasIndex.Cinema);
             }
         }
+
         public void LoadScene()
         {
             int sceneIndex = 1;

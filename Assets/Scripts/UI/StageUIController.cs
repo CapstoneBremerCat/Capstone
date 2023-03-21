@@ -62,7 +62,6 @@ namespace Game
             StopAllCoroutines();
             coolTimeSlider.value = 0;
             Mediator.Instance.RegisterEventHandler(GameEvent.SKILL_ACTIVATED, DisplayCooltime);
-            Mediator.Instance.RegisterEventHandler(GameEvent.RESTART, DisplayCooltime);
         }
         public void ToggleStatusUI()
         {

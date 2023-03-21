@@ -48,6 +48,11 @@ namespace Game
                 if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
                 GameManager.Instance.GameOver();
             };
+            UIManager.Instance.RestartEvent += () =>
+            {
+                UIManager.Instance.UpdateHealthBar(GetHpRatio());
+                UIManager.Instance.UpdateStaminaBar(GetStaminaRatio());
+            };
         }
         public int GetEquippedPassiveSkillCount()
         {
