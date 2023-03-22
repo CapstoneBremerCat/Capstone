@@ -105,7 +105,7 @@ namespace Game
 
         private void OnDestroy()
         {
-            DataMgr.Instance.SaveEquipmentsById(GetEquipmentIds());
+            DataManager.Instance.SaveEquipmentsById(GetEquipmentIds());
         }
 
         private List<int> GetEquipmentIds()
@@ -121,7 +121,7 @@ namespace Game
 
         public void LoadSavedEquipments()
         {
-            List<int> equippedEquipmentIds = DataMgr.Instance.LoadEquipmentsById();
+            List<int> equippedEquipmentIds = DataManager.Instance.LoadEquipmentsById();
             foreach (int id in equippedEquipmentIds)
             {
                 Skill skill = NFTManager.Instance.GetNFTSkillByID(id);

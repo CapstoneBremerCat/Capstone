@@ -9,8 +9,8 @@ namespace Game
 {
     public enum SlotType
     {
-        SkillInventory,
-        SkillEquipWindow
+        Inventory,
+        EquipWindow
     }
     public class SkillSlot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
@@ -62,7 +62,7 @@ namespace Game
                 Debug.Log("if1완료");
                 if (!IsEmpty())
                 {
-                    if (slotType == SlotType.SkillInventory)
+                    if (slotType == SlotType.Inventory)
                         GameManager.Instance.EquipSkill(equippedSkill);
                     else
                         GameManager.Instance.UnEquipSkill(equippedSkill);
@@ -106,18 +106,19 @@ namespace Game
         {
             var tempSkill = equippedSkill;
             SkillSlot skillSlot = DragSlot.instance.dragSlot.GetComponent<SkillSlot>();
+            if (!skillSlot) return;
             SetSlot(skillSlot.equippedSkill);
             // Check if the dragged skill slot has an equipped skill
             if (tempSkill != null)
             {
                 // 할당된 슬롯이 인벤토리 -> 장비창일 경우
-                if (skillSlot.slotType == SlotType.SkillInventory && slotType == SlotType.SkillEquipWindow)
+                if (skillSlot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
                 {
                     GameManager.Instance.UnEquipSkill(tempSkill);
                     GameManager.Instance.EquipSkill(skillSlot.equippedSkill);
                 }
                 // 장비창에서 가져온 슬롯일 경우
-                else if (skillSlot.slotType == SlotType.SkillEquipWindow && slotType == SlotType.SkillInventory)
+                else if (skillSlot.slotType == SlotType.EquipWindow && slotType == SlotType.Inventory)
                 {
                     GameManager.Instance.UnEquipSkill(skillSlot.equippedSkill);
                     GameManager.Instance.EquipSkill(tempSkill);
@@ -128,12 +129,12 @@ namespace Game
             else
             {
                 // 할당된 슬롯이 인벤토리 -> 장비창일 경우
-                if (skillSlot.slotType == SlotType.SkillInventory && slotType == SlotType.SkillEquipWindow)
+                if (skillSlot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
                 {
                     GameManager.Instance.EquipSkill(skillSlot.equippedSkill);
                 }
                 // 장비창에서 가져온 슬롯일 경우
-                else if (skillSlot.slotType == SlotType.SkillEquipWindow && slotType == SlotType.SkillInventory)
+                else if (skillSlot.slotType == SlotType.EquipWindow && slotType == SlotType.Inventory)
                 {
                     GameManager.Instance.UnEquipSkill(skillSlot.equippedSkill);
                 }

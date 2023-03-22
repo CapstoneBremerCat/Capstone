@@ -7,11 +7,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Game;
 namespace Game
 {
-    public class DataMgr : MonoBehaviour
+    public class DataManager : MonoBehaviour
     {
         #region instance
-        private static DataMgr instance = null;
-        public static DataMgr Instance { get { return instance; } }
+        private static DataManager instance = null;
+        public static DataManager Instance { get { return instance; } }
 
         private void Awake()
         {

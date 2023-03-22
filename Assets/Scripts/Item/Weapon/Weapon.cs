@@ -13,14 +13,13 @@ namespace Game
 
     public class Weapon : MonoBehaviour
     {
-        private Transform pivot;
         private State state = State.Ready;
 
         [Header("Projectile")] //inspector에 표시, 해당 Data들의 사용처를 알려준다.
         [SerializeField] private Projectile Projectile; // 투사체
         [SerializeField] private Transform firePos; // 투사체 발사 위치.
-        [SerializeField] private string weaponName;  // 무기 이름.
-        public int weaponId { get; private set; }  // 무기 ID.
+        [SerializeField] private int _weaponId;  // 무기 ID
+        public int weaponId { get { return _weaponId; }}  // 무기 ID.
 
         [Header("Projectile Attribute")] // [Range(a,b)] : 값의 범위를 제한(a~b).
         [SerializeField] private float hitRange = 100f;  // 사정거리.
@@ -45,13 +44,10 @@ namespace Game
         [SerializeField] private float retroActionForce;  // 반동 세기
 
         public Transform FirePos { get { return firePos; } }
-        public Vector3 Pivot { get { return (pivot) ? pivot.position : Vector3.zero; } set { if (pivot) pivot.position = value; } }
         public State GetState { get { return state; } } // 커스텀.
         public int AmmoRemain { get { return ammoRemain; } }
         public int MagAmmo { get { return magAmmo; } }
         public float HitRange { get { return hitRange; } }
-        public string WeaponName { get { return weaponName; } }
-
         public bool IsFire { get; private set; }
 
 
@@ -63,23 +59,18 @@ namespace Game
             //pivot = transform.parent;
         }
 
-        private void OnEnable()
+        public void Init()
         {
             magAmmo = magCapacity;  // 초기 탄창의 총알을 최대치로.
             state = State.Ready;
             lastFireTime = Time.time - timeBetFire;
-
+            SetPos(transform.position);
         }
 
         public void SetPos(Vector3 position)
         {
             // 첫 위치 등록
             originPos = position;
-        }
-
-        public void SetFirePos(Transform transform)
-        {
-            firePos = transform;
         }
 
         public void Fire()

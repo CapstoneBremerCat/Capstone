@@ -28,7 +28,7 @@ namespace Game
         #endregion
 
         // The item pool to search in
-        [SerializeField] private List<Item> itemList;
+        private List<Item> itemList;
         [SerializeField] private List<GameObject> itemObjList = new List<GameObject>();  // The list of item prefabs
         [SerializeField] private List<GameObject> itemPool = new List<GameObject>();  // The list of item objects in the pool
 
@@ -40,6 +40,11 @@ namespace Game
 
         void Start()
         {
+            itemList = new List<Item>();
+            foreach (GameObject itemObj in itemObjList)
+            {
+                itemList.Add(itemObj.GetComponent<ItemPickUp>().Item);
+            }
             for (int i = 0; i < weapons.Length; i++)
             {
                 weaponDictionary.Add(weapons[i].weaponId, weapons[i]);

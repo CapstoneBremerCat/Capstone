@@ -8,12 +8,10 @@ namespace Game
 {
     public class Slot : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
     {
-        private Vector3 originPos;
-
         [SerializeField] private Item item; // 획득 아이템
         [SerializeField] private Image itemImage; // 아이템의 이미지.
         public int itemCount { get; private set; } // 획득 아이템 개수
-
+        [SerializeField] private SlotType slotType;    // Slot type
 
         // 필요한 컴포넌트
         [SerializeField] private Text text_Count;
@@ -24,14 +22,8 @@ namespace Game
 
         public Item Item { get { return item; } }
 
-
-        // 무기 관리
-        //private WeaponManager theWeaponManager;
-
         void Start()
         {
-            originPos = transform.position;
-            //theWeaponManager = FindObjectOfType<WeaponManager>();
             baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
             player = GameObject.FindWithTag("Player").transform;
         }
@@ -110,7 +102,7 @@ namespace Game
 
         public void OnBeginDrag(PointerEventData eventData)
         {
-            if (item != null && item.itemType != Item.ItemType.Weapon)
+            if (item != null)
             {
                 DragSlot.instance.dragSlot = this.gameObject;
                 DragSlot.instance.DragSetImage(itemImage);
@@ -120,7 +112,7 @@ namespace Game
 
         public void OnDrag(PointerEventData eventData)
         {
-            if (item != null && item.itemType != Item.ItemType.Weapon)
+            if (item != null)
             {
                 DragSlot.instance.transform.position = eventData.position;
             }
@@ -128,17 +120,17 @@ namespace Game
 
         public void OnEndDrag(PointerEventData eventData)
         {
-            if (DragSlot.instance.transform.localPosition.x < baseRect.xMin
-        || DragSlot.instance.transform.localPosition.x > baseRect.xMax
-        || DragSlot.instance.transform.localPosition.y < baseRect.yMin
-        || DragSlot.instance.transform.localPosition.y > baseRect.yMax)
+/*            if (DragSlot.instance.transform.position.x < baseRect.xMin
+        || DragSlot.instance.transform.position.x > baseRect.xMax
+        || DragSlot.instance.transform.position.y < baseRect.yMin
+        || DragSlot.instance.transform.position.y > baseRect.yMax)
             {
                 var slot = DragSlot.instance.dragSlot.GetComponent<Slot>();
                 Instantiate(slot.item.itemPrefab, player.position + player.forward * 2 + new Vector3(0, 0.5f, 0),
                     Quaternion.identity);
                 slot.ClearSlot();
 
-            }
+            }*/
             DragSlot.instance.SetColor(0);
             DragSlot.instance.dragSlot = null;
         }
@@ -153,18 +145,60 @@ namespace Game
 
         private void ChangeSlot()
         {
-            Item _tempItem = item;
-            int _tempItemCount = itemCount;
+            Item tempItem = item;
+            int tempItemCount = itemCount;
             var slot = DragSlot.instance.dragSlot.GetComponent<Slot>();
             if (!slot) return;
+
+            // When the slot types are not the same,
+            // or when the dragged item is not a weapon,
+            // or when an existing item exists and it is not a weapon, return
+            if (this.slotType != slot.slotType &&
+                (slot.item.itemType != Item.ItemType.Weapon || tempItem != null && tempItem.itemType != Item.ItemType.Weapon))
+            {
+                return;
+            }
+
             AddItem(slot.item, slot.itemCount);
 
-            if (_tempItem != null)
+            // When an existing item exists
+            if (tempItem != null)
             {
-                slot.AddItem(_tempItem, _tempItemCount);
+                // When the item is a weapon
+                if (tempItem.itemType == Item.ItemType.Weapon && slot.item.itemType == Item.ItemType.Weapon)
+                {
+                    // Inventory -> Equipment window
+                    if (slot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
+                    {
+                        EquipManager.Instance.UnequipWeapon();
+                        EquipManager.Instance.EquipWeapon(slot.item);
+                    }
+                    // Equipment window -> Inventory
+                    else if (slot.slotType == SlotType.EquipWindow && slotType == SlotType.Inventory)
+                    {
+                        EquipManager.Instance.UnequipWeapon();
+                        EquipManager.Instance.EquipWeapon(tempItem);
+                    }
+                }
+                slot.AddItem(tempItem, tempItemCount);
             }
+            // When an existing item does not exist
             else
             {
+                // When the item is a weapon
+                if (slot.item.itemType == Item.ItemType.Weapon)
+                {
+                    // Inventory -> Equipment window
+                    if (slot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
+                    {
+                        EquipManager.Instance.EquipWeapon(slot.item);
+                    }
+                    // Equipment window -> Inventory
+                    else if (slot.slotType == SlotType.EquipWindow && slotType == SlotType.Inventory)
+                    {
+                        EquipManager.Instance.UnequipWeapon();
+                    }
+                }
                 slot.ClearSlot();
             }
         }

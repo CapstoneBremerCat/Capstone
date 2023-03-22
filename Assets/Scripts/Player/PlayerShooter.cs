@@ -22,12 +22,9 @@ namespace Game
         // Refreshes the currently equipped weapon based on the weaponItemObject passed in.
         private void RefreshWeapon(object weaponItemObject)
         {
-            Item weaponItem = weaponItemObject as Item;
-            // Retrieves the Weapon instance corresponding to the weaponItem's itemCode using the ItemMgr.
-            Weapon weapon = ItemMgr.Instance.GetWeaponById(weaponItem.itemCode);
-            if(EquipManager.Instance.EquippedWeapon) this.weapon = weapon;
             // If there is no currently equipped weapon, sets weapon to null.
-            else this.weapon = null;
+            weapon = EquipManager.Instance.EquippedWeapon;
+            if(weapon) weapon.Init();
         }
 
         // Update is called once per frame
