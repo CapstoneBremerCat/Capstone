@@ -88,14 +88,6 @@ namespace Game
             }
         }
 
-        public void UpdateAmmoText(int magAmmo, int remainAmmo)
-        {
-            if (stageUIController != null)
-            {
-                stageUIController.UpdateAmmoText(magAmmo, remainAmmo);
-            }
-        }
-
         public void UpdateScoreText(int newScore)
         {
             if (stageUIController != null)

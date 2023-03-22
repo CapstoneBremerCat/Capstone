@@ -175,10 +175,10 @@ namespace Game
             // 웨이브 UI 비활성화
             UIManager.Instance.DisableWaveUI();
 
-
             // 게임 시작 신호 활성화.
             isGameStart = true;
 
+            Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, player);
         }
         private GameObject LoadCharacter(GameObject prefab)
         {

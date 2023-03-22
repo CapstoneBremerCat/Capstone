@@ -28,7 +28,7 @@ namespace Game
         [Header("Player UI")]
         [SerializeField] private Slider healthSlider;
         [SerializeField] private Slider staminaSlider;
-        [SerializeField] private TextMeshProUGUI ammoText; // Text for displaying ammo count
+/*        [SerializeField] private TextMeshProUGUI ammoText; // Text for displaying ammo count*/
         [SerializeField] private Slider coolTimeSlider; // Slider for displaying the skill cooldown time
         [SerializeField] private Animation coolTimeAnim; // Animation for the skill cooldown time
 
@@ -122,14 +122,10 @@ namespace Game
             if (staminaSlider) staminaSlider.value = ratio;
         }
 
-        public void UpdateAmmoText(int magAmmo, int remainAmmo)
+/*        public void UpdateAmmoText(int magAmmo = 0, int remainAmmo = 0)
         {
-            //var strBuilder = new System.Text.StringBuilder();
-            //strBuilder.Append(magAmmo);
-            //strBuilder.Append(" / ");
-            //strBuilder.Append(remainAmmo);
             if (ammoText) ammoText.text = string.Format("{0} / {1}", magAmmo, remainAmmo);
-        }
+        }*/
 
         public void UpdateScoreText(int newScore)
         {

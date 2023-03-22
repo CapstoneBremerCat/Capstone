@@ -20,11 +20,10 @@ namespace Game
         public float moveSpeed;     // move speed
         public float attackSpeed;   // attack speed
 
-        public float attackPower;   // ATK
-        public float defense;       // DEF
+        public float damage;   // ATK
+        public float armor;       // DEF
 
-        public float damageIncrease;   // amount of damage increased.
-        public float damageReduction;  // amount of damage you receive.
+        public float coolTimeReduce;  // skill coolTime Reduce
 
         //***
         public float runSpeedMult = 1.5f;   // 달리기 시 속력 배수
@@ -50,10 +49,9 @@ namespace Game
             staminaGauge.regenValue += target.staminaGauge.regenValue;
             moveSpeed += target.moveSpeed;
             attackSpeed += target.attackSpeed;
-            attackPower += target.attackPower;
-            defense += target.defense;
-            damageIncrease += target.damageIncrease;
-            damageReduction += target.damageReduction;
+            damage += target.damage;
+            armor += target.armor;
+            coolTimeReduce += target.coolTimeReduce;
         }
 
         public void SubStat(StatusData target)
@@ -72,10 +70,9 @@ namespace Game
             staminaGauge.regenValue -= target.staminaGauge.regenValue;
             moveSpeed -= target.moveSpeed;
             attackSpeed -= target.attackSpeed;
-            attackPower -= target.attackPower;
-            defense -= target.defense;
-            damageIncrease -= target.damageIncrease;
-            damageReduction -= target.damageReduction;
+            damage -= target.damage;
+            armor -= target.armor;
+            coolTimeReduce -= target.coolTimeReduce;
         }
 
     }

@@ -14,10 +14,7 @@ namespace Game
         [SerializeField] private NavMeshAgent agent;
         private Animator anim;
 
-        private new Collider collider;
-
-        [SerializeField] private float health; // 현재 체력.
-        [SerializeField] private float damage = 20f; // 공격력.
+        private new Collider collider;  
 
         [SerializeField] private AudioClip deathSound;  // 사망 효과음.
         [SerializeField] private AudioClip hitSound; // 피격 효과음.
@@ -31,7 +28,7 @@ namespace Game
 
         public void Setup(float damage, float maxhealth, float speed, Color color, Vector3 pos)
         {
-            this.damage = damage;
+            totalStat.damage = damage;
             //this.maxHealth = maxHealth;
             if (agent) agent.speed = speed;
             //if (enemyRenderer) enemyRenderer.material.color = color;
@@ -73,7 +70,6 @@ namespace Game
             base.OnEnable();    // Status의 OnEnable() 호출.
             if (collider) collider.enabled = true;  // 피격을 받을 수 있도록 collider를 활성화.
             InitStatus();
-            health = curHealth;
             // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
             if (agent) agent.isStopped = false;
             isDamaged = false;
@@ -93,7 +89,6 @@ namespace Game
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
             base.OnDamage(damage, hitPoint, hitNormal);
-            health = curHealth;
             if (anim && !isDead)
             {
                 if (hitEffect)
@@ -177,7 +172,7 @@ namespace Game
                     // TODO : Player Damageable Code 추가.
                     if (isHpZero || target.isHpZero) yield break;
                     var hitNormal = transform.position - trTarget.position;
-                    target.OnDamage(damage, Vector3.zero, hitNormal);
+                    target.OnDamage(totalDamage, Vector3.zero, hitNormal);
 
                     yield return new WaitForSeconds(1.2f);
 
@@ -192,7 +187,7 @@ namespace Game
         private void OnCollisionEnter(Collision collision)
         {
             IDamageable target = collision.collider.GetComponent<IDamageable>();
-            if (null != target) target.OnDamage(damage, collision.transform.position, Vector3.zero);
+            if (null != target) target.OnDamage(totalDamage, collision.transform.position, Vector3.zero);
         }
 
         private void OnDisable()

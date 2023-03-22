@@ -12,7 +12,6 @@ namespace Game
         [SerializeField] private Slot weaponSlot;
         [SerializeField] private SkillSlot[] skillSlots;
         [SerializeField] private GameObject windowBase;
-        private bool windowActivated = false;
 
         private void Start()
         {

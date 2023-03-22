@@ -14,25 +14,27 @@ namespace Game
         {
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);
+            Mediator.Instance.RegisterEventHandler(GameEvent.REFRESH_STATUS, RefreshStatusUI);
         }
 
         public void RefreshStatusUI(object playerObject)
         {
             Player player = playerObject as Player;
-            texts[0].text = player.totalStat.healthGauge.maxValue.ToString();
-            texts[1].text = player.totalStat.healthGauge.regenValue.ToString();
-            texts[2].text = player.totalStat.staminaGauge.maxValue.ToString();
-            texts[3].text = player.totalStat.staminaGauge.regenValue.ToString();
-            texts[4].text = player.totalStat.moveSpeed.ToString();
-            texts[5].text = player.totalStat.attackSpeed.ToString();
-            texts[6].text = player.totalStat.attackPower.ToString();
-            texts[7].text = player.totalStat.defense.ToString();
+            texts[0].text = player.maxHealth.ToString();
+            texts[1].text = string.Format("{0}/sec", player.regenHealth);
+            texts[2].text = player.maxStamina.ToString();
+            texts[3].text = string.Format("{0}/sec", player.regenStamina);
+            texts[4].text = player.totalDamage.ToString();
+            texts[5].text = string.Format("{0} (-{1:F1}%)", player.totalStat.armor, player.damageReduction);
+            texts[6].text = string.Format("+{0:F1}%", player.attackSpeed);
+            texts[7].text = string.Format("-{0:F1}%", player.coolTimeReduce);
         }
 
         private void OnDestroy()
         {
             Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
             Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);
+            Mediator.Instance.UnregisterEventHandler(GameEvent.REFRESH_STATUS, RefreshStatusUI);
         }
     }
 }

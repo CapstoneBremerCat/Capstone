@@ -26,7 +26,7 @@ namespace Game
             }
         }
 
-        private void Start()
+        public void EquipLoadedWeapon()
         {
             // PlayerPrefs에서 저장된 장착중인 무기 정보를 불러옴
             if (PlayerPrefs.HasKey(EQUIPPED_WEAPON_KEY))
@@ -46,7 +46,6 @@ namespace Game
             if (item.itemType == Item.ItemType.Weapon)
             {
                 EquipWeapon(item);
-
             }
         }
 
@@ -81,10 +80,8 @@ namespace Game
             if (equippedWeapon != null)
             {
                 Destroy(equippedWeapon.gameObject);
-                //equippedWeapon.gameObject.SetActive(false);
                 equippedWeapon = null;
             }
         }
-
     }
 }

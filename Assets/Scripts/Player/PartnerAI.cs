@@ -179,7 +179,7 @@ namespace Game
                 Quaternion _rotation = Quaternion.Lerp(transform.rotation, _lookRotation, 0.2f);
                 transform.rotation = _rotation;
                 weapon.Fire();
-                if ((weapon.GetState.Equals(State.Empty)) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+                //if ((weapon.GetState.Equals(State.Empty)) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
 
             }
         }
@@ -205,8 +205,8 @@ namespace Game
                                             Destroy(_HitEffect, 1f);*/
                         weapon.Fire();   // 총알 발사.  
                                          // 총알이 비었으면 재장전 시도.
-                        if ((weapon.GetState.Equals(State.Empty)) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
-
+/*                        if ((weapon.GetState.Equals(State.Empty)) && weapon.Reload() && anim) anim.SetTrigger("Reload");  //재장전 상태 확인 후, 재장전 애니메이션 재생.
+*/
                         if (hitInfo.transform.name == "Player")
                         {
                             //hitInfo.transform.GetComponent<Status>().OnDamage(damage);

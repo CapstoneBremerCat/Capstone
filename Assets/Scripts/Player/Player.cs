@@ -41,6 +41,7 @@ namespace Game
         public List<PassiveSkill> equippedPassiveSkills { get; private set; }
         public ActiveSkill equippedActiveSkill { get; private set; }
         private bool isCoolTime;
+        private bool isRun;
         private void Awake()
         {
             OnDeath += () =>
@@ -57,6 +58,10 @@ namespace Game
                 UIManager.Instance.UpdateStaminaBar(GetStaminaRatio());
             };
             EquipManager.Instance.SetWeaponSocket(weaponSocket);
+        }
+        private void Start()
+        {
+            Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, InitWeaponStatus);
         }
         public int GetEquippedPassiveSkillCount()
         {
@@ -87,13 +92,12 @@ namespace Game
             equippedActiveSkill = null;
         }
 
-
         public void Init(Vector3 initPos)
         {
             if(equippedPassiveSkills == null) equippedPassiveSkills = new List<PassiveSkill>();
             InitStatus();
             SetPlayerPosition(initPos);
-            Mediator.Instance.Notify(this, GameEvent.EQUIPPED_SKILL, this);
+            //Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
         }
 
         public void SetPlayerPosition(Vector3 pos)
@@ -103,8 +107,23 @@ namespace Game
             charController.enabled = true;
         }
 
+        private void InitWeaponStatus(object weaponItem)
+        {
+            // If there is no currently equipped weapon, sets weapon to null.
+            var weapon = EquipManager.Instance.EquippedWeapon;
+            if (weapon)
+            {
+                weapon.Init();
+                weapon.UpdateWeaponStats(this);
+                SetWeaponDamage(weapon.Damage);
+            }
+            else SetWeaponDamage(0);
+            Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
+        }
+
         private void OnDestroy()
         {
+            Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_WEAPON, InitWeaponStatus);
             DataManager.Instance.SaveEquipmentsById(GetEquipmentIds());
         }
 
@@ -143,7 +162,7 @@ namespace Game
         public void OnInputUpdated()
         {
             // 입력값에 따라 적절한 처리를 수행합니다.
-            if (playerShooter && playerInput.fire) playerShooter.ShootUpdate(playerInput.fire, playerInput.reload);
+            if (playerShooter && playerInput.fire) playerShooter.ShootUpdate(playerInput.fire);
             if (equippedActiveSkill && playerInput.skillSlot1) UseSkill(equippedActiveSkill);
             if (playerInput.inventory) UIManager.Instance.ToggleInventoryUI();
             if (playerInput.skillWindow) UIManager.Instance.ToggleSkillWindowUI();
@@ -189,7 +208,8 @@ namespace Game
         public void UpdateMovement()
         {
             if (currentSpeed > 0.2f || playerInput.fire) Rotate();
-            Run(playerInput.run);
+            isRun = playerInput.run;
+            Run();
             Move(playerInput.moveInput);
 
             if (playerInput.jump) Jump();
@@ -216,18 +236,19 @@ namespace Game
             if (charController.isGrounded) currentVelocityY = 0;
         }
 
-        public void Run(bool isRun)
+        public void Run()
         {
-            if (isRun)
-            {
-                animSpeed = (UseStamina(runStamina)) ? 2 : 1;
-            }
-            else
-            {
-                animSpeed = 1;
-                RestoreStamina(regenStamina);
-            }
+            // If the character is running,
+            // set animSpeed to 2 if UseStamina returns true (stamina is consumed), otherwise set it to 1.
+            // If the character is not running, set animSpeed to 1.
+            animSpeed = isRun ? ((UseStamina(runStamina)) ? 2 : 1) : 1;
             StageUIController.Instance.SetStaminaBar(GetStaminaRatio());
+        }
+
+        public override void RestoreStamina(float value)
+        {
+            // Don't restore Stamina if the character is running.
+            if (!isRun) base.RestoreStamina(value);
         }
 
         public void Rotate()
@@ -240,9 +261,10 @@ namespace Game
 
         public void Jump()
         {
-            // ĳ���Ͱ� ���� �پ��ִ� ��쿡�� �۵� 
+            // If the character is not on the ground, return without doing anything.
             if (!charController.isGrounded) return;
 
+            // Set the vertical velocity to the jump power to make the character jump.
             currentVelocityY = jumpPower;
         }
 

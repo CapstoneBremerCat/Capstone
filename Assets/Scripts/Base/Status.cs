@@ -20,6 +20,7 @@ namespace Game
         public float maxMana { get { return totalStat.manaGauge.maxValue; } }
         public float maxStamina { get { return totalStat.staminaGauge.maxValue; } }
 
+        // 초당 회복량
         public float regenHealth { get { return totalStat.healthGauge.regenValue; } }
         public float regenMana { get { return totalStat.manaGauge.regenValue; } }
         public float regenStamina { get { return totalStat.staminaGauge.regenValue; } }
@@ -33,15 +34,13 @@ namespace Game
         public bool isGodMode { get; private set; }
         public float moveSpeed { get { return totalStat.moveSpeed; } }
         public float attackSpeed { get { return totalStat.attackSpeed; } }
-
-        public float attackPower { get { return totalStat.attackPower; } }
-        public float defense { get { return totalStat.defense; } }
-
-        public float damageIncrease { get { return totalStat.damageIncrease; } }
-        public float damageReduction { get { return totalStat.damageReduction; } }
+        public float totalDamage { get { return totalStat.damage + weaponDamage; } }
+        public float damageReduction { get { return CalculateDamageReduction(); } }
+        public float coolTimeReduce { get { return totalStat.coolTimeReduce; } }
         public float jumpPower { get { return totalStat.jumpPower; } }
         public float runStamina { get { return totalStat.runStamina; } }
 
+        private float weaponDamage;
         public ConditionType curCondition { get; private set; }    // ���� ����(�⺻, ħ��, ����)
         public bool isDead { get { return (0 >= curHealth); } }    // ���� ���� Ȯ��.
         public event Action OnDeath; // ��� �� �ߵ��� �̺�Ʈ
@@ -51,19 +50,7 @@ namespace Game
             InitStatus();
         }
 
-        public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
-        {
-            if (isDead) return; // �̹� ���� ���¶�� �� �̻� ó������ �ʴ´�.
-
-            curHealth -= damage;   // ������ ��ŭ ü�� ����.
-            if (isDead) Die();  // �������� �Ծ� ü���� 0����(��� ����) ��� ��� �̺�Ʈ ����.
-        }
-        private void Die()
-        {
-            if (null != OnDeath) OnDeath(); // ��ϵ� ��� �̺�Ʈ ����.
-        }
-
-        // �����۵� �ʱ�ȭ�� �ؾ��ұ�? �������� ��������?
+        // 캐릭터 상태 초기화
         public void InitStatus()
         {
             totalStat = new StatusData();
@@ -76,15 +63,48 @@ namespace Game
             curCondition = ConditionType.Default;
             OffGodMode();
         }
+
+        public void SetWeaponDamage(float damage)
+        {
+            weaponDamage = damage;
+        }
+        private void Update()
+        {
+            // 매 프레임마다 회복시킨다면, 초당 회복량과 동일한 수치로 회복이 된다.
+            RestoreHealth(totalStat.healthGauge.regenValue * Time.deltaTime);
+            RestoreStamina(totalStat.staminaGauge.regenValue * Time.deltaTime);
+        }
         public virtual void RestoreHealth(float value)
         {
-            if (isDead) return; // �̹� ���� ���¿����� ü��ȸ�� �Ұ���.
+            if (isDead) return;
             SetHealth(curHealth + value);
         }
         public virtual void RestoreStamina(float value)
         {
-            if (isDead) return; // �̹� ���� ���¶�� �� �̻� ó������ �ʴ´�.
+            if (isDead) return;
             SetStamina(curStamina + value);
+        }
+        public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
+        {
+            if (isDead) return; // If already dead, do not process any further.
+
+            // Calculate actual damage by applying damage reduction.
+            float actualDamage = damage * (100 - damageReduction) / 100;
+
+            curHealth -= actualDamage;   // Reduce health by received damage amount.
+            if (isDead) Die();  // If health becomes 0 or below, execute death handling.
+        }
+
+        // Function to calculate damage reduction based on defense stat using logarithmic function
+        private float CalculateDamageReduction()
+        {
+            // Damage reduction calculated by logarithmic function
+            return Mathf.Log10(totalStat.armor + 1) / Mathf.Log10(totalStat.armor + 10) * 100; ;
+        }
+
+        private void Die()
+        {
+            if (null != OnDeath) OnDeath(); // 관련된 이벤트 처리를 실행한다.
         }
         
         public void ApplyStatus(StatusData status)
@@ -108,6 +128,7 @@ namespace Game
                 curMana = Mathf.Min(curHealth, totalStat.manaGauge.maxValue);
             }
         }
+
 
         public void OnGodMode()
         {

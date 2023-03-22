@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9236f55382b380a4fb973859013d06ae, type: 3}
   m_Name: DefaultEnemy
   m_EditorClassIdentifier: 
-  idCode: 10001
+  id: 0
   status:
     healthGauge:
       maxValue: 100
@@ -25,10 +25,9 @@ MonoBehaviour:
       regenValue: 0.1
     moveSpeed: 5
     attackSpeed: 5
-    attackPower: 10
+    damage: 20
     defense: 0
-    damageIncrease: 0
-    damageReduction: 0
+    coolTimeReduce: 0
     runSpeedMult: 1.5
     runStamina: 0.2
     jumpPower: 2.5

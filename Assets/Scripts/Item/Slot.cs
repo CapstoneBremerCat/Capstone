@@ -197,6 +197,7 @@ namespace Game
                     else if (slot.slotType == SlotType.EquipWindow && slotType == SlotType.Inventory)
                     {
                         EquipManager.Instance.UnequipWeapon();
+                        Mediator.Instance.Notify(this, GameEvent.EQUIPPED_WEAPON, null);
                     }
                 }
                 slot.ClearSlot();

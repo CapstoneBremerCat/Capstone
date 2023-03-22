@@ -16,19 +16,18 @@ MonoBehaviour:
   status:
     healthGauge:
       maxValue: 100
-      regenValue: 0.05
+      regenValue: 1
     manaGauge:
       maxValue: 100
-      regenValue: 0.1
+      regenValue: 5
     staminaGauge:
       maxValue: 100
-      regenValue: 0.2
-    moveSpeed: 8
+      regenValue: 5
+    moveSpeed: 6
     attackSpeed: 7
-    attackPower: 10
-    defense: 0
-    damageIncrease: 0
-    damageReduction: 0
+    damage: 5
+    armor: 5
+    coolTimeReduce: 0
     runSpeedMult: 1.5
     runStamina: 1
     jumpPower: 6

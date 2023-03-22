@@ -22502,7 +22502,6 @@ GameObject:
   - component: {fileID: 1120468819}
   - component: {fileID: 1120468818}
   - component: {fileID: 1120468820}
-  - component: {fileID: 1120468821}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Sun
@@ -22602,25 +22601,6 @@ MonoBehaviour:
   secondPerRealTimeSecond: 50
   nightFogDensity: 0.1
   fogDensityCalc: 0.2
---- !u!114 &1120468821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120468817}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 799e9d0fcf439d141b7c4af55db14f29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  directionalLight: {fileID: 1120468818}
-  directionalLightTransform: {fileID: 1120468819}
-  shadowCenter: {fileID: 0}
-  maxIntensity: 1
-  minIntensity: 0.1
-  shadowQuality: 2
-  shadowStrength: 0.8
 --- !u!1001 &1122820740
 PrefabInstance:
   m_ObjectHideFlags: 0
