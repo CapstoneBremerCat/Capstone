@@ -16,7 +16,6 @@ namespace Game
         {
             Weapon,
             Used,
-            Ammo,
             ETC
         }
     }

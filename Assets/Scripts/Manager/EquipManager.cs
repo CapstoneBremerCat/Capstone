@@ -82,6 +82,7 @@ namespace Game
                 Destroy(equippedWeapon.gameObject);
                 equippedWeapon = null;
             }
+
         }
     }
 }

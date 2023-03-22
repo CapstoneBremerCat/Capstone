@@ -89,13 +89,10 @@ namespace Game
             switch (item.itemType)
             {
                 case Item.ItemType.Weapon:
-                    EquipManager.Instance.EquipWeapon(item);
+                    //EquipManager.Instance.EquipWeapon(item);
                     break;
                 case Item.ItemType.Used:
                     // Use recovery item
-                    break;
-                case Item.ItemType.Ammo:
-                    // Add ammo to inventory
                     break;
             }
         }
