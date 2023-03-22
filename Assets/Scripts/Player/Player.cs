@@ -275,7 +275,7 @@ namespace Game
 
             Mediator.Instance.Notify(this, GameEvent.SKILL_ACTIVATED, skill);
             // 쿨타임을 시작합니다.
-            StartCoroutine(CooltimeRoutine(skill.cooldown));
+            StartCoroutine(CooltimeRoutine(skill.cooldown * (100 - coolTimeReduce * 0.01f)));
         }
         private IEnumerator CooltimeRoutine(float timeRemaining)
         {

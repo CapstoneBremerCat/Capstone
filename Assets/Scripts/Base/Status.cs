@@ -36,7 +36,7 @@ namespace Game
         public float attackSpeed { get { return totalStat.attackSpeed; } }
         public float totalDamage { get { return totalStat.damage + weaponDamage; } }
         public float damageReduction { get { return CalculateDamageReduction(); } }
-        public float coolTimeReduce { get { return totalStat.coolTimeReduce; } }
+        public float coolTimeReduce { get { return CalculateCoolTimeReduction(); } }
         public float jumpPower { get { return totalStat.jumpPower; } }
         public float runStamina { get { return totalStat.runStamina; } }
 
@@ -100,6 +100,11 @@ namespace Game
         {
             // Damage reduction calculated by logarithmic function
             return Mathf.Log10(totalStat.armor + 1) / Mathf.Log10(totalStat.armor + 10) * 100; ;
+        }
+        private float CalculateCoolTimeReduction()
+        {
+            // Damage reduction calculated by logarithmic function
+            return Mathf.Clamp(totalStat.coolTimeReduce, 0, 60);
         }
 
         private void Die()
