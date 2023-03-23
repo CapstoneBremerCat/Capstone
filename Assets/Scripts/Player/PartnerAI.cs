@@ -43,10 +43,14 @@ namespace Game
         private Transform tf_Target; // 현재 설정된 타겟의 트랜스폼
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             //weapon = GetComponent<Projectile>();
             // anim = GetComponent<Animator>();
+            OnDeath += () =>
+            {
+                this.gameObject.SetActive(false);
+            };
         }
         protected override void OnEnable()
         {

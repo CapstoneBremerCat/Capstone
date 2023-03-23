@@ -48,7 +48,7 @@ namespace Game
             {
                 // If dead, disable collider
                 //if (collider) collider.enabled = false;
-                if (anim) anim.SetBool("isDead", isDead);   // Set Death animation.
+                //if (anim) anim.SetBool("isDead", isDead);   // Set Death animation.
                 if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
                 GameManager.Instance.GameOver();
             };

@@ -176,6 +176,7 @@ namespace Game
             UIManager.Instance.DisableWaveUI();
 
             // 게임 시작 신호 활성화.
+            isGameOver = false;
             isGameStart = true;
 
             Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, player);
