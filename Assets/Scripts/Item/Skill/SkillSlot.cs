@@ -106,14 +106,16 @@ namespace Game
         {
             var tempSkill = equippedSkill;
             SkillSlot skillSlot = DragSlot.instance.dragSlot.GetComponent<SkillSlot>();
-            if (!skillSlot) return;
+            if (!skillSlot|| skillType != skillSlot.equippedSkill.skillType) return;
             SetSlot(skillSlot.equippedSkill);
             // Check if the dragged skill slot has an equipped skill
             if (tempSkill != null)
             {
+  
                 // 할당된 슬롯이 인벤토리 -> 장비창일 경우
                 if (skillSlot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
                 {
+
                     GameManager.Instance.UnEquipSkill(tempSkill);
                     GameManager.Instance.EquipSkill(skillSlot.equippedSkill);
                 }

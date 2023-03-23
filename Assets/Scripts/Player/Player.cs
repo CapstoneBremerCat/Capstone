@@ -114,7 +114,7 @@ namespace Game
             var weapon = EquipManager.Instance.EquippedWeapon;
             if (weapon)
             {
-                weapon.Init();
+                weapon.Init(weaponSocket);
                 SetWeaponDamage(weapon.Damage);
                 weapon.UpdateWeaponStats(this);
             }

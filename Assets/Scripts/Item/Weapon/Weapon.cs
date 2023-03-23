@@ -7,7 +7,9 @@ namespace Game
     public class Weapon : MonoBehaviour
     {
         [Header("Projectile")] //inspector에 표시, 해당 Data들의 사용처를 알려준다.
-        [SerializeField] private Projectile Projectile; // 투사체
+        private List<GameObject> projectilePool; // 오브젝트 풀 리스트
+        [SerializeField] private int poolSize = 10; // 초기 풀 크기
+        [SerializeField] private GameObject projectilePrefab; // 생성할 프리팹
         [SerializeField] private Transform firePos; // 투사체 발사 위치.
         [SerializeField] private int _weaponId;  // 무기 ID
         public int weaponId { get { return _weaponId; }}  // 무기 ID.
@@ -43,10 +45,24 @@ namespace Game
             audioSource.playOnAwake = false;
         }
 
-        public void Init()
+        public void Init(Transform parentTransform)
         {
             lastFireTime = Time.time - timeBetFire;
             totalDamage = damage;
+            transform.position = parentTransform.TransformPoint(transform.localPosition);
+            transform.rotation = Quaternion.LookRotation(
+    parentTransform.TransformDirection(transform.localPosition), parentTransform.up);
+            InitProjectilePool();
+        }
+        private void InitProjectilePool()
+        {
+            projectilePool = new List<GameObject>();
+            for (int i = 0; i < poolSize; i++)
+            {
+                GameObject projectileObj = Instantiate(projectilePrefab, transform);
+                projectileObj.SetActive(false);
+                projectilePool.Add(projectileObj);
+            }
         }
 
         public void UpdateWeaponStats(Status status)
@@ -76,7 +92,7 @@ namespace Game
         {
             if (firePos)
             {
-                RaycastHit hit; // Physics.RayCast()를 이용하여 충돌 지점 정보를 알아온다.
+/*                RaycastHit hit; // Physics.RayCast()를 이용하여 충돌 지점 정보를 알아온다.
                 Vector3 hitPos = firePos.position + firePos.forward * hitRange; // 총알이 맞은 위치를 저장, 최대 거리 위치를 기본 값으로 가진다.
                 if (Physics.Raycast(firePos.position, firePos.forward, out hit, hitRange))
                 {
@@ -86,12 +102,15 @@ namespace Game
                     IDamageable target = hit.collider.GetComponent<IDamageable>();
                     if (null != target) target.OnDamage(totalDamage, hit.point, hit.normal);
                     hitPos = hit.point; // 실제 총알이 맞은 지점으로 갱신.
-                }
+                }*/
                 // 총기 반동 코루틴 실행
-                StopAllCoroutines();
-                StartCoroutine(ShotEffect(hitPos)); // 총알 발사 이펙트.
+                //StopAllCoroutines();
+                //StartCoroutine(ShotEffect(hitPos)); // 총알 발사 이펙트.
 
-                Instantiate(Projectile.gameObject, firePos.transform.position, firePos.transform.rotation);   // 총알 발사
+                // 오브젝트 풀에서 오브젝트를 가져와 활성화시키고 위치, 회전값을 설정한다.
+                GameObject projectileObj = GetProjectileFromPool();
+                projectileObj.GetComponent<Projectile>().InitProjectile(firePos, totalDamage);
+                projectileObj.SetActive(true);
             }
         }
 
@@ -102,7 +121,22 @@ namespace Game
 
             yield return new WaitForSeconds(0.03f); // 0.03초 동안 잠시 처리를 대기.
         }
+        private GameObject GetProjectileFromPool()
+        {
+            for (int i = 0; i < projectilePool.Count; i++)
+            {
+                if (!projectilePool[i].activeInHierarchy)
+                {
+                    return projectilePool[i];
+                }
+            }
 
+            // 풀에 빈 공간이 없으면 새로운 오브젝트를 생성하여 추가한다.
+            GameObject projectileObj = Instantiate(projectilePrefab, transform);
+            projectileObj.SetActive(false);
+            projectilePool.Add(projectileObj);
+            return projectileObj;
+        }
         private void OnDisable()
         {
             StopAllCoroutines();
