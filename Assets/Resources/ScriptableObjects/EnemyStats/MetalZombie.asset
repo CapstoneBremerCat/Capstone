@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9236f55382b380a4fb973859013d06ae, type: 3}
-  m_Name: DefaultEnemy
+  m_Name: MetalZombie
   m_EditorClassIdentifier: 
-  id: 0
+  id: 2
   status:
     healthGauge:
-      maxValue: 100
-      regenValue: 4
+      maxValue: 200
+      regenValue: 2
     manaGauge:
       maxValue: 100
       regenValue: 0.1
@@ -25,8 +25,8 @@ MonoBehaviour:
       regenValue: 5
     moveSpeed: 5
     attackSpeed: 5
-    damage: 10
-    armor: 0
+    damage: 25
+    armor: 60
     coolTimeReduce: 0
     runSpeedMult: 1.5
     runStamina: 0.2

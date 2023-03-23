@@ -9344,7 +9344,7 @@ Transform:
   m_GameObject: {fileID: 1863052250637867807}
   m_LocalRotation: {x: -0, y: 0.9962452, z: -0, w: 0.086576514}
   m_LocalPosition: {x: 3.7999997, y: 0, z: 6.6799994}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2.4, y: 2, z: 2.4}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1863052250637960955}
@@ -9423,7 +9423,7 @@ MonoBehaviour:
   baseStat: {fileID: 11400000, guid: 63370e68e01c84bfea3a64808fa34644, type: 2}
   targetLayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 520
   searchRange: 20
   damagedSearchRange: 40
   agent: {fileID: 1863052250637835292}
@@ -9456,7 +9456,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7900542571367836059
 Transform:
   m_ObjectHideFlags: 0

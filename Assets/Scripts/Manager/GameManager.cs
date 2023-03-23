@@ -249,9 +249,6 @@ namespace Game
         {
             // 웨이브 시작 연출 실행
             UIManager.Instance.PlayWaveStartUI();
-            // 웨이브 UI 활성화
-            UIManager.Instance.EnableWaveUI();
-            UIManager.Instance.UpdateWaveUI(Wave, --spawnCount);
 
             /* 연출이 끝날 때 까지 대기 */
             yield return null;
@@ -259,9 +256,11 @@ namespace Game
             // 웨이브에 맞춰 적 스폰
             Wave++;
             spawnCount += EnemySpawnCount;
-            spawner.SpawnEnemy(spawnCount);
+            spawner.SpawnEnemy(spawnCount, Wave);
 
-            //NextWave();
+            // 웨이브 UI 활성화
+            UIManager.Instance.EnableWaveUI();
+            UIManager.Instance.UpdateWaveUI(Wave, spawnCount);
         }
 
         public IEnumerator EndWave()

@@ -8,27 +8,39 @@ namespace Game
     {
         [SerializeField] private List<GameObject> enemies = new List<GameObject>();  // 생성된 적들을 담는 리스트    [SerializeField] private List<GameObject> itemPrefabs = new List<GameObject>();  // 생성할 아이템들을 담는 리스트
 
-        [SerializeField] private GameObject enemyPrefab;     // 생성할 적 AI
+        [SerializeField] private List<GameObject> enemyPrefabs = new List<GameObject>();  // 다양한 적 프리팹을 담는 리스트
         [SerializeField] private Transform[] spawnPoints;   // 적 AI를 소환할 위치들
 
         // spawnCount만큼 적을 생성
-        public void SpawnEnemy(int spawnCount)
+        public void SpawnEnemy(int spawnCount, int wave)
         {
             // spawnCount 만큼 적을 생성
             for (int i = 0; i < spawnCount; i++)
             {
                 // 적 생성 및 배치
-                SetEnemyPos(CreateEnemy(enemyPrefab));
+                SetEnemyPos(CreateEnemy(wave));
             }
         }
 
         // 적 생성
-        private GameObject CreateEnemy(GameObject enemyPrefab)
+        private GameObject CreateEnemy(int wave)
         {
+            GameObject enemyPrefab = enemyPrefabs[0];
+            int random = Random.Range(0, 100);
+            for (int i = 0; i < enemyPrefabs.Count; i++)
+            {
+                if (random < 100 - ((wave * 10 / (wave * 10 + 100)) * 100))
+                {
+                    Debug.LogWarning(100 - ((wave * 10 / (wave * 10 + 100)) * 100));
+                    enemyPrefab = enemyPrefabs[i];
+                    break;
+                }
+                wave *= 2;  // wave 값을 2배씩 높임
+            }
             // 풀 안에 비활성화된 적이 있으면 재활용
             foreach (GameObject enemy in enemies)
             {
-                if (!enemy.activeInHierarchy)
+                if (enemy.activeInHierarchy == false && enemy.name.Equals(enemyPrefab.name + "(Clone)"))
                 {
                     enemy.SetActive(true);
                     return enemy;

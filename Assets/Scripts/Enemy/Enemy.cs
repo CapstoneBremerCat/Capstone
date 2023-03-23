@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.AI;
 using Game;
 namespace Game
@@ -11,6 +12,7 @@ namespace Game
         [SerializeField] [Range(0, 100)] protected float searchRange = 20;    // 탐색 범위
         [SerializeField] [Range(0, 100)] protected float damagedSearchRange = 30; // 피격 시 탐색 범위
 
+        [SerializeField] protected Slider slider;
         [SerializeField] protected NavMeshAgent agent;
         protected Animator anim;
 
@@ -30,6 +32,7 @@ namespace Game
             if (agent) agent.speed = speed;
             transform.position = pos;
             gameObject.SetActive(true);
+
         }
 
         // Gizmo를 이용하여 target을 찾는 가시 범위를 벌 수 있다.
@@ -42,7 +45,7 @@ namespace Game
         {
             anim = GetComponent<Animator>();
             collider = GetComponent<Collider>();    // Collider의 종류를 신경쓰지 않는다.
-
+            if(slider) slider.gameObject.SetActive(false);
 
             // 현재 오브젝트에 AudioSource 컴포넌트 추가
             audioSource = gameObject.AddComponent<AudioSource>();
@@ -73,6 +76,8 @@ namespace Game
 
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
+            if(slider) slider.gameObject.SetActive(true);
+            
             base.OnDamage(damage, hitPoint, hitNormal);
             if (anim && !isDead)
             {
@@ -99,7 +104,6 @@ namespace Game
             isDamaged = true;
             searchRange = damagedSearchRange;   // 피격 시 탐색범위 증가
             yield return new WaitForSeconds(3.0f);
-            agent.isStopped = true;
             searchRange = originRange;  // 일정 시간이 지나면 탐색범위 복구
             isDamaged = false;  // 피격 상태 초기화
         }
@@ -113,6 +117,7 @@ namespace Game
         {
             while (!isHpZero)
             {
+                if (slider) slider.value = GetHpRatio();
                 if (agent)
                 {
                     var targets = Physics.OverlapSphere(transform.position, searchRange, targetLayer);  // 설정한 탐색 범위 내에 Target(Player)이 있는 지 확인.
@@ -123,7 +128,6 @@ namespace Game
                         if (livingEntity && !livingEntity.isHpZero)
                         { // 대상이 존재하고 죽지 않았을 경우.
                             var targetPos = livingEntity.transform.position;
-                            agent.isStopped = false;
                             agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
                             if (Vector3.Distance(targetPos, transform.position) <= agent.stoppingDistance)   // 일정 거리(stoppingDistance)만큼 다가갔을 경우,
                             {

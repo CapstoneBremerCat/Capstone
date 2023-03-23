@@ -133,8 +133,7 @@ MonoBehaviour:
   firePos: {fileID: 5415851945468316402}
   _weaponId: 10000
   hitRange: 100
-  timeBetFire: 1
-  ammoRemain: 90
+  timeBetFire: 0.8
   reloadTime: 0.9
   damage: 25
   muzzleFlashEffect: {fileID: 0}
