@@ -114,8 +114,8 @@ namespace Game
             if (weapon)
             {
                 weapon.Init();
-                weapon.UpdateWeaponStats(this);
                 SetWeaponDamage(weapon.Damage);
+                weapon.UpdateWeaponStats(this);
             }
             else SetWeaponDamage(0);
             Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);

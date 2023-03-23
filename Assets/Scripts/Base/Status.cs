@@ -90,7 +90,7 @@ namespace Game
 
             // Calculate actual damage by applying damage reduction.
             float actualDamage = damage * (100 - damageReduction) / 100;
-
+            Debug.Log("ActualDamage: " + actualDamage + "reduced: -" + damageReduction);
             curHealth -= actualDamage;   // Reduce health by received damage amount.
             if (isDead) Die();  // If health becomes 0 or below, execute death handling.
         }
@@ -98,12 +98,12 @@ namespace Game
         // Function to calculate damage reduction based on defense stat using logarithmic function
         private float CalculateDamageReduction()
         {
-            // Damage reduction calculated by logarithmic function
-            return Mathf.Log10(totalStat.armor + 1) / Mathf.Log10(totalStat.armor + 10) * 100; ;
+            // Damage reduction calculated by function
+            return totalStat.armor / (totalStat.armor + 100) * 100;
         }
         private float CalculateCoolTimeReduction()
         {
-            // Damage reduction calculated by logarithmic function
+            // Damage reduction calculated by function
             return Mathf.Clamp(totalStat.coolTimeReduce, 0, 60);
         }
 

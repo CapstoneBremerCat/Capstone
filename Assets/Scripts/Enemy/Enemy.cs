@@ -7,31 +7,27 @@ namespace Game
 {
     public class Enemy : Status
     {
-        [SerializeField] private LayerMask targetLayer;
-        [SerializeField] [Range(0, 100)] private float searchRange = 20;    // 탐색 범위
-        [SerializeField] [Range(0, 100)] private float damagedSearchRange = 30; // 피격 시 탐색 범위
+        [SerializeField] protected LayerMask targetLayer;
+        [SerializeField] [Range(0, 100)] protected float searchRange = 20;    // 탐색 범위
+        [SerializeField] [Range(0, 100)] protected float damagedSearchRange = 30; // 피격 시 탐색 범위
 
-        [SerializeField] private NavMeshAgent agent;
-        private Animator anim;
+        [SerializeField] protected NavMeshAgent agent;
+        protected Animator anim;
 
         private new Collider collider;  
 
-        [SerializeField] private AudioClip deathSound;  // 사망 효과음.
-        [SerializeField] private AudioClip hitSound; // 피격 효과음.
-        [SerializeField] private ParticleSystem hitEffect;  // 피격 이펙트.
-        private AudioSource audioSource;    // 효과음을 출력하는데 사용.
+        [SerializeField] protected AudioClip deathSound;  // 사망 효과음.
+        [SerializeField] protected AudioClip hitSound; // 피격 효과음.
+        [SerializeField] protected ParticleSystem hitEffect;  // 피격 이펙트.
+        protected AudioSource audioSource;    // 효과음을 출력하는데 사용.
 
         [SerializeField] private bool isWaveEnemy;   // 웨이브 적인지 판단
-        private bool isDamaged = false;
+        public bool isDamaged { get; private set; }
 
-        //[SerializeField] private Renderer enemyRenderer;
-
-        public void Setup(float damage, float maxhealth, float speed, Color color, Vector3 pos)
+        public void Setup(float damage, float maxhealth, float speed, Vector3 pos)
         {
             totalStat.damage = damage;
-            //this.maxHealth = maxHealth;
             if (agent) agent.speed = speed;
-            //if (enemyRenderer) enemyRenderer.material.color = color;
             transform.position = pos;
             gameObject.SetActive(true);
         }
@@ -42,7 +38,7 @@ namespace Game
             Gizmos.DrawWireSphere(transform.position, searchRange);
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             anim = GetComponent<Animator>();
             collider = GetComponent<Collider>();    // Collider의 종류를 신경쓰지 않는다.
@@ -59,7 +55,6 @@ namespace Game
             if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
             if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
             if (GameManager.Instance) GameManager.Instance.KillEnemy(isWaveEnemy);
-            //EnemyMgr.Instance.DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
             //gameObject.SetActive(false);
             if (ItemMgr.Instance) ItemMgr.Instance.SpawnItem(transform.position + Vector3.up);
             };
@@ -75,16 +70,6 @@ namespace Game
             isDamaged = false;
             StartCoroutine(UpdatePath());
         }
-        /*    protected override void OnEnable()
-            {
-                base.OnEnable();    // LivingEntity의 OnEnable() 호출.
-
-                if (anim) anim.SetBool("isDead", isDead);   // 사망 상태를 false, isDead=false/
-                if (collider) collider.enabled = true;  // 피격을 받을 수 있도록 collider를 활성화.
-                // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
-                if (agent) agent.isStopped = false;
-                StartCoroutine(UpdatePath());
-            }*/
 
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
@@ -114,6 +99,7 @@ namespace Game
             isDamaged = true;
             searchRange = damagedSearchRange;   // 피격 시 탐색범위 증가
             yield return new WaitForSeconds(3.0f);
+            agent.isStopped = true;
             searchRange = originRange;  // 일정 시간이 지나면 탐색범위 복구
             isDamaged = false;  // 피격 상태 초기화
         }
@@ -123,7 +109,7 @@ namespace Game
             gameObject.SetActive(false);
         }
 
-        private IEnumerator UpdatePath()
+        protected virtual IEnumerator UpdatePath()
         {
             while (!isHpZero)
             {
@@ -137,6 +123,7 @@ namespace Game
                         if (livingEntity && !livingEntity.isHpZero)
                         { // 대상이 존재하고 죽지 않았을 경우.
                             var targetPos = livingEntity.transform.position;
+                            agent.isStopped = false;
                             agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
                             if (Vector3.Distance(targetPos, transform.position) <= agent.stoppingDistance)   // 일정 거리(stoppingDistance)만큼 다가갔을 경우,
                             {
@@ -155,12 +142,12 @@ namespace Game
             } //while()
         } // UpdatePath()
 
-        private IEnumerator Attack(Status target)
+        protected virtual IEnumerator Attack(Status target)
         {
             if (agent && target)
             {
                 var trTarget = target.transform;
-                while (!isHpZero && !target.isHpZero)
+                while (!isDead && !target.isDead)
                 {
                     // 공격 모션 실행.
                     if (anim) anim.SetTrigger("Attack");
@@ -170,7 +157,7 @@ namespace Game
                     if (Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
 
                     // TODO : Player Damageable Code 추가.
-                    if (isHpZero || target.isHpZero) yield break;
+                    if (isDead || target.isDead) yield break;
                     var hitNormal = transform.position - trTarget.position;
                     target.OnDamage(totalDamage, Vector3.zero, hitNormal);
 
@@ -181,7 +168,7 @@ namespace Game
                 }
             }
             // target과의 거리가 벌어진다면 다시 target을 쫓아 간다.
-            if (!isHpZero) StartCoroutine(UpdatePath());   // if(!isDead) 조건 추가.
+            if (!isDead) StartCoroutine(UpdatePath());   // if(!isDead) 조건 추가.
         }
 
         private void OnCollisionEnter(Collision collision)
