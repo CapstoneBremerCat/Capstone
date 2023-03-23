@@ -16,7 +16,7 @@ namespace Game
 
         public virtual void UseSkill()
         {
-            
+            Debug.Log("Skill Activated");
         }
     }
 }

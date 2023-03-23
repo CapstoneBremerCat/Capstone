@@ -27,15 +27,17 @@ namespace Game
         {
             GameObject enemyPrefab = enemyPrefabs[0];
             int random = Random.Range(0, 100);
+            // 기본 몬스터 등장 확률
+            float commonRate = (100.0f - (wave / (wave + 100.0f)) * 100.0f);
+            Debug.LogWarning("wave: " + wave + " namedRate: " + commonRate);
+            float namedRate = (100 - commonRate) / (enemyPrefabs.Count - 1);
             for (int i = 0; i < enemyPrefabs.Count; i++)
             {
-                if (random < 100 - ((wave * 10 / (wave * 10 + 100)) * 100))
+                if (random < commonRate + namedRate * i)
                 {
-                    Debug.LogWarning(100 - ((wave * 10 / (wave * 10 + 100)) * 100));
                     enemyPrefab = enemyPrefabs[i];
                     break;
                 }
-                wave *= 2;  // wave 값을 2배씩 높임
             }
             // 풀 안에 비활성화된 적이 있으면 재활용
             foreach (GameObject enemy in enemies)

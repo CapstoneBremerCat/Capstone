@@ -9344,7 +9344,7 @@ Transform:
   m_GameObject: {fileID: 1863052250637867807}
   m_LocalRotation: {x: -0, y: 0.9962452, z: -0, w: 0.086576514}
   m_LocalPosition: {x: 3.7999997, y: 0, z: 6.6799994}
-  m_LocalScale: {x: 2.4, y: 2, z: 2.4}
+  m_LocalScale: {x: 2, y: 1.8, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1863052250637960955}
@@ -9426,6 +9426,7 @@ MonoBehaviour:
     m_Bits: 520
   searchRange: 20
   damagedSearchRange: 40
+  slider: {fileID: 0}
   agent: {fileID: 1863052250637835292}
   deathSound: {fileID: 8300000, guid: b86f03005ed394911b43027aeaaedeb7, type: 3}
   hitSound: {fileID: 8300000, guid: c3d8accfc053f004ca665a1c8c4a6919, type: 3}

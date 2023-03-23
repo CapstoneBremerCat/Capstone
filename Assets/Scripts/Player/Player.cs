@@ -85,10 +85,11 @@ namespace Game
         }
         public void EquipActiveSkill(ActiveSkill active)
         {
-            equippedActiveSkill = active;
+            equippedActiveSkill = Instantiate(active, transform);
         }
         public void UnequipActiveSkill()
         {
+            Destroy(equippedActiveSkill);
             equippedActiveSkill = null;
         }
 
@@ -272,15 +273,15 @@ namespace Game
         {
             // 쿨타임 중에는 스킬을 사용할 수 없습니다.
             if (isCoolTime) return;
-
-            Mediator.Instance.Notify(this, GameEvent.SKILL_ACTIVATED, skill);
+            equippedActiveSkill.UseSkill();
+            float actualCoolTime = skill.cooldown * ((100.0f - coolTimeReduce) * 0.01f);
             // 쿨타임을 시작합니다.
-            StartCoroutine(CooltimeRoutine(skill.cooldown * (100 - coolTimeReduce * 0.01f)));
+            StartCoroutine(CooltimeRoutine(actualCoolTime));
+            Mediator.Instance.Notify(this, GameEvent.SKILL_ACTIVATED, actualCoolTime);
         }
         private IEnumerator CooltimeRoutine(float timeRemaining)
         {
             isCoolTime = true;
-            float totalTime = timeRemaining;
             float interval = 0.1f;
             while (timeRemaining > 0)
             {

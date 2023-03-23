@@ -10826,6 +10826,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zombie_Metal
       objectReference: {fileID: 0}
+    - target: {fileID: 3404339256304009486, guid: 235ad4a065cf8b248be9df7422d4ec17, type: 3}
+      propertyPath: isWaveEnemy
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3404339256304147436, guid: 235ad4a065cf8b248be9df7422d4ec17, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -19073,7 +19077,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemies: []
   enemyPrefabs:
-  - {fileID: 7245000872403005356, guid: 3feb2f2941fd74f46a6627b08eaabe9f, type: 3}
   - {fileID: 7245000872403005356, guid: 3feb2f2941fd74f46a6627b08eaabe9f, type: 3}
   - {fileID: 7245000872403005356, guid: 03616865cedb1d74e8d7af8464c39b7b, type: 3}
   - {fileID: 7245000872403005356, guid: d3335053928b32e4b9504d96e193415e, type: 3}
@@ -34368,6 +34371,10 @@ PrefabInstance:
     - target: {fileID: 8017451787768979619, guid: e2880d3fa318f684eb513c1c44a62dec, type: 3}
       propertyPath: m_Name
       value: Zombie_Regen
+      objectReference: {fileID: 0}
+    - target: {fileID: 8017451787769079713, guid: e2880d3fa318f684eb513c1c44a62dec, type: 3}
+      propertyPath: isWaveEnemy
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8017451787769216323, guid: e2880d3fa318f684eb513c1c44a62dec, type: 3}
       propertyPath: m_RootOrder

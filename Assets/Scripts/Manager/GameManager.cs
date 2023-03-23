@@ -135,6 +135,10 @@ namespace Game
         {
             player.Init(startPoint.position);
         }
+        public void DebugWave()
+        {
+            StartCoroutine(StartWave());
+        }
         // 스테이지 시작 세팅
         public void InitNewStage()
         {
@@ -257,7 +261,7 @@ namespace Game
             // 웨이브에 맞춰 적 스폰
             Wave++;
             spawnCount += EnemySpawnCount;
-            spawner.SpawnEnemy(spawnCount, Wave);
+            if (spawnCount < 200) spawner.SpawnEnemy(spawnCount, Wave);
 
             // 웨이브 UI 활성화
             UIManager.Instance.EnableWaveUI();

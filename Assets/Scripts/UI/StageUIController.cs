@@ -88,10 +88,10 @@ namespace Game
             if (ui) ui.SetActive(!ui.activeSelf);
         }
         // ÄðÅ¸ÀÓ Ç¥±â
-        public void DisplayCooltime(object activeSkillObj)
+        public void DisplayCooltime(object coolTimeObj)
         {
-            ActiveSkill skill = activeSkillObj as ActiveSkill;
-            StartCoroutine(CooltimeRountine(skill.cooldown));
+            float coolTime = (float)coolTimeObj;
+            StartCoroutine(CooltimeRountine(coolTime));
         }
 
         IEnumerator CooltimeRountine(float timeRemaining)
