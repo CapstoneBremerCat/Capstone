@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;	// UnityWebRequest사용을 위해서 적어준다.
 using Newtonsoft.Json;
+using TMPro;
 using BlockChain;
 using Game;
 namespace BlockChain
@@ -80,6 +81,22 @@ namespace BlockChain
         public string code;
         public string message;
     }
+    public class UpdateRing_req_upload
+    {
+        public string addr;
+        public int score;
+    }
+    public class getRing_req_upload
+    {
+        public string message;
+    }
+    public class getRing_res_upload : _packet
+    {
+        public string code;
+        public string message;
+        public string ringOwner;
+        public int ringScore;
+    }
 
     public class NFTManager : MonoBehaviour
     {
@@ -111,6 +128,9 @@ namespace BlockChain
         private Dictionary<int, Skill> skillDictionary = new Dictionary<int, Skill>();
         private bool isLoaded = false; // 모든 아이템이 로딩되었는지 여부를 저장할 변수
         public float balanceOfKlay { get { return _balanceOfKlay; } }
+        [SerializeField] private TextMeshProUGUI ringOwner;
+        [SerializeField] private  TextMeshProUGUI ringScore;
+
         private IEnumerator FirstLoadItems()
         {
             Debug.Log("FirstLoadItems Start");
@@ -156,6 +176,35 @@ namespace BlockChain
 
             }));
             //Debug.Log("LoadTotalSupply");
+        }
+        public void newWinner()
+        {
+            var UpdateRingrequpload = new UpdateRing_req_upload();
+            //UpdateRingrequpload.addr= LoginManager.Instance.GetAddr();
+            UpdateRingrequpload.addr = "";
+            UpdateRingrequpload.score = 0;
+            var json = JsonConvert.SerializeObject(UpdateRingrequpload);
+
+            StartCoroutine(Upload("http://localhost:5000/ring-score/update", json, null));
+        }
+
+        public void GetWinner()
+        {
+            var getRingrequpload = new getRing_req_upload();
+            getRingrequpload.message = "";
+            var json2 = JsonConvert.SerializeObject(getRingrequpload);
+
+            StartCoroutine(Upload("http://localhost:5000/ring-data", json2, (result) =>
+            {
+                var getRingresupload = JsonConvert.DeserializeObject<getRing_res_upload>(result);
+
+                Debug.Log("ringOwner : " + getRingresupload.ringOwner);
+                Debug.Log("ringScore : " + getRingresupload.ringScore);
+
+                ringOwner.text = "RingOwner: " + getRingresupload.ringOwner;
+                ringScore.text = "RingScore : " + getRingresupload.ringScore.ToString();
+
+            }));
         }
 
         // 데이터를 받아서 item으로 만들어서 items에 넣음
