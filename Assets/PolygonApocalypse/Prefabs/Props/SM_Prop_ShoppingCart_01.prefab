@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 4903353639713366}
   - component: {fileID: 33294689093195746}
   - component: {fileID: 23076526554004022}
-  - component: {fileID: 3698801721345397435}
+  - component: {fileID: 2017459419860374810}
   m_Layer: 0
   m_Name: SM_Prop_ShoppingCart_01
   m_TagString: Untagged
@@ -339,7 +339,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3698801721345397435
+--- !u!65 &2017459419860374810
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -350,8 +350,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.87605184, y: 1.1067044, z: 1.3561624}
-  m_Center: {x: 0.00000029802328, y: 0.622068, z: 0}
+  m_Size: {x: 0.8760516, y: 1.1067042, z: 1.356162}
+  m_Center: {x: 0.00000029802322, y: 0.62207556, z: 0.0000009536743}
 --- !u!1 &1646387086167542
 GameObject:
   m_ObjectHideFlags: 0

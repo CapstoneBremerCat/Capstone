@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4991977484697956}
   - component: {fileID: 33273477584820218}
   - component: {fileID: 23425166734527830}
-  - component: {fileID: 7621407898469022621}
+  - component: {fileID: 4397187755193958392}
   m_Layer: 0
   m_Name: SM_Prop_Car_Wrecked_OpenBoot_01
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7621407898469022621
+--- !u!65 &4397187755193958392
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,5 +95,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.1721292, y: 1.6518297, z: 5.1610465}
-  m_Center: {x: -0.089775406, y: 0.7885871, z: -0.08324947}
+  m_Size: {x: 2.1721287, y: 1.6518297, z: 5.161045}
+  m_Center: {x: -0.08977538, y: 0.7885871, z: -0.08324945}

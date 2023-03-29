@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4878723573058038}
   - component: {fileID: 33812322034531280}
   - component: {fileID: 23258059270206270}
-  - component: {fileID: 5641788764040454516}
+  - component: {fileID: 7783918795586014062}
   m_Layer: 0
   m_Name: SM_Prop_Car_Wrecked_Bus_01
   m_TagString: Untagged
@@ -85,7 +85,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5641788764040454516
+--- !u!65 &7783918795586014062
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,5 +96,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.237289, y: 3.1269302, z: 11.426148}
-  m_Center: {x: 0.020415002, y: 1.473106, z: 0.0671582}
+  m_Size: {x: 3.23729, y: 3.1269302, z: 11.426152}
+  m_Center: {x: 0.020415008, y: 1.4731061, z: 0.06715822}

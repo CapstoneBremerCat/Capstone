@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4937488354381138}
   - component: {fileID: 33227160811843480}
   - component: {fileID: 23676817123758940}
-  - component: {fileID: 1347203914481761412}
+  - component: {fileID: 1712849514999467205}
   m_Layer: 0
   m_Name: SM_Prop_Dumpster_01
   m_TagString: Untagged
@@ -168,7 +168,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1347203914481761412
+--- !u!65 &1712849514999467205
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,5 +179,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.428772, y: 1.8469827, z: 1.3025537}
-  m_Center: {x: -0.0004364252, y: 0.92349136, z: -0.058393538}
+  m_Size: {x: 2.4287717, y: 1.8469827, z: 1.3025535}
+  m_Center: {x: -0.00042879576, y: 0.92349136, z: -0.05839353}

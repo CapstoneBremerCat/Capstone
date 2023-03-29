@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4883335094662546}
   - component: {fileID: 33962705587648388}
   - component: {fileID: 23707735709763348}
-  - component: {fileID: 9033688437767354756}
+  - component: {fileID: 5099178447041279906}
   m_Layer: 0
   m_Name: SM_Prop_Car_Wrecked_Van_01
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &9033688437767354756
+--- !u!65 &5099178447041279906
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,5 +95,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.4726102, y: 1.7638751, z: 5.0189137}
-  m_Center: {x: 0.0051155123, y: 0.85078424, z: -0.101214066}
+  m_Size: {x: 2.4726114, y: 1.7638766, z: 5.018915}
+  m_Center: {x: 0.0051192194, y: 0.8507844, z: -0.10121227}

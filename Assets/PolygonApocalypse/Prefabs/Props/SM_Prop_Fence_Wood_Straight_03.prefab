@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4569399389228950}
   - component: {fileID: 33330105222269814}
   - component: {fileID: 23024177895369956}
-  - component: {fileID: 6607916667459491229}
+  - component: {fileID: 6541873275794590763}
   m_Layer: 0
   m_Name: SM_Prop_Fence_Wood_Straight_03
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &6607916667459491229
+--- !u!65 &6541873275794590763
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,5 +95,5 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.509125, y: 2.1108038, z: 0.15920612}
-  m_Center: {x: -1.2434376, y: 1.046148, z: 0.0097556785}
+  m_Size: {x: 2.5091245, y: 2.1108036, z: 0.15920602}
+  m_Center: {x: -1.2434374, y: 1.0461464, z: 0.009755603}

@@ -14338,6 +14338,7 @@ MonoBehaviour:
   - 02_Cinema_SceneA
   - 03_Stage_1
   - 04_Cinema_SceneB
+  - 05_Stage_2
   sun: {fileID: 0}
   playerPrefab: {fileID: 6823143498374011951, guid: dcc254a5c07a95f42843bfbd97b18cf1, type: 3}
   player: {fileID: 0}
