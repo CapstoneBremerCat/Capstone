@@ -1277,7 +1277,7 @@ AnimationClip:
   m_Events:
   - time: 33.5
     functionName: EndCinema
-    data: 02_Stage_1
+    data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

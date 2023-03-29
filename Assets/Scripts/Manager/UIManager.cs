@@ -65,7 +65,7 @@ namespace Game
             if (quitButton) quitButton.onClick.AddListener(() => Application.Quit());
 
             // 스킵 버튼
-            skipButton.onClick.AddListener(() => GameManager.Instance.MextScene());
+            //skipButton.onClick.AddListener(() => GameManager.Instance.MextScene());
 
             // 스테이지 UI
             if (!stageUIController) stageUIController = FindObjectOfType<StageUIController>();
