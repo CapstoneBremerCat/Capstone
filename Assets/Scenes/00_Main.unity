@@ -11813,8 +11813,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b52719e2ffc41142ace96ddc68ccfbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ringOwner: {fileID: 0}
-  ringScore: {fileID: 0}
+  ringOwner: {fileID: 778082477}
+  ringScore: {fileID: 29939966}
 --- !u!4 &1402752323
 Transform:
   m_ObjectHideFlags: 0
@@ -14339,6 +14339,11 @@ MonoBehaviour:
   - 03_Stage_1
   - 04_Cinema_SceneB
   - 05_Stage_2
+  - 06_Cinema_SceneC
+  - 07_Stage_3
+  - 08_Cinema_SceneD
+  - 09_Stage_4
+  - 10_Cinema_SceneE
   sun: {fileID: 0}
   playerPrefab: {fileID: 6823143498374011951, guid: dcc254a5c07a95f42843bfbd97b18cf1, type: 3}
   player: {fileID: 0}
