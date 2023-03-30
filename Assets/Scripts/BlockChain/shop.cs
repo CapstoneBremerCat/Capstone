@@ -6,9 +6,6 @@ using System.Data;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;	// UnityWebRequest사용을 위해서 적어준다.
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Newtonsoft.Json;

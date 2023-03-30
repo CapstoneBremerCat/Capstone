@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;	// UnityWebRequest사용을 위해서 적어준다.
@@ -20,26 +22,23 @@ namespace BlockChain
         public bool isSelling;
         public Sprite image;
     }
-    public class _packet
+    public class packet
     {
         public int errorno;
     }
-    public class Test_req_upload
-    {
-        public string req; // totalsupply, ownedTokens
-    }
-    // 민팅된 nft 총 갯수와 소유하고 있는 nft리스트를 모아다가 돈디스트로이에 넣자;
-    public class Test_res_upload : _packet
+
+    public class res_upload : packet
     {
         public string code;
         public string message;
     }
+
     public class UpdateNFT_req_upload
     {
         public string addr; // totalsupply, ownedTokens
     }
     // 민팅된 nft 총 갯수와 소유하고 있는 nft리스트를 모아다가 돈디스트로이에 넣자;
-    public class UpdateNFT_res_upload : _packet
+    public class UpdateNFT_res_upload : packet
     {
         public string code;
         public string message;
@@ -52,7 +51,7 @@ namespace BlockChain
         public int tokenId;
     }
     // 받아와서 json에 넣을 거임
-    public class getNFT_res_upload : _packet
+    public class getNFT_res_upload : packet
     {
         public string code;
         public string message;
@@ -76,10 +75,27 @@ namespace BlockChain
         public float price;
     }
     // 받아와서 json에 넣을 거임
-    public class sellNFT_res_upload : _packet
+
+    public class reward_req_upload
+    {
+        public string name;
+    }
+
+    public class reward_res_upload : packet
     {
         public string code;
         public string message;
+        public string cid;
+    }
+
+    public class mint_req_upload
+    {
+        public string addr;
+        public string ipfs;
+        public string name;
+        public string description;
+        public string nftType;
+
     }
     public class UpdateRing_req_upload
     {
@@ -90,7 +106,7 @@ namespace BlockChain
     {
         public string message;
     }
-    public class getRing_res_upload : _packet
+    public class getRing_res_upload : packet
     {
         public string code;
         public string message;
@@ -98,6 +114,53 @@ namespace BlockChain
         public int ringScore;
     }
 
+    [System.Serializable]
+    public class SaveData
+    {
+        public SaveData(string _name, string _description, string _image)
+        {
+            name = _name;
+            description = _description;
+            image = _image;
+        }
+
+        public string name;
+        public string description;
+        public string image;
+    }
+    public static class SaveSystem
+    {
+        private static string SavePath => Application.persistentDataPath + "/saves/";
+
+        public static void Save(SaveData saveData, string saveFileName)
+        {
+            if (!Directory.Exists(SavePath))
+            {
+                Directory.CreateDirectory(SavePath);
+            }
+
+            string saveJson = JsonUtility.ToJson(saveData);
+
+            string saveFilePath = SavePath + saveFileName + ".json";
+            File.WriteAllText(saveFilePath, saveJson);
+            Debug.Log("Save Success: " + saveFilePath);
+        }
+
+        public static SaveData Load(string saveFileName)
+        {
+            string saveFilePath = SavePath + saveFileName + ".json";
+
+            if (!File.Exists(saveFilePath))
+            {
+                Debug.LogError("No such saveFile exists");
+                return null;
+            }
+
+            string saveFile = File.ReadAllText(saveFilePath);
+            SaveData saveData = JsonUtility.FromJson<SaveData>(saveFile);
+            return saveData;
+        }
+    }
     public class NFTManager : MonoBehaviour
     {
         #region instance
@@ -129,7 +192,7 @@ namespace BlockChain
         private bool isLoaded = false; // 모든 아이템이 로딩되었는지 여부를 저장할 변수
         public float balanceOfKlay { get { return _balanceOfKlay; } }
         [SerializeField] private TextMeshProUGUI ringOwner;
-        [SerializeField] private  TextMeshProUGUI ringScore;
+        [SerializeField] private TextMeshProUGUI ringScore;
 
         private IEnumerator FirstLoadItems()
         {
@@ -145,8 +208,10 @@ namespace BlockChain
             }
             // 이후 코드 실행
             // 모든 아이템이 로딩되었다는 플래그를 true로 변경
+            yield return new WaitForSeconds(5.0f);
             isLoaded = true;
             LoadNFTSkills();
+
         }
 
         IEnumerator LoadTotalSupply()
@@ -158,7 +223,7 @@ namespace BlockChain
             var json = JsonConvert.SerializeObject(UpdateNFTrequpload);
 
             // 결과를 기다리는 yield return 추가
-            yield return StartCoroutine(Upload("http://localhost:5000/updateNFT", json, (result) =>
+            yield return StartCoroutine(Upload("http://localhost:5000/users-data", json, (result) =>
             {
                 var updateNFTresponseResult = JsonConvert.DeserializeObject<UpdateNFT_res_upload>(result);
                 //Debug.Log("result: " + updateNFTresponseResult);
@@ -176,15 +241,65 @@ namespace BlockChain
             }));
             //Debug.Log("LoadTotalSupply");
         }
+        async public void mintRewardNFT(string _name, string _description)
+        {
+            var name = _name + "-" + LoginManager.Instance.GetAddr();
+            var description = _description;
+            //var name = "rewardNFTName";
+            //var description = "rewardNFTDescription";
+
+            // 1. 이미지 스크린샷 후 ipfs 업로드 cid 반환 
+
+            byte[] _imageBytes = Screenshot.TakeScreenshot_(1920, 1080, name);
+
+            var reqUploadImage = new reward_req_upload();
+            reqUploadImage.name = "imgfile";
+            var json = JsonConvert.SerializeObject(reqUploadImage);
+
+            StartCoroutine(ImageUpload("http://localhost:5000/ipfs-image", _imageBytes, json, name, (result) =>
+            {
+                var responseResult = JsonConvert.DeserializeObject<reward_res_upload>(result);
+                Debug.Log("result: " + responseResult);
+                Debug.Log("image cid : " + responseResult.cid);
+
+                // 2. 이미지 cid를 이용하여 metadata.json 생성한 후 cid 받아오기
+                SaveData metaData = new SaveData(name, description, "ipfs://" + responseResult.cid);
+
+                SaveSystem.Save(metaData, name);
+
+                byte[] _fileBytes = System.IO.File.ReadAllBytes(Application.persistentDataPath + "/saves/" + name + ".json");
+
+                var reqUploadFile = new reward_req_upload();
+                reqUploadFile.name = "jsonFile";
+                var json2 = JsonConvert.SerializeObject(reqUploadFile);
+
+                StartCoroutine(JsonUpload("http://localhost:5000/ipfs-json", _fileBytes, json2, name, (cidResult) =>
+                {
+                    Debug.Log("last json cid check: " + cidResult);
+                    var MintReqUpload = new mint_req_upload();
+                    MintReqUpload.addr = LoginManager.Instance.GetAddr();
+                    MintReqUpload.ipfs = cidResult;
+                    MintReqUpload.name = name;
+                    MintReqUpload.description = description;
+                    MintReqUpload.nftType = "3";
+
+                    var json = JsonConvert.SerializeObject(MintReqUpload);
+
+                    StartCoroutine(Upload($"http://localhost:5000/nfts/mint", json, null));
+                }
+                ));
+
+            }));
+        }
 
         public void newWinner()
         {
             var UpdateRingrequpload = new UpdateRing_req_upload();
             //UpdateRingrequpload.addr= LoginManager.Instance.GetAddr();
-            var highScore = GameManager.Instance.highScore;
             UpdateRingrequpload.addr = "";
             UpdateRingrequpload.score = 0;
             var json = JsonConvert.SerializeObject(UpdateRingrequpload);
+
             StartCoroutine(Upload("http://localhost:5000/ring-score/update", json, null));
         }
 
@@ -207,6 +322,7 @@ namespace BlockChain
             }));
         }
 
+
         // 데이터를 받아서 item으로 만들어서 items에 넣음
         private IEnumerator LoadNFT(int tokenId)
         {
@@ -216,7 +332,7 @@ namespace BlockChain
             getNFTrequpload.tokenId = tokenId;
             var json2 = JsonConvert.SerializeObject(getNFTrequpload);
             Item itemTemp = new Item();
-            using (UnityWebRequest request = UnityWebRequest.Post($"http://localhost:5000/getNFT", json2))
+            using (UnityWebRequest request = UnityWebRequest.Post($"http://localhost:5000/nfts", json2))
             {
                 try
                 {
@@ -311,7 +427,7 @@ namespace BlockChain
                     getNFTrequpload.tokenId = j;
                     var json = JsonConvert.SerializeObject(getNFTrequpload);
 
-                    StartCoroutine(Upload("http://localhost:5000/getNFT", json, (result) =>
+                    StartCoroutine(Upload("http://localhost:5000/nfts", json, (result) =>
                     {
                         var getNFTresponseResult = JsonConvert.DeserializeObject<getNFT_res_upload>(result);
                         Debug.Log("result: " + getNFTresponseResult);
@@ -359,16 +475,18 @@ namespace BlockChain
             // Create Skill objects from the filtered skill items and add them to the skill list and dictionary
             foreach (Item skillItem in items)
             {
-                // Check if the item is in the items list
+                //skillItem.nftType
+/*                // Check if the item is in the items list
                 if (items.Contains(skillItem))
                 {
                     continue; // Skip adding this item as a skill
-                }
+                }*/
                 // Create a new SkillInfo object with the item's information
                 SkillInfo skillInfo = new SkillInfo(skillItem.tokenId, skillItem.name, skillItem.description, skillItem.image);
 
                 // Create a new Skill object with the SkillInfo and add it to the skillList and skillDictionary
-                Skill skill = new Skill(skillInfo);
+                Skill skill = gameObject.AddComponent<Skill>();
+                skill.SetSkill(skillInfo, skillItem.nftType);
                 skillList.Add(skill);
                 skillDictionary.Add(skill.skillInfo.skillId, skill);
             }
@@ -379,7 +497,7 @@ namespace BlockChain
             if (skillDictionary.ContainsKey(skillID))
             {
                 // Return the Skill object with the given skillID
-                return skillDictionary[skillID];            
+                return skillDictionary[skillID];
             }
             else
             {
@@ -407,7 +525,20 @@ namespace BlockChain
             return skillList;
         }
 
+        public void SellNFTItem(int tokenId, float price)
+        {
+            var sellNFTrequpload = new sellNFT_req_upload();
+            sellNFTrequpload.tokenId = tokenId;
+            sellNFTrequpload.price = price;
+            var json = JsonConvert.SerializeObject(sellNFTrequpload);
 
+            // 결과를 기다리는 yield return 추가
+            StartCoroutine(Upload("http://localhost:5000/nfts/sell", json, (result) =>
+            {
+                var sellNFTresponseResult = JsonConvert.DeserializeObject<res_upload>(result);
+                Debug.Log("result: " + sellNFTresponseResult);
+            }));
+        }
         public IEnumerator Upload(string URL, string json, System.Action<string> OnCompleteUpload)
         {
             using (UnityWebRequest request = UnityWebRequest.Post(URL, json))
@@ -440,6 +571,51 @@ namespace BlockChain
                 }
             }
         }
+
+        IEnumerator ImageUpload(string URL, byte[] bytes, string data, string _name, System.Action<string> OnCompleteUpload)
+        {
+            var byteArr = Encoding.UTF8.GetBytes(data);
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+            formData.Add(new MultipartFormFileSection("imgfile", bytes, _name + ".png", "image/png"));
+
+            UnityWebRequest webRequest = UnityWebRequest.Post(URL, formData);
+            webRequest.downloadHandler = new DownloadHandlerBuffer();
+            yield return webRequest.SendWebRequest();
+
+            var result = webRequest.downloadHandler.text;
+            OnCompleteUpload(result);
+            webRequest.Dispose();
+        }
+
+        IEnumerator JsonUpload(string URL, byte[] bytes, string data, string _name, System.Action<string> OnCompleteUpload)
+        {
+            var byteArr = Encoding.UTF8.GetBytes(data);
+            List<IMultipartFormSection> formData = new List<IMultipartFormSection>();
+            formData.Add(new MultipartFormFileSection("jsonfile", bytes, _name + ".json", " application/json"));
+
+            UnityWebRequest webRequest = UnityWebRequest.Post(URL, formData);
+            webRequest.downloadHandler = new DownloadHandlerBuffer();
+
+            try
+            {
+                yield return webRequest.SendWebRequest();
+                var result = webRequest.downloadHandler.text;
+                reward_res_upload responseResult = JsonConvert.DeserializeObject<reward_res_upload>(result);
+                Debug.Log(result);
+                Debug.Log("cid : " + responseResult.cid);
+                string cidResult = responseResult.cid;
+                OnCompleteUpload(cidResult);
+            }
+            finally
+            {
+                if (webRequest != null)
+                {
+                    webRequest.Dispose();
+                }
+            }
+        }
+
+
         IEnumerator GetImgCID(string URL, System.Action<string> OnCompleteUpload)
         {
             using (WWW www = new WWW(URL))
@@ -456,6 +632,7 @@ namespace BlockChain
                     if (www != null)
                     {
                         www.Dispose();
+
                     }
                 }
             }
@@ -488,23 +665,6 @@ namespace BlockChain
                 }
             }
         }
-        public void SellNFTItem(int tokenId, float price)
-        {
-            var sellNFTrequpload = new sellNFT_req_upload();
-            sellNFTrequpload.tokenId = tokenId;
-            sellNFTrequpload.price = price;
-            var json = JsonConvert.SerializeObject(sellNFTrequpload);
 
-            // 결과를 기다리는 yield return 추가
-            StartCoroutine(Upload("http://localhost:5000/sellNFT", json, (result) =>
-            {
-                var sellNFTresponseResult = JsonConvert.DeserializeObject<sellNFT_res_upload>(result);
-                Debug.Log("result: " + sellNFTresponseResult);
-            }));
-        }
-        public void BuyNFTItem(int tokenId, float price)
-        {
-
-        }
     }
 }

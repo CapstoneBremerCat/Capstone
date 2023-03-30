@@ -31,9 +31,14 @@ namespace Game
     {
         public SkillInfo skillInfo;
         public SkillType skillType = SkillType.Passive;
-        public Skill(SkillInfo skillInfo)
+
+        public void SetSkill(SkillInfo skillInfo, int nftType)
         {
             this.skillInfo = skillInfo;
+            if (nftType == 1)
+                skillType = SkillType.Active;
+            else if (nftType == 2)
+                skillType = SkillType.Passive;
         }
     }
 }

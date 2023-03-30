@@ -23,7 +23,7 @@ namespace Game
             instance = this;
 
             // Don't destroy this object when changing scenes
-            //DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
         #endregion
 

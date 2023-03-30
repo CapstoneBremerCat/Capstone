@@ -14342,8 +14342,8 @@ MonoBehaviour:
   - 06_Cinema_SceneC
   - 07_Stage_3
   - 08_Cinema_SceneD
-  - 09_Stage_4
-  - 10_Cinema_SceneE
+  - 09_Cinema_SceneE
+  - 10_Stage_4
   sun: {fileID: 0}
   playerPrefab: {fileID: 6823143498374011951, guid: dcc254a5c07a95f42843bfbd97b18cf1, type: 3}
   player: {fileID: 0}

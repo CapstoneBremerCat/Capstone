@@ -8,7 +8,7 @@ namespace Game
     {
         public float cooldown;
 
-        public ActiveSkill(SkillInfo skillInfo, float cooldown) : base(skillInfo)
+        public ActiveSkill(SkillInfo skillInfo, float cooldown)
         {
             this.skillInfo = skillInfo;
             this.cooldown = cooldown;
