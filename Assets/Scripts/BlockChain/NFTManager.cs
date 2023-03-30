@@ -147,7 +147,6 @@ namespace BlockChain
             // 모든 아이템이 로딩되었다는 플래그를 true로 변경
             isLoaded = true;
             LoadNFTSkills();
-
         }
 
         IEnumerator LoadTotalSupply()
@@ -177,14 +176,15 @@ namespace BlockChain
             }));
             //Debug.Log("LoadTotalSupply");
         }
+
         public void newWinner()
         {
             var UpdateRingrequpload = new UpdateRing_req_upload();
             //UpdateRingrequpload.addr= LoginManager.Instance.GetAddr();
+            var highScore = GameManager.Instance.highScore;
             UpdateRingrequpload.addr = "";
             UpdateRingrequpload.score = 0;
             var json = JsonConvert.SerializeObject(UpdateRingrequpload);
-
             StartCoroutine(Upload("http://localhost:5000/ring-score/update", json, null));
         }
 
@@ -456,7 +456,6 @@ namespace BlockChain
                     if (www != null)
                     {
                         www.Dispose();
-
                     }
                 }
             }

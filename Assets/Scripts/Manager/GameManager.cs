@@ -64,7 +64,7 @@ namespace Game
 
         [SerializeField] private GAMEMODE gameMode;
         private int score = 0;
-
+        public int highScore { get; private set; }
         private Timer playTime;
         [SerializeField] private float timeScale;
         private int lastSavedHour;   // 마지막으로 저장된 시간
@@ -73,11 +73,13 @@ namespace Game
         private const int MAX_EQUIPPED_PASSIVE_SKILLS = 4;
         public bool isGameOver { get; private set; }    // 게임오버 여부
         public bool isGameStart { get; private set; }    // 게임시작 여부
+        public bool isRankStart { get; private set; }    // 게임시작 여부
 
         // Start is called before the first frame update
         private void Start()
         {
             isGameStart = false;
+            isRankStart = false;
             isGameOver = false;
 
             if (player) player.gameObject.SetActive(false);
@@ -139,6 +141,13 @@ namespace Game
         {
             StartCoroutine(StartWave());
         }
+
+        public void StartRankMode()
+        {
+            StartCoroutine(MoveScene("99_Stage_Rank"));
+            isRankStart = true;
+        }
+
         // 스테이지 시작 세팅
         public void InitNewStage()
         {
@@ -323,6 +332,13 @@ namespace Game
 
         public void GameOver()
         {
+            // if Rank mode, Save highScore
+            if(isRankStart)
+            {
+                highScore = (score > highScore) ? score : highScore;
+                // score 저장
+                isRankStart = false;
+            }
             isGameOver = true;
             isGameStart = false;
             UIManager.Instance.EnableGameOverUI();
@@ -389,6 +405,35 @@ namespace Game
             }
             // 이동한 씬이 Cinema 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Cinema"))
+            {
+                UIManager.Instance.SwitchCanvas(CavasIndex.Cinema);
+            }
+        }
+
+        public IEnumerator MoveScene(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName);
+            var async = SceneManager.LoadSceneAsync(sceneName);
+
+            // 씬 이동이 끝날 때 까지 대기
+            while (!async.isDone)
+            {
+                yield return null;
+            }
+
+            // 이동한 씬이 Main 면 스테이지 초기화
+            if (sceneName.Contains("Main"))
+            {
+                UIManager.Instance.SwitchCanvas(CavasIndex.Main);
+            }
+            // 이동한 씬이 Stage 면 스테이지 초기화
+            if (sceneName.Contains("Stage"))
+            {
+                InitNewStage();
+                UIManager.Instance.SwitchCanvas(CavasIndex.Stage);
+            }
+            // 이동한 씬이 Cinema 면 스테이지 초기화
+            if (sceneName.Contains("Cinema"))
             {
                 UIManager.Instance.SwitchCanvas(CavasIndex.Cinema);
             }
