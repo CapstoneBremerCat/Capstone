@@ -9450,7 +9450,6 @@ GameObject:
   - component: {fileID: 7900542571367836058}
   - component: {fileID: 7900542571367836057}
   - component: {fileID: 7900542571367836061}
-  - component: {fileID: 7900542571367836060}
   m_Layer: 0
   m_Name: AttackWarning
   m_TagString: Untagged
@@ -9544,21 +9543,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!111 &7900542571367836060
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7900542571367836056}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 0ac7ae56e07f73541a941b1ebe32341b, type: 2}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!1 &7900542571619056919
 GameObject:
   m_ObjectHideFlags: 0
@@ -10157,7 +10141,6 @@ GameObject:
   - component: {fileID: 9030154646879793259}
   - component: {fileID: 9030154646879793258}
   - component: {fileID: 9030154646879793253}
-  - component: {fileID: 9030154646879793252}
   m_Layer: 5
   m_Name: BossPanel
   m_TagString: Untagged
@@ -10243,21 +10226,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!111 &9030154646879793252
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9030154646879793256}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 82005dae17bc4f047a0a69bcfe3a9e07, type: 2}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!1 &9030154647023962721
 GameObject:
   m_ObjectHideFlags: 0
