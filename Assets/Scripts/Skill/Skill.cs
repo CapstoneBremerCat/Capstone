@@ -27,11 +27,22 @@ namespace Game
         }
     }
 
-    public class Skill : MonoBehaviour
+    public class Skill: MonoBehaviour
     {
+        private NFTSkill nftSkill;
+
+        private void Start()
+        {
+            nftSkill = new NFTSkill();
+        }
+
         public SkillInfo skillInfo;
         public SkillType skillType = SkillType.Passive;
 
+        public void SetSkillInfo(SkillInfo skillInfo)
+        {
+            this.skillInfo = skillInfo;
+        }
         public void SetSkill(SkillInfo skillInfo, int nftType)
         {
             this.skillInfo = skillInfo;
@@ -40,5 +51,6 @@ namespace Game
             else if (nftType == 2)
                 skillType = SkillType.Passive;
         }
+
     }
 }

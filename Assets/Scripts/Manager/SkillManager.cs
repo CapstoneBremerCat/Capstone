@@ -28,26 +28,44 @@ namespace Game
         #endregion
 
         [SerializeField] private List<Skill> skillPool = new List<Skill>();
-        private List<Skill> activeSkills = new List<Skill>();
-        private List<Skill> passiveSkills = new List<Skill>();
-
-        public void LoadSavedEquipments()
+        private List<Skill> owenedSkills = new List<Skill>();
+        private List<ActiveSkill> activeSkills = new List<ActiveSkill>();
+        private List<PassiveSkill> passiveSkills = new List<PassiveSkill>();
+        private bool isSkillLoaded = false;
+        public List<Skill> GetOwnedSkills()
         {
-            foreach (Skill skill in skillPool)
+            if (!isSkillLoaded)
             {
-                Skill targetSkill = NFTManager.Instance.GetNFTSkillByID(skill.skillInfo.skillId);
+                Debug.LogWarning("Owned Skill not Loaded,");
+                return null;
+            }
+            return owenedSkills;
+        }
+        public void LoadOwnedSkills(List<Skill> owenedNFTSkills)
+        {
+            foreach (Skill skill in owenedNFTSkills)
+            {
+                Skill targetSkill = skillPool.Find(s => s.skillInfo.skillId == skill.skillInfo.skillId);
+                if (targetSkill == null)
+                {
+                    continue;
+                }
                 switch (targetSkill.skillType)
                 {
                     case SkillType.Active:
+                        targetSkill.SetSkillInfo(skill.skillInfo);
                         activeSkills.Add(targetSkill as ActiveSkill);
                         break;
                     case SkillType.Passive:
+                        targetSkill.SetSkillInfo(skill.skillInfo);
                         passiveSkills.Add(targetSkill as PassiveSkill);
                         break;
                     default:
                         break;
                 }
+                owenedSkills.Add(targetSkill);
             }
+            isSkillLoaded = true;
         }
     }
 }

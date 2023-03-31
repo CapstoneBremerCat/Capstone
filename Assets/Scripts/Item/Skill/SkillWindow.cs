@@ -24,7 +24,7 @@ namespace Game
         private void LoadOwnedSkills()
         {
             ClearAllSlots();
-            List<Skill> skillList = NFTManager.Instance.GetOwnedSkills();
+            List<Skill> skillList = NFTManager.Instance.GetOwnedNFTSkills();
             if (skillList == null) return;
             foreach (Skill skill in skillList)
             {

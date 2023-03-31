@@ -8,11 +8,5 @@ namespace Game
     {
         [SerializeField] private StatusObject statusObject;
         public StatusData statusData { get { return statusObject.status; } }
-
-        public PassiveSkill(SkillInfo skillInfo, StatusObject statusObject)
-        {
-            this.skillInfo = skillInfo;
-            this.statusObject = statusObject;
-        }
     }
 }

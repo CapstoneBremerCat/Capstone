@@ -9,11 +9,7 @@ namespace Game
         [SerializeField] [Range(0, 20)] private float radius = 4;    // 공격 범위
         [SerializeField] private float damage = 400;    // 피해량
         [SerializeField] protected LayerMask targetLayer;
-        public AbsoluteRing(SkillInfo skillInfo, float cooldown) : base(skillInfo, cooldown)
-        {
-            this.skillInfo = skillInfo;
-            this.cooldown = cooldown;
-        }
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireSphere(transform.position, radius);

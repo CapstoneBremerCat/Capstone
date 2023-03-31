@@ -211,7 +211,7 @@ namespace BlockChain
             yield return new WaitForSeconds(5.0f);
             isLoaded = true;
             LoadNFTSkills();
-
+            SkillManager.Instance.LoadOwnedSkills(GetOwnedNFTSkills());
         }
 
         IEnumerator LoadTotalSupply()
@@ -485,7 +485,7 @@ namespace BlockChain
                 SkillInfo skillInfo = new SkillInfo(skillItem.tokenId, skillItem.name, skillItem.description, skillItem.image);
 
                 // Create a new Skill object with the SkillInfo and add it to the skillList and skillDictionary
-                Skill skill = gameObject.AddComponent<Skill>();
+                Skill skill = new Skill();
                 skill.SetSkill(skillInfo, skillItem.nftType);
                 skillList.Add(skill);
                 skillDictionary.Add(skill.skillInfo.skillId, skill);
@@ -507,7 +507,7 @@ namespace BlockChain
             }
         }
 
-        public List<Skill> GetOwnedSkills()
+        public List<Skill> GetOwnedNFTSkills()
         {
             int[] ownedSkillids = OwnedTokens.GetOwnedTokens();
             List<Skill> skillList = new List<Skill>();
