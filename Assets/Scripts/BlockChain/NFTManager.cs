@@ -187,8 +187,8 @@ namespace BlockChain
         private float _balanceOfKlay;
         private List<Item> items = new List<Item>();    // 모든 아이템들을 저장하는 배열
         private List<Item> notSellingItems = new List<Item>(); // isSelling이 false인 모든 아이템들을 저장하는 배열
-        private List<Skill> skillList = new List<Skill>();
-        private Dictionary<int, Skill> skillDictionary = new Dictionary<int, Skill>();
+        private List<SkillInfo> skillInfoList = new List<SkillInfo>();
+        private Dictionary<int, SkillInfo> skillInfoDictionary = new Dictionary<int, SkillInfo>();
         private bool isLoaded = false; // 모든 아이템이 로딩되었는지 여부를 저장할 변수
         public float balanceOfKlay { get { return _balanceOfKlay; } }
         [SerializeField] private TextMeshProUGUI ringOwner;
@@ -208,10 +208,10 @@ namespace BlockChain
             }
             // 이후 코드 실행
             // 모든 아이템이 로딩되었다는 플래그를 true로 변경
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(8.0f);
             isLoaded = true;
-            LoadNFTSkills();
-            SkillManager.Instance.LoadOwnedSkills(GetOwnedNFTSkills());
+            LoadNFTSkillInfos();
+            SkillManager.Instance.LoadOwnedSkills(GetOwnedNFTSkillInfos());
         }
 
         IEnumerator LoadTotalSupply()
@@ -470,7 +470,7 @@ namespace BlockChain
             return notSellingItems;
         }
 
-        private void LoadNFTSkills()
+        private void LoadNFTSkillInfos()
         {
             // Create Skill objects from the filtered skill items and add them to the skill list and dictionary
             foreach (Item skillItem in items)
@@ -482,22 +482,18 @@ namespace BlockChain
                     continue; // Skip adding this item as a skill
                 }*/
                 // Create a new SkillInfo object with the item's information
-                SkillInfo skillInfo = new SkillInfo(skillItem.tokenId, skillItem.name, skillItem.description, skillItem.image);
-
-                // Create a new Skill object with the SkillInfo and add it to the skillList and skillDictionary
-                Skill skill = new Skill();
-                skill.SetSkill(skillInfo, skillItem.nftType);
-                skillList.Add(skill);
-                skillDictionary.Add(skill.skillInfo.skillId, skill);
+                SkillInfo skillInfo = new SkillInfo(skillItem.tokenId, skillItem.name, skillItem.description, skillItem.image, skillItem.nftType);
+                skillInfoList.Add(skillInfo);
+                skillInfoDictionary.Add(skillInfo.skillId, skillInfo);
             }
         }
-        public Skill GetNFTSkillByID(int skillID)
+        public SkillInfo GetNFTSkillInfoByID(int skillID)
         {
             // Check if the skillDictionary contains a Skill with the given skillID
-            if (skillDictionary.ContainsKey(skillID))
+            if (skillInfoDictionary.ContainsKey(skillID))
             {
                 // Return the Skill object with the given skillID
-                return skillDictionary[skillID];
+                return skillInfoDictionary[skillID];
             }
             else
             {
@@ -507,10 +503,10 @@ namespace BlockChain
             }
         }
 
-        public List<Skill> GetOwnedNFTSkills()
+        public List<SkillInfo> GetOwnedNFTSkillInfos()
         {
             int[] ownedSkillids = OwnedTokens.GetOwnedTokens();
-            List<Skill> skillList = new List<Skill>();
+            List<SkillInfo> skillInfoList = new List<SkillInfo>();
             if (ownedSkillids == null)
             {
                 Debug.LogWarning("Failed to get owned skill IDs from OwnedTokens");
@@ -519,10 +515,10 @@ namespace BlockChain
 
             foreach (int skillID in ownedSkillids)
             {
-                Skill skill = GetNFTSkillByID(skillID);
-                if (skill) skillList.Add(skill);
+                SkillInfo skillInfo = GetNFTSkillInfoByID(skillID);
+                if (skillInfo != null) skillInfoList.Add(skillInfo);
             }
-            return skillList;
+            return skillInfoList;
         }
 
         public void SellNFTItem(int tokenId, float price)

@@ -139,7 +139,7 @@ namespace Game
             return equippedEquipmentIds;
         }
 
-        public void LoadSavedEquipments()
+/*        public void LoadSavedEquipments()
         {
             List<int> equippedEquipmentIds = DataManager.Instance.LoadEquipmentsById();
             foreach (int id in equippedEquipmentIds)
@@ -158,7 +158,7 @@ namespace Game
                 }
             }
             Mediator.Instance.Notify(this, GameEvent.EQUIPPED_SKILL, this);
-        }
+        }*/
 
         public void OnInputUpdated()
         {

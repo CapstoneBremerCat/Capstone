@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7436977623556576883}
   - component: {fileID: 8328539549352187694}
   m_Layer: 0
-  m_Name: AbsoluteRing
+  m_Name: 01_AbsoluteRing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,12 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillInfo:
-    skillId: 0
-    skillName: Absolute Ring
-    skillDescription: Extend the Zone of Champion and deal critical damage to all
-      enemies inside
-    skillImage: {fileID: 21300000, guid: 33aa5e6f9b0039143829aa746cd2f1d9, type: 3}
-  skillType: 1
+    skillId: 1
+    skillName: Absolute ring
+    skillDescription: It is an absolute ring given only to the winner. The ability
+      of a ring is a secret.
+    skillImage: {fileID: 0}
+    skillType: 1
   cooldown: 10
   radius: 10
   damage: 400

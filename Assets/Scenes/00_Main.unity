@@ -4898,6 +4898,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillPool:
   - {fileID: 8328539549352187694, guid: fc0693281bf861a4eb5e397f50c3365e, type: 3}
+  - {fileID: 8128834066454150412, guid: a77be25d5a6ddbd4b8801e272cf2dcc3, type: 3}
+  - {fileID: 3710681922605607527, guid: f656736d803414e46aa7c2573c6baaa4, type: 3}
+  - {fileID: 5622869510430691876, guid: 1554bd99b031ec247be918846a1e1674, type: 3}
+  - {fileID: 5622869510430691876, guid: c366245ed1c17ad45bdda4ac7d1f1c65, type: 3}
+  - {fileID: 5622869510430691876, guid: 5d5f22bbb03255c4a84fb025a2900399, type: 3}
+  - {fileID: 5622869510430691876, guid: 93f98797c77d3074daf5d33bd8bd6cc1, type: 3}
 --- !u!4 &710776042
 Transform:
   m_ObjectHideFlags: 0

@@ -41,23 +41,23 @@ namespace Game
             }
             return owenedSkills;
         }
-        public void LoadOwnedSkills(List<Skill> owenedNFTSkills)
+        public void LoadOwnedSkills(List<SkillInfo> owenedNFTSkills)
         {
-            foreach (Skill skill in owenedNFTSkills)
+            foreach (SkillInfo skillInfo in owenedNFTSkills)
             {
-                Skill targetSkill = skillPool.Find(s => s.skillInfo.skillId == skill.skillInfo.skillId);
+                Skill targetSkill = skillPool.Find(s => s.skillInfo.skillId == skillInfo.skillId);
                 if (targetSkill == null)
                 {
                     continue;
                 }
-                switch (targetSkill.skillType)
+                switch (skillInfo.skillType)
                 {
                     case SkillType.Active:
-                        targetSkill.SetSkillInfo(skill.skillInfo);
+                        targetSkill.SetSkillInfo(skillInfo);
                         activeSkills.Add(targetSkill as ActiveSkill);
                         break;
                     case SkillType.Passive:
-                        targetSkill.SetSkillInfo(skill.skillInfo);
+                        targetSkill.SetSkillInfo(skillInfo);
                         passiveSkills.Add(targetSkill as PassiveSkill);
                         break;
                     default:
