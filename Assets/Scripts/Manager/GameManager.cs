@@ -210,7 +210,7 @@ namespace Game
         }
         public void EquipSkill(Skill skill)
         {
-            if (skill != null && skill.skillType == SkillType.Passive && player.GetEquippedPassiveSkillCount() < MAX_EQUIPPED_PASSIVE_SKILLS)
+            if (skill != null && skill.skillInfo.skillType == SkillType.Passive && player.GetEquippedPassiveSkillCount() < MAX_EQUIPPED_PASSIVE_SKILLS)
             {
                 PassiveSkill passiveSkill = skill as PassiveSkill;
                 if (passiveSkill != null)
@@ -218,7 +218,7 @@ namespace Game
                     player.EquipPassiveSkill(passiveSkill);
                 }
             }
-            else if (skill != null && skill.skillType == SkillType.Active && player.equippedActiveSkill == null)
+            else if (skill != null && skill.skillInfo.skillType == SkillType.Active && player.equippedActiveSkill == null)
             {
                 ActiveSkill activeSkill = skill as ActiveSkill;
                 if (activeSkill != null)
@@ -229,7 +229,7 @@ namespace Game
         }
         public void UnEquipSkill(Skill skill)
         {
-            if (skill != null && skill.skillType == SkillType.Passive)
+            if (skill != null && skill.skillInfo.skillType == SkillType.Passive)
             {
                 PassiveSkill passiveSkill = skill as PassiveSkill;
                 if (passiveSkill != null)
@@ -237,7 +237,7 @@ namespace Game
                     player.UnequipPassiveSkill(passiveSkill);
                 }
             }
-            else if (skill != null && skill.skillType == SkillType.Active)
+            else if (skill != null && skill.skillInfo.skillType == SkillType.Active)
             {
                 ActiveSkill activeSkill = skill as ActiveSkill;
                 if (activeSkill != null && player.equippedActiveSkill == activeSkill)

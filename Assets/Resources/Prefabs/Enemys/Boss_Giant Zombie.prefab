@@ -10104,7 +10104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9030154646694985402}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boss_Giant Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}

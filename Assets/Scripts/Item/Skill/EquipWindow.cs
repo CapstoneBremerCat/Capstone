@@ -63,7 +63,7 @@ namespace Game
             }
 
             SkillSlot skillSlot = null;
-            skillSlot = Array.Find(skillSlots, slot => slot.SkillType == skill.skillType);
+            skillSlot = Array.Find(skillSlots, slot => slot.SkillType == skill.skillInfo.skillType);
 
             if (skillSlot == null)
             {
@@ -89,7 +89,7 @@ namespace Game
             }
 
             SkillSlot skillSlot = null;
-            skillSlot = Array.Find(skillSlots, slot => slot.SkillType == skill.skillType);
+            skillSlot = Array.Find(skillSlots, slot => slot.SkillType == skill.skillInfo.skillType);
 
             if (skillSlot == null)
             {

@@ -106,7 +106,7 @@ namespace Game
         {
             var tempSkill = equippedSkill;
             SkillSlot skillSlot = DragSlot.instance.dragSlot.GetComponent<SkillSlot>();
-            if (!skillSlot|| skillType != skillSlot.equippedSkill.skillType) return;
+            if (!skillSlot|| skillType != skillSlot.equippedSkill.skillInfo.skillType) return;
             SetSlot(skillSlot.equippedSkill);
             // Check if the dragged skill slot has an equipped skill
             if (tempSkill != null)

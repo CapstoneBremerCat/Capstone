@@ -6,13 +6,7 @@ namespace Game
 {
     public class ActiveSkill : Skill
     {
-        public float cooldown;
-
-        public ActiveSkill(SkillInfo skillInfo, float cooldown)
-        {
-            this.skillInfo = skillInfo;
-            this.cooldown = cooldown;
-        }
+        [SerializeField] public float cooldown;
 
         public virtual void UseSkill()
         {
