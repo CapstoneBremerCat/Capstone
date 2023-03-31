@@ -92,7 +92,7 @@ namespace BlockChain
             string json = JsonUtility.ToJson(param);
 
             //request Post
-            StartCoroutine(Upload("http://localhost:5000/resultUnity", json));
+            StartCoroutine(Upload("http://localhost:5000/login-result-unity", json));
 
         }
 
@@ -126,7 +126,7 @@ namespace BlockChain
                         //Debug.Log("loginAddr : " + temp);
                         //resourceText.text = temp;
 
-                        SceneManager.LoadScene("main");
+                        //SceneManager.LoadScene("main");
                     }
                 }
                 finally
