@@ -42,6 +42,7 @@ namespace Game
         public ActiveSkill equippedActiveSkill { get; private set; }
         private bool isCoolTime;
         private bool isRun;
+        public bool inputState { get; private set; }
         private void Awake()
         {
             OnDeath += () =>
@@ -50,6 +51,7 @@ namespace Game
                 //if (collider) collider.enabled = false;
                 //if (anim) anim.SetBool("isDead", isDead);   // Set Death animation.
                 if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);
+                SetInputState(false);
                 GameManager.Instance.GameOver();
             };
             UIManager.Instance.RestartEvent += () =>
@@ -98,6 +100,7 @@ namespace Game
             if(equippedPassiveSkills == null) equippedPassiveSkills = new List<PassiveSkill>();
             InitStatus();
             SetPlayerPosition(initPos);
+            SetInputState(true);
             //Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
         }
 
@@ -160,8 +163,15 @@ namespace Game
             Mediator.Instance.Notify(this, GameEvent.EQUIPPED_SKILL, this);
         }*/
 
+        public void SetInputState(bool value)
+        {
+            inputState = value;
+        }
+
         public void OnInputUpdated()
         {
+            // if inputState is false, return.
+            if (!inputState) return;
             // 입력값에 따라 적절한 처리를 수행합니다.
             if (playerShooter && playerInput.fire) playerShooter.ShootUpdate(playerInput.fire);
             if (equippedActiveSkill && playerInput.skillSlot1) UseSkill(equippedActiveSkill);

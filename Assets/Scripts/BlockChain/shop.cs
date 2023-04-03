@@ -43,7 +43,9 @@ namespace BlockChain
                 Destroy(child.gameObject);
             }
 
-            foreach (Item item in NFTManager.Instance.GetAllItems())
+            var allItems = NFTManager.Instance.GetAllItems();
+            if (allItems == null) return;
+            foreach (Item item in allItems)
             {
                 GameObject itemButton = Instantiate(itemButtonPrefab, itemPanelContainer.transform);
                 itemButton.GetComponent<ItemSlot>().SetSlot(item);

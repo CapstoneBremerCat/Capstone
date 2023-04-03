@@ -28,7 +28,8 @@ namespace Game
         [Header("Player UI")]
         [SerializeField] private Slider healthSlider;
         [SerializeField] private Slider staminaSlider;
-/*        [SerializeField] private TextMeshProUGUI ammoText; // Text for displaying ammo count*/
+        /*[SerializeField] private TextMeshProUGUI ammoText; // Text for displaying ammo count*/
+        [SerializeField] private Image activeSkillImage;
         [SerializeField] private Slider coolTimeSlider; // Slider for displaying the skill cooldown time
         [SerializeField] private Animation coolTimeAnim; // Animation for the skill cooldown time
 
@@ -85,8 +86,24 @@ namespace Game
         }
         private void ToggleUI(GameObject ui)
         {
-            if (ui) ui.SetActive(!ui.activeSelf);
+            if (!ui) return;
+            var active = !ui.activeSelf;
+            ui.SetActive(active);
+            if (active) UIManager.Instance.AddWindow(ui);
+            else UIManager.Instance.RemoveWindow(ui);
         }
+
+        public void SetEnableActiveSkill(bool value)
+        {
+
+            activeSkillImage.enabled = value;
+        }
+
+        public void SetActiveSkillSprite(Sprite sprite)
+        {
+            activeSkillImage.sprite = sprite;
+        }
+
         // ÄðÅ¸ÀÓ Ç¥±â
         public void DisplayCooltime(object coolTimeObj)
         {

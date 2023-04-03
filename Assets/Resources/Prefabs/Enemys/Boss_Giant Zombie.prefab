@@ -9420,7 +9420,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed55b2409950c4fe38504f51a3ebfecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseStat: {fileID: 11400000, guid: 63370e68e01c84bfea3a64808fa34644, type: 2}
+  baseStat: {fileID: 11400000, guid: 680b9024ecd6cd34da998af9cc3f15ac, type: 2}
   targetLayer:
     serializedVersion: 2
     m_Bits: 520

@@ -18,14 +18,16 @@ namespace Game
 
         // 마우스 드래그가 끝났을 때 발생하는 이벤트
         private Rect baseRect;  // Inventory_Base 이미지의 Rect 정보 받아 옴.
-        private Transform player;  // 아이템을 떨어트릴 위치.
+        private Transform playerTransform;  // 아이템을 떨어트릴 위치.
+        private Player player;  // 아이템을 떨어트릴 위치.
 
         public Item Item { get { return item; } }
 
         void Start()
         {
             baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
-            player = GameObject.FindWithTag("Player").transform;
+            playerTransform = GameObject.FindWithTag("Player").transform;
+            player = playerTransform.GetComponent<Player>();
         }
 
 
@@ -92,6 +94,11 @@ namespace Game
                     //EquipManager.Instance.EquipWeapon(item);
                     break;
                 case Item.ItemType.Used:
+                    // only if player got damaged
+                    if (player.GetHpRatio() == 1) break;
+                    SetSlotCount(-1);
+                    player.RestoreHealth(100);
+                    UIManager.Instance.UpdateHealthBar(player.GetHpRatio());
                     // Use recovery item
                     break;
             }

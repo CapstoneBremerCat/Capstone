@@ -43,6 +43,7 @@ namespace Game
         }
         public void LoadOwnedSkills(List<SkillInfo> owenedNFTSkills)
         {
+            if (owenedNFTSkills == null) return;
             foreach (SkillInfo skillInfo in owenedNFTSkills)
             {
                 Skill targetSkill = skillPool.Find(s => s.skillInfo.skillId == skillInfo.skillId);

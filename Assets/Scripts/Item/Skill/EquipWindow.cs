@@ -31,6 +31,7 @@ namespace Game
             {
                 skillSlot.ClearSlot();
             }
+            UIManager.Instance.DisableActiveSkill();
         }
         private void RefreshEquippedWeapon(object weaponItemObject)
         {
@@ -52,6 +53,11 @@ namespace Game
                 EquipSkill(skill);
             }
             EquipSkill(player.equippedActiveSkill);
+            if (player.equippedActiveSkill)
+            {
+                UIManager.Instance.EnableActiveSkill(player.equippedActiveSkill.skillInfo.skillImage);
+            }
+            else UIManager.Instance.DisableActiveSkill();
         }
 
         // Ca

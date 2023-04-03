@@ -65,7 +65,8 @@ namespace Game
         [SerializeField] private GAMEMODE gameMode;
         private int score = 0;
         public int highScore { get; private set; }
-        private Timer playTime;
+        public Timer clearTime { get; private set; }
+        public Timer playTime { get; private set; }
         [SerializeField] private float timeScale;
         private int lastSavedHour;   // 마지막으로 저장된 시간
 
@@ -152,9 +153,11 @@ namespace Game
         public void InitNewStage()
         {
             // 태양, 시작지점, 스포너 가져오기
-            if(!sun) sun = GameObject.FindWithTag("Sun").GetComponent<DayAndNight>();
-            if(!startPoint) startPoint = GameObject.FindWithTag("Start").transform;
-            if(!spawner) spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
+            var sunObj = GameObject.FindWithTag("Sun"); 
+            if (!sun && sunObj) sun = sunObj.GetComponent<DayAndNight>();
+            var spawnerObj = GameObject.FindWithTag("Spawner");
+            if (!spawner && spawnerObj) spawner = spawnerObj.GetComponent<Spawner>();
+            if (!startPoint) startPoint = GameObject.FindWithTag("Start").transform;
 
             player = FindObjectOfType<Player>();
             if(!player) player = LoadCharacter(playerPrefab).GetComponent<Player>();
@@ -208,6 +211,7 @@ namespace Game
 
             return character;
         }
+
         public void EquipSkill(Skill skill)
         {
             if (skill != null && skill.skillInfo.skillType == SkillType.Passive && player.GetEquippedPassiveSkillCount() < MAX_EQUIPPED_PASSIVE_SKILLS)
@@ -224,6 +228,7 @@ namespace Game
                 if (activeSkill != null)
                 {
                     player.EquipActiveSkill(activeSkill);
+                    UIManager.Instance.EnableActiveSkill(activeSkill.skillInfo.skillImage);
                 }
             }
         }
@@ -326,6 +331,8 @@ namespace Game
         public void StageClear()
         {
             player.OnGodMode();
+            player.SetInputState(false);
+            clearTime = playTime;
             isGameStart = false;
             UIManager.Instance.PlayStageClearUI();
         }
