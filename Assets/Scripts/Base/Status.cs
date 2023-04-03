@@ -86,7 +86,7 @@ namespace Game
         }
         public virtual void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
         {
-            if (isDead) return; // If already dead, do not process any further.
+            if (isDead || isGodMode) return; // If already dead or god, do not process any further.
 
             // Calculate actual damage by applying damage reduction.
             float actualDamage = damage * (100 - damageReduction) / 100;

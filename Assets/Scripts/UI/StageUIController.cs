@@ -89,8 +89,6 @@ namespace Game
             if (!ui) return;
             var active = !ui.activeSelf;
             ui.SetActive(active);
-            if (active) UIManager.Instance.AddWindow(ui);
-            else UIManager.Instance.RemoveWindow(ui);
         }
 
         public void SetEnableActiveSkill(bool value)

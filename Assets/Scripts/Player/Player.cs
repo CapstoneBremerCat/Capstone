@@ -178,14 +178,18 @@ namespace Game
             if (playerInput.inventory) UIManager.Instance.ToggleInventoryUI();
             if (playerInput.skillWindow) UIManager.Instance.ToggleSkillWindowUI();
             if (playerInput.equipWindow) UIManager.Instance.ToggleEquipWindowUI();
-            if (playerInput.statusWindow) UIManager.Instance.ToggleStatusUI();
+            if (playerInput.statusWindow)
+            {
+                Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
+                UIManager.Instance.ToggleStatusUI();
+            }
         }
 
         // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
         private void FixedUpdate()
         {
-            // 게임오버되지 않았을 경우에만 실행
-            if (isDead) return;
+            // 게임오버되지 않았거나, 입력을 받을 수 있는 경우에만 실행
+            if (isDead || !inputState) return;
             UpdateMovement();
         }
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)

@@ -43,26 +43,12 @@ namespace Game
         [Header("Stage UI")]
         [SerializeField] private StageUIController stageUIController;
         public event System.Action RestartEvent;
-        // 현재 열린 창 목록을 저장하는 스택
-        private Stack<GameObject> _windowStack = new Stack<GameObject>();
 
         private void Start()
         {
             InitUI();
         }
 
-        // esc 키를 누르면 가장 위에 있는 창을 닫습니다.
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (_windowStack.Count > 0)
-                {
-                    var topWindow = _windowStack.Peek();
-                    topWindow.SetActive(false);
-                }
-            }
-        }
         public void SwitchCanvas(CavasIndex index)
         {
             foreach(GameObject canvas in canvasList)
@@ -86,21 +72,6 @@ namespace Game
             if (!stageUIController) stageUIController = FindObjectOfType<StageUIController>();
             stageUIController.InitUI();
             DisableActiveSkill();
-        }
-
-        // 창이 열릴 때 스택에 추가합니다.
-        public void AddWindow(GameObject window)
-        {
-            Debug.Log("Window added");
-            _windowStack.Push(window);
-        }
-        // 창이 닫힐 때 스택에서 제거합니다.
-        public void RemoveWindow(GameObject window)
-        {
-            if (_windowStack.Count > 0 && _windowStack.Peek() == window)
-            {
-                _windowStack.Pop();
-            }
         }
 
         public void UpdateHealthBar(float ratio)
