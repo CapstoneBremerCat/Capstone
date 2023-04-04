@@ -346,6 +346,9 @@ namespace Game
                 // score ÀúÀå
                 isRankStart = false;
             }
+            else highScore = (score > highScore) ? score : highScore;
+            if (NFTManager.Instance.GetWinner() < highScore)
+                NFTManager.Instance.newWinner(highScore);
             isGameOver = true;
             isGameStart = false;
             UIManager.Instance.EnableGameOverUI();

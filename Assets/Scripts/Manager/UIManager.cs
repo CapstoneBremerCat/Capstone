@@ -34,6 +34,7 @@ namespace Game
         }
         #endregion
 
+        [SerializeField] private GameObject optionWindow;    // 옵션 창
         [SerializeField] private GameObject[] canvasList;    // 캔버스 목록
         [Header("Main UI")]
         [SerializeField] private Button startButton;    // 시작 버튼

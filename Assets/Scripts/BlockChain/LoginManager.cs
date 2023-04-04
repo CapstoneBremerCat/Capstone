@@ -35,6 +35,7 @@ namespace BlockChain
     public class LoginManager : MonoBehaviour
     {
         public static string loginAddr;
+        #region instance
         private static LoginManager instance = null;
         public static LoginManager Instance { get { return instance; } }
 
@@ -51,8 +52,10 @@ namespace BlockChain
 
             // Scene 이동 시 삭제 되지 않도록 처리
             DontDestroyOnLoad(this.gameObject);
+
             loginAddr = "---";
         }
+        #endregion
 
         /*
             // Start is called before the first frame update

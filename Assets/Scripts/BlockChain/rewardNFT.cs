@@ -11,22 +11,11 @@ using BlockChain;
 using Game;
 namespace BlockChain
 {
-
-
     public class rewardNFT : MonoBehaviour
     {
         public string name;
         public string description;
 
-        public bool isZombieApocalypseSurvivor = false;
-        public bool isZombieSlayer = false;
-        public bool isUndeadExterminator = false;
-        public bool isZombieAnnihilator = false;
-        public bool isBossSlayer = false;
-        public bool isSquadLeader = false;
-        public bool isRingBearer = false;
-        public bool isNFTPioneer = false;
-        public bool isUltimateSurvivor = false;
         /*    //좀비 1000마리 죽이기
             if (GameManager.Instance.zombieKillCount >= 1000) 
             {

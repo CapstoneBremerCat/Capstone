@@ -191,9 +191,8 @@ namespace BlockChain
         private Dictionary<int, SkillInfo> skillInfoDictionary = new Dictionary<int, SkillInfo>();
         private bool isLoaded = false; // 모든 아이템이 로딩되었는지 여부를 저장할 변수
         public float balanceOfKlay { get { return _balanceOfKlay; } }
-        [SerializeField] private TextMeshProUGUI ringOwner;
-        [SerializeField] private TextMeshProUGUI ringScore;
 
+        [SerializeField] private RankController rankController;
         private IEnumerator FirstLoadItems()
         {
             Debug.Log("FirstLoadItems Start");
@@ -206,6 +205,7 @@ namespace BlockChain
             {
                 yield return StartCoroutine(LoadNFT(i));
             }
+            GetWinner();
             // 이후 코드 실행
             // 모든 아이템이 로딩되었다는 플래그를 true로 변경
             yield return new WaitForSeconds(8.0f);
@@ -292,34 +292,30 @@ namespace BlockChain
             }));
         }
 
-        public void newWinner()
+        public void newWinner(int highScore)
         {
             var UpdateRingrequpload = new UpdateRing_req_upload();
-            //UpdateRingrequpload.addr= LoginManager.Instance.GetAddr();
-            UpdateRingrequpload.addr = "";
-            UpdateRingrequpload.score = 0;
+            //UpdateRingrequpload.addr = "";
+            UpdateRingrequpload.addr= LoginManager.Instance.GetAddr();
+            UpdateRingrequpload.score = highScore;
             var json = JsonConvert.SerializeObject(UpdateRingrequpload);
 
             StartCoroutine(Upload("http://localhost:5000/ring-score/update", json, null));
         }
 
-        public void GetWinner()
+        public int GetWinner()
         {
             var getRingrequpload = new getRing_req_upload();
             getRingrequpload.message = "";
             var json2 = JsonConvert.SerializeObject(getRingrequpload);
-
+            var highscore = 0;
             StartCoroutine(Upload("http://localhost:5000/ring-data", json2, (result) =>
             {
                 var getRingresupload = JsonConvert.DeserializeObject<getRing_res_upload>(result);
-
-                Debug.Log("ringOwner : " + getRingresupload.ringOwner);
-                Debug.Log("ringScore : " + getRingresupload.ringScore);
-
-                ringOwner.text = "RingOwner: " + getRingresupload.ringOwner;
-                ringScore.text = "RingScore : " + getRingresupload.ringScore.ToString();
-
+                highscore = getRingresupload.ringScore;
+                rankController.SetRank(getRingresupload.ringOwner, highscore);
             }));
+            return highscore;
         }
 
 
@@ -384,6 +380,8 @@ namespace BlockChain
                             StartCoroutine(GetTexture(url2, (sprite) =>
                             {
                                 itemTemp.image = sprite;
+                                if (tokenId == TotalSupply.GetTotalSupply())
+                                    Debug.Log("Done");
 
                             }));
                         }));
