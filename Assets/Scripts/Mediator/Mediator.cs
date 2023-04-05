@@ -14,6 +14,7 @@ public enum GameEvent
     EQUIPPED_ACTIVE,
     EQUIPPED_SKILL,
     ITEM_PICKED_UP,
+    ACHIEVEMENT_UNLOCKED,
     RESTART
 }
 public class Mediator : MonoBehaviour, IMediator

@@ -8,7 +8,13 @@ public class AchievementData
     public string name;
     public string description;
     public bool isCompleted;
-    public bool isEarned;
+}
+public class PlayData
+{
+    public int code;
+    public string name;
+    public int amount;
+    public bool completed;
 }
 
 public class AchievementDatabase : MonoBehaviour
@@ -35,7 +41,19 @@ public class AchievementDatabase : MonoBehaviour
 
     [SerializeField] private string saveFileName = "achievementData";
 
-    private List<AchievementData> achievementDataList;
+    public List<AchievementData> achievementDataList { get; private set; }
+
+/*    private void Start()
+    {
+*//*        List<AchievementData> emptyAchievementDataList = new List<AchievementData>();
+        AchievementData achievementData = new AchievementData();
+        achievementData.code = 1;
+        achievementData.name = "Survivor";
+        achievementData.description = "Clear Stage 1";
+        achievementData.isCompleted = false;
+        emptyAchievementDataList.Add(achievementData);
+        XML<AchievementData>.Write(saveFileName, emptyAchievementDataList);*//*
+    }*/
 
     private void LoadAchievementData()
     {
@@ -49,6 +67,24 @@ public class AchievementDatabase : MonoBehaviour
             Debug.LogWarning("Failed to load achievement data: " + e.Message);
             achievementDataList = new List<AchievementData>();
         }
+    }
+    public AchievementData GetAchievementData(int index)
+    {
+        if(index < achievementDataList.Count)
+            return achievementDataList[index];
+        return null;
+    }
+    public AchievementData GetAchievementDataByCode(int code)
+    {
+        // Find and return the achievement data with the specified code
+        foreach (AchievementData achievementData in achievementDataList)
+        {
+            if (achievementData.code == code)
+            {
+                return achievementData;
+            }
+        }
+        return null;
     }
 
     private void SaveAchievementData()
@@ -64,38 +100,12 @@ public class AchievementDatabase : MonoBehaviour
         }
     }
 
-    public AchievementData GetAchievementData(int code)
-    {
-        // Find and return the achievement data with the specified code
-        foreach (AchievementData achievementData in achievementDataList)
-        {
-            if (achievementData.code == code)
-            {
-                return achievementData;
-            }
-        }
-
-        // If the achievement data with the specified code does not exist, create it and add it to the list
-        AchievementData newAchievementData = new AchievementData
-        {
-            code = code,
-            name = "Achievement Title",
-            description = "Achievement Description",
-            isCompleted = false,
-            isEarned = false
-        };
-        achievementDataList.Add(newAchievementData);
-        SaveAchievementData();
-
-        return newAchievementData;
-    }
-
-    public void SetAchievementData(int code, AchievementData achievementData)
+    public void SetAchievementData(AchievementData achievementData)
     {
         // Find and update the achievement data with the specified code
         for (int i = 0; i < achievementDataList.Count; i++)
         {
-            if (achievementDataList[i].code == code)
+            if (achievementDataList[i].code == achievementData.code)
             {
                 achievementDataList[i] = achievementData;
                 SaveAchievementData();

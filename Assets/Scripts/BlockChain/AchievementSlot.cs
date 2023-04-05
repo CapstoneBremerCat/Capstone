@@ -14,14 +14,16 @@ public class AchievementSlot : MonoBehaviour
     public bool IsCompleted { get; private set; }
     public bool IsEarned { get; private set; }
     public Button CompleteButton { get { return completeButton; } }
+    public AchievementData achievementData { get; private set; }
 
-    public void SetAchievementSlot(AchievementData achievementData)
+    public void SetAchievementSlot(AchievementData achievementData, bool isEarned)
     {
+        this.achievementData = achievementData;
         // Update the UI elements with the given information
         title.text = achievementData.name;
         description.text = achievementData.description;
         IsCompleted = achievementData.isCompleted;
-        IsEarned = false; // earned는 데이터베이스에서 관리하므로 초기값은 false로 설정
+        IsEarned = isEarned; // earned는 블록체인 서버에서 관리
 
         RefreshUI();
     }
@@ -34,11 +36,14 @@ public class AchievementSlot : MonoBehaviour
         // If the achievement has not yet been completed, hide the complete button
         completeButton.gameObject.SetActive(IsCompleted);
     }
+    public void Complete()
+    {
+        achievementData.isCompleted = IsCompleted = true;
+    }
 
     public void OnComplete()
     {
         IsEarned = true;
         CompleteButton.interactable = false;
-        // 데이터베이스에 해당 정보 전달
     }
 }

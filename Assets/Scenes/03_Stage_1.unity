@@ -10958,6 +10958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f81bc0a16ab72148a59dd0e7fdaf233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievement: 256
 --- !u!1001 &532296793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22901,6 +22902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f81bc0a16ab72148a59dd0e7fdaf233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievement: 128
 --- !u!1001 &1135261620
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33938,6 +33940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb2c315f661ef046bd6cd0c1e5ec4a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievement: 1
   goals:
   - {fileID: 530430157}
   - {fileID: 1794666515}
@@ -34579,6 +34582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f81bc0a16ab72148a59dd0e7fdaf233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievement: 0
 --- !u!114 &1795383614 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1795383614, guid: 66663246dfecf8e49b6ae95924e4ab87, type: 3}

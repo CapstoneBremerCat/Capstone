@@ -193,8 +193,15 @@ namespace BlockChain
         public float balanceOfKlay { get { return _balanceOfKlay; } }
 
         [SerializeField] private RankController rankController;
+        private int nftImgCount = 0;
+        public void InitNFT()
+        {
+            StartCoroutine(FirstLoadItems());
+        }
+
         private IEnumerator FirstLoadItems()
         {
+            isLoaded = false;
             Debug.Log("FirstLoadItems Start");
             yield return StartCoroutine(LoadTotalSupply());
 
@@ -206,10 +213,10 @@ namespace BlockChain
                 yield return StartCoroutine(LoadNFT(i));
             }
             GetWinner();
+
+            // 모든 아이템이 로딩되었다는 플래그가 true일 경우,
+            while (isLoaded) yield return null;
             // 이후 코드 실행
-            // 모든 아이템이 로딩되었다는 플래그를 true로 변경
-            yield return new WaitForSeconds(8.0f);
-            isLoaded = true;
             LoadNFTSkillInfos();
             SkillManager.Instance.LoadOwnedSkills(GetOwnedNFTSkillInfos());
         }
@@ -301,6 +308,7 @@ namespace BlockChain
             var json = JsonConvert.SerializeObject(UpdateRingrequpload);
 
             StartCoroutine(Upload("http://localhost:5000/ring-score/update", json, null));
+            Mediator.Instance.Notify(this, GameEvent.ACHIEVEMENT_UNLOCKED, Achievement.RingOwner);
         }
 
         public int GetWinner()
@@ -380,9 +388,12 @@ namespace BlockChain
                             StartCoroutine(GetTexture(url2, (sprite) =>
                             {
                                 itemTemp.image = sprite;
-                                if (tokenId == TotalSupply.GetTotalSupply())
+                                nftImgCount++;
+                                if (nftImgCount == TotalSupply.GetTotalSupply())
+                                {
+                                    isLoaded = true;
                                     Debug.Log("Done");
-
+                                }
                             }));
                         }));
                     }

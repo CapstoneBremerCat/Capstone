@@ -8,6 +8,7 @@ using BlockChain;
 
 public enum Achievement
 {
+    Default = 0,
     Survivor = 1 << 0,
     Savior = 1 << 1,
     RingOwner = 1 << 2,
@@ -15,21 +16,27 @@ public enum Achievement
     ZombieSlayer = 1 << 4,
     ZombieExterminator = 1 << 5,
     ZombieAnnihilator = 1 << 6,
-    GiantSlayer = 1 << 7
+    GiantSlayer = 1 << 7,
+    SteelDestroyer = 1 << 8
 }
 
 public class AchievementController : MonoBehaviour
 {
-    [SerializeField] private AchievementSlot[] achievementSlots;
+    [SerializeField] private GameObject achievementUnlockedWindow;
+    [SerializeField] private TextMeshProUGUI achievementUnlockedText;
+
+    [SerializeField] private GameObject achievementsPanel;
+    [SerializeField] private GameObject achievementSlotPrefab;
+    [SerializeField] private List<AchievementSlot> achievementSlotList;
     [SerializeField] private TextMeshProUGUI achievedText;
     [SerializeField] private TextMeshProUGUI tokensText;
     [SerializeField] private Button getNFTButton;
     private int tokens;
 
-    private void OnEnable()
+    public void OpenAchievementWindow()
     {
         // Refresh each achievement slot
-        foreach (AchievementSlot slot in achievementSlots)
+        foreach (AchievementSlot slot in achievementSlotList)
         {
             // Refresh the slot's achievement state
             slot.RefreshUI();
@@ -43,17 +50,20 @@ public class AchievementController : MonoBehaviour
     {
         // Set the initial value of tokens
         tokens = 0;
-
+        var index = 1;
+        achievementSlotList.Clear();
         // Initialize each achievement slot
-        foreach (AchievementSlot slot in achievementSlots)
+        for (int i = 0; i < AchievementDatabase.Instance.achievementDataList.Count; i++)
         {
             // Get the achievement data from the database
-            AchievementData achievementData = AchievementDatabase.Instance.GetAchievementData(1/*블록체인 데이터*/);
+            AchievementData achievementData = AchievementDatabase.Instance.GetAchievementData(i);
 
+            AchievementSlot slot = Instantiate(achievementSlotPrefab, achievementsPanel.transform).GetComponent<AchievementSlot>();
             // Set the slot's achievement information
-            slot.SetAchievementSlot(achievementData);
+            bool isEarned = (achievementData.code & 0/*블록체인 데이터*/) != 0;
+            slot.SetAchievementSlot(achievementData, isEarned);
 
-            // Set the slot's complete button click listener
+             // Set the slot's complete button click listener
             slot.CompleteButton.onClick.AddListener(() => {
                 // If the achievement is not yet completed, mark it as completed and add a token
                 if (slot.IsCompleted)
@@ -62,9 +72,22 @@ public class AchievementController : MonoBehaviour
                     tokens++;
                     UpdateAchievedText();
                     UpdateTokensText();
+
+                    // Save achievement completion to database
+                    AchievementDatabase.Instance.SetAchievementData(slot.achievementData);
+                    // save
+                    // slot.IsEarned;
                 }
             });
+            achievementSlotList.Add(slot);
+            index *= 2;
         }
+
+        // Expand the content rect to fit all the achievement slots
+        achievementsPanel.GetComponent<RectTransform>().sizeDelta = new Vector2(
+            achievementsPanel.GetComponent<RectTransform>().sizeDelta.x,
+            achievementSlotList.Count * achievementSlotPrefab.GetComponent<RectTransform>().rect.height
+        );
 
         // Set the getNFTButton click listener
         getNFTButton.onClick.AddListener(() => {
@@ -80,11 +103,48 @@ public class AchievementController : MonoBehaviour
         // Update the tokens and achieved text elements with the initial values
         UpdateTokensText();
         UpdateAchievedText();
+        Mediator.Instance.RegisterEventHandler(GameEvent.ACHIEVEMENT_UNLOCKED, UnlockAchievement);
     }
+
+    private void OnDestroy()
+    {
+        Mediator.Instance.UnregisterEventHandler(GameEvent.ACHIEVEMENT_UNLOCKED, UnlockAchievement);
+    }
+
+    public void UnlockAchievement(object achievement)
+    {
+        foreach (AchievementSlot slot in achievementSlotList)
+        {
+            if(slot.achievementData.code == (int)achievement)
+            {
+                if (!slot.IsCompleted /*&& !slot.IsEarned*/)
+                {
+                    slot.Complete();
+                    AchievementDatabase.Instance.SetAchievementData(slot.achievementData);
+                    // complete 연출
+                    achievementUnlockedText.text = slot.achievementData.name;
+                    StartCoroutine(ShowAchievementPopup());
+                }
+                break;
+            }
+        }
+    }
+
+    private IEnumerator ShowAchievementPopup()
+    {
+        Animation animation = achievementUnlockedWindow.GetComponent<Animation>();
+        achievementUnlockedWindow.gameObject.SetActive(true);
+        do
+        {
+            yield return null;
+        } while (animation.isPlaying);
+        achievementUnlockedWindow.gameObject.SetActive(false);
+    }
+
     private void UpdateAchievedText()
     {
         int achievedCount = 0;
-        foreach (AchievementSlot slot in achievementSlots)
+        foreach (AchievementSlot slot in achievementSlotList)
         {
             if (slot.IsEarned)
             {
@@ -92,7 +152,7 @@ public class AchievementController : MonoBehaviour
             }
         }
 
-        achievedText.text = string.Format("{0} / {1}", achievedCount, achievementSlots.Length);
+        achievedText.text = string.Format("{0} / {1}", achievedCount, achievementSlotList.Count);
     }
 
     private void UpdateTokensText()

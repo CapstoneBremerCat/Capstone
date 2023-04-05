@@ -6,6 +6,7 @@ namespace Game
 {
     public class StageArea : MonoBehaviour
     {
+        [SerializeField] private Achievement achievement;
         [SerializeField] private Goal[] goals;
         private void OnTriggerEnter(Collider other)
         {
@@ -20,6 +21,7 @@ namespace Game
             {
                 GameManager.Instance.StageClear();
             }
+            if (achievement != Achievement.Default) Mediator.Instance.Notify(this, GameEvent.ACHIEVEMENT_UNLOCKED, achievement);
         }
     }
 }

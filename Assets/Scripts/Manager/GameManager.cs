@@ -50,6 +50,8 @@ namespace Game
 
         [SerializeField] private Transform startPoint; // 스테이지 시작 지점
 
+        [SerializeField] private AchievementController achievementController;   // 업적 관리
+
         [Header("Game")]
         [SerializeField] private int maxWave = 10;  // 최대 Wave 카운트.
         public int Wave { get; private set; }  // 현재 Wave 카운트.
@@ -57,6 +59,7 @@ namespace Game
         public int EnemySpawnCount { get { return Mathf.RoundToInt(10.0f + Wave * 2.0f); } }
 
         private int spawnCount = 0; // 필드에 존재하는 Enemy의 수.
+        public int enemyKilledCount { get; private set; } // 필드에 존재하는 Enemy의 수.
 
         [SerializeField] private float maxFatigue = 100f;   // 최대 피로도
         [SerializeField] private float recoverFatiguePerHour = 10f;   // 수면 시간당 회복하는 피로도 수치
@@ -180,6 +183,8 @@ namespace Game
             gameMode = GAMEMODE.MORNING;
             // 웨이브 수 초기화.
             Wave = 0;
+            // 적 제거 수 초기화.
+            enemyKilledCount = 0;
             // 플레이 시작 시간 저장.
             playTime = new Timer();
             playTime.SetTimeScale(timeScale);
@@ -316,7 +321,27 @@ namespace Game
         public void KillEnemy(bool isWaveEnemy)
         {
             AddScore(100); // enemy 처치 시, 100 score 상승.
+            enemyKilledCount++;
+            CheckKillAchievements();
             if (isWaveEnemy) DecreaseSpawnCount(); // enemy 처치 시, Spawn Count 감소.
+        }
+
+        public void CheckKillAchievements()
+        {
+            if (!achievementController) return;
+
+            if (enemyKilledCount >= 1000)
+            {
+                Mediator.Instance.Notify(this, GameEvent.ACHIEVEMENT_UNLOCKED, Achievement.ZombieAnnihilator);
+            }
+            else if (enemyKilledCount >= 100)
+            {
+                Mediator.Instance.Notify(this, GameEvent.ACHIEVEMENT_UNLOCKED, Achievement.ZombieExterminator);
+            }
+            else if (enemyKilledCount >= 10)
+            {
+                Mediator.Instance.Notify(this, GameEvent.ACHIEVEMENT_UNLOCKED, Achievement.ZombieSlayer);
+            }
         }
 
         public void OnPause()
@@ -391,6 +416,11 @@ namespace Game
                 StartCoroutine(MoveScene(currSceneIdx + 1));
         }
 
+        public void ToMain()
+        {
+            StartCoroutine(MoveScene(0));
+        }
+
         public IEnumerator MoveScene(int sceneIndex)
         {
             SceneManager.LoadScene(sceneList[sceneIndex]);
@@ -461,6 +491,11 @@ namespace Game
             CurFatigue = maxFatigue;
             spawnCount = 0;
             Wave = 0;
+        }
+
+        public void ExitGame()
+        {
+            Application.Quit();
         }
     }
 }

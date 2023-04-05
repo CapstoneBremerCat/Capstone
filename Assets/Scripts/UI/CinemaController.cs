@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Game;
 namespace Game
 {
@@ -21,7 +22,8 @@ namespace Game
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                StartCoroutine(OnSkip());
+                if (SceneManager.GetActiveScene().name.Contains("Cinema"))
+                    StartCoroutine(OnSkip());
             }
         }
 

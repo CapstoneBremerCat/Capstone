@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Game;
 namespace Game
@@ -48,6 +49,15 @@ namespace Game
         private void Start()
         {
             InitUI();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (!SceneManager.GetActiveScene().name.Contains("Cinema"))
+                    optionWindow.SetActive(!optionWindow.activeSelf);
+            }
         }
 
         public void SwitchCanvas(CavasIndex index)

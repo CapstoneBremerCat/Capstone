@@ -38,6 +38,7 @@ namespace Game
                         if (int.TryParse(strValue, out int i)) value = i;
                         else if (float.TryParse(strValue, out float f)) value = f;
                         else if (double.TryParse(strValue, out double d)) value = d;
+                        else if (bool.TryParse(strValue, out bool b)) value = b;
 
                         // 해당 field에 맞는 값으로 데이터를 입력.
                         field.SetValue(data, value);
