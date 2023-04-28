@@ -1,0 +1,541 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7247570102999251587
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7247570102999251584}
+  - component: {fileID: 7247570103413527188}
+  - component: {fileID: 7247570102999251585}
+  m_Layer: 0
+  m_Name: Directional Light Sun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7247570102999251584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570102999251587}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -3000}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7247570104753394365}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &7247570103413527188
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570102999251587}
+  m_Enabled: 1
+  serializedVersion: 10
+  m_Type: 1
+  m_Shape: 0
+  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Intensity: 2
+  m_Range: 10
+  m_SpotAngle: 30
+  m_InnerSpotAngle: 21.80208
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 2
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.5
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 0
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0
+--- !u!123 &7247570102999251585
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570102999251587}
+  m_Enabled: 1
+  m_Flare: {fileID: 12100000, guid: c3f645efa7289e840a822a2d778a55e7, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Brightness: 0.8
+  m_FadeSpeed: 10
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 1
+--- !u!1 &7247570103673335959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7247570103673335956}
+  - component: {fileID: 7247570103673335955}
+  - component: {fileID: 7247570103673335954}
+  - component: {fileID: 7247570103673335957}
+  m_Layer: 0
+  m_Name: Moon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7247570103673335956
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103673335959}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 1500}
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_Children: []
+  m_Father: {fileID: 7247570104753394365}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!33 &7247570103673335955
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103673335959}
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!64 &7247570103673335954
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103673335959}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &7247570103673335957
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103673335959}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 18677d1260a9f814eb2c8b666df1589f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7247570103797732950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7247570103797732949}
+  - component: {fileID: 7247570103797732948}
+  - component: {fileID: 7247570103797732951}
+  m_Layer: 0
+  m_Name: StarSphere
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &7247570103797732949
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103797732950}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 50, z: 0}
+  m_LocalScale: {x: 2000, y: 2000, z: 2000}
+  m_Children: []
+  m_Father: {fileID: 7247570104461259220}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7247570103797732948
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103797732950}
+  m_Mesh: {fileID: -5495902117074765545, guid: e35a38c9acabac54fb002f883d09b2a4, type: 3}
+--- !u!23 &7247570103797732951
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570103797732950}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 0eb56f53804887f428c81392ab6cbe8b, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7247570104461259223
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7247570104461259220}
+  - component: {fileID: 7247570103329132883}
+  m_Layer: 0
+  m_Name: EnvironmentObjects
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!4 &7247570104461259220
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570104461259223}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7247570103797732949}
+  - {fileID: 7247570104753394365}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7247570103329132883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570104461259223}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f9e18e6ade714469540e0159e8b265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WaitTimeMultiplier: 0.5
+  count: 1
+  ShortYear: 
+  MoveSunContinuously: 0
+  MoveSunAfter: 3
+  isLerping: 0
+  isLeapYear: 0
+  Sun: {fileID: 7247570102999251587}
+  SunLight: {fileID: 7247570103413527188}
+  LF: {fileID: 7247570102999251585}
+  Moon: {fileID: 7247570103673335959}
+  SunMoon: {fileID: 7247570104753394364}
+  CurrentDayName: 
+  Day1Name: Sunday
+  Day2Name: Monday
+  Day3Name: Tuesday
+  Day4Name: Wednesday
+  Day5Name: Thursday
+  Day6Name: Friday
+  Day7Name: Saturday
+  CurrentMonthName: 
+  Month1Name: January
+  Month2Name: February
+  Month3Name: March
+  Month4Name: April
+  Month5Name: May
+  Month6Name: June
+  Month7Name: July
+  Month8Name: August
+  Month9Name: September
+  Month10Name: October
+  Month11Name: November
+  Month12Name: December
+  DayStatus: 
+  hours: 12
+  minutes: 0
+  DayNum: 1
+  MonthNum: 1
+  YearNum: 2022
+  Days: 0
+  AmPm: pm
+  DaySpeed: 0.3
+  starsphere: {fileID: 7247570103797732950}
+  StartHourMidnight: 6
+  StartMinMidnight: 34
+  StartAmPmMidnight: pm
+  MidnightStartRot: 0
+  MidnightChangeRate: 0.015
+  MidnightLensFlare: 0
+  MidnightLightIntensity: 0.2
+  MidnightLightColor: {r: 0.41568628, g: 0.47843137, b: 0.5568628, a: 1}
+  MidnightAmbientColor: {r: 0.14117648, g: 0.15294118, b: 0.16862746, a: 1}
+  MidnightStarAlpha: 0.35
+  MidnightFogColor: {r: 0, g: 0, b: 0, a: 1}
+  MidnightFogDensity: 0.0005
+  StartHourPreSunRise: 5
+  StartMinPreSunRise: 18
+  StartAmPmPreSunRise: am
+  PreSunRiseStartRot: 0
+  PreSunRiseChangeRate: 0.05
+  PreSunRiseLensFlare: 0.6
+  PreSunRiseLightIntensity: 0.6
+  PreSunRiseLightColor: {r: 0.99215686, g: 0.8156863, b: 0.33333334, a: 1}
+  PreSunRiseAmbientColor: {r: 0.28235295, g: 0.28235295, b: 0.28235295, a: 1}
+  PreSunRiseStarAlpha: 0.9
+  PreSunRiseFogColor: {r: 0.3372549, g: 0.37254903, b: 0.3882353, a: 1}
+  PreSunRiseFogDensity: 0.0005
+  StartHourSunRise: 5
+  StartMinSunRise: 40
+  StartAmPmSunRise: am
+  SunRiseStartRot: 0
+  SunRiseChangeRate: 0.05
+  SunRiseLensFlare: 1.2
+  SunRiseLightIntensity: 1.4
+  SunRiseLightColor: {r: 1, g: 0.9098039, b: 0.45882353, a: 1}
+  SunRiseAmbientColor: {r: 0.30980393, g: 0.30980393, b: 0.30980393, a: 1}
+  SunRiseStarAlpha: 0.95
+  SunRiseFogColor: {r: 0.58431375, g: 0.6431373, b: 0.67058825, a: 1}
+  SunRiseFogDensity: 0.00075
+  StartHourPostSunRise: 6
+  StartMinPostSunRise: 2
+  StartAmPmPostSunRise: am
+  PostSunRiseStartRot: 0
+  PostSunRiseChangeRate: 0.02
+  PostSunRiseLensFlare: 1
+  PostSunRiseLightIntensity: 1.2
+  PostSunRiseLightColor: {r: 1, g: 0.89411765, b: 0.60784316, a: 1}
+  PostSunRiseAmbientColor: {r: 0.35686275, g: 0.37254903, b: 0.41568628, a: 1}
+  PostSunRiseStarAlpha: 1
+  PostSunRiseFogColor: {r: 0.8745098, g: 0.9607843, b: 1, a: 1}
+  PostSunRiseFogDensity: 0.001
+  StartHourAfternoon: 7
+  StartMinAfternoon: 0
+  StartAmPmAfternoon: am
+  AfternoonStartRot: 0
+  AfternoonChangeRate: 0.02
+  AfternoonLensFlare: 1
+  AfternoonLightIntensity: 1.2
+  AfternoonLightColor: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  AfternoonAmbientColor: {r: 0.4392157, g: 0.45490196, b: 0.5019608, a: 1}
+  AfternoonStarAlpha: 1
+  AfternoonFogColor: {r: 0.8745098, g: 0.9607843, b: 1, a: 1}
+  AfternoonFogDensity: 0.0001
+  StartHourPreSunSet: 5
+  StartMinPreSunSet: 0
+  StartAmPmPreSunSet: pm
+  PreSunSetStartRot: 0
+  PreSunSetChangeRate: 0.025
+  PreSunSetLensFlare: 0.8
+  PreSunSetLightIntensity: 1.2
+  PreSunSetLightColor: {r: 1, g: 0.7607843, b: 0.61960787, a: 1}
+  PreSunSetAmbientColor: {r: 0.40392157, g: 0.36862746, b: 0.34901962, a: 1}
+  PreSunSetStarAlpha: 1
+  PreSunSetFogColor: {r: 1, g: 0.89411765, b: 0.8745098, a: 1}
+  PreSunSetFogDensity: 0.0005
+  StartHourSunSet: 5
+  StartMinSunSet: 40
+  StartAmPmSunSet: pm
+  SunSetStartRot: 0
+  SunSetChangeRate: 0.05
+  SunSetLensFlare: 1
+  SunSetLightIntensity: 1.4
+  SunSetLightColor: {r: 1, g: 0.62352943, b: 0.4, a: 1}
+  SunSetAmbientColor: {r: 0.3019608, g: 0.28627452, b: 0.27450982, a: 1}
+  SunSetStarAlpha: 0.95
+  SunSetFogColor: {r: 0.67058825, g: 0.60784316, b: 0.58431375, a: 1}
+  SunSetFogDensity: 0.0005
+  StartHourPostSunSet: 6
+  StartMinPostSunSet: 2
+  StartAmPmPostSunSet: pm
+  PostSunSetStartRot: 0
+  PostSunSetChangeRate: 0.05
+  PostSunSetLensFlare: 0
+  PostSunSetLightIntensity: 0.8
+  PostSunSetLightColor: {r: 1, g: 0.8156863, b: 0.5882353, a: 1}
+  PostSunSetAmbientColor: {r: 0.25490198, g: 0.23921569, b: 0.22352941, a: 1}
+  PostSunSetStarAlpha: 0.9
+  PostSunSetFogColor: {r: 0.3882353, g: 0.3529412, b: 0.3372549, a: 1}
+  PostSunSetFogDensity: 0.0005
+  mp1: {fileID: 2800000, guid: af533d47816befe44bece0c270661369, type: 3}
+  mp2: {fileID: 2800000, guid: e0571957cfcca4048aa7e29c7d67d76f, type: 3}
+  mp3: {fileID: 2800000, guid: 378854967dd2e2c4e9b67b8a90a803ba, type: 3}
+  mp4: {fileID: 2800000, guid: 9cafad9d95728114c98402136a2d1f44, type: 3}
+  mp5: {fileID: 2800000, guid: 6d81f04ee96b1ff4086a76d1e2d94523, type: 3}
+  mp6: {fileID: 2800000, guid: 934e6ca940c810d4a83af1ed3c43e560, type: 3}
+  mp7: {fileID: 2800000, guid: ccefc5273bfc30e488242e247e47d411, type: 3}
+  mp8: {fileID: 2800000, guid: d0a89d8703ab67a4abf254c9bd637952, type: 3}
+  StartingPhase: 4
+  MoonScale: 5
+  hourAndMinuteA: 0
+  hourAndMinuteB: 0
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!1 &7247570104753394364
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7247570104753394365}
+  m_Layer: 0
+  m_Name: SunPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7247570104753394365
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7247570104753394364}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 7247570102999251584}
+  - {fileID: 7247570103673335956}
+  m_Father: {fileID: 7247570104461259220}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

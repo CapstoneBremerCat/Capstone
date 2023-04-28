@@ -30,7 +30,6 @@ namespace Game
             player = playerTransform.GetComponent<Player>();
         }
 
-
         // 이미지의 투명도 조절
         private void SetColor(float _alpha)
         {
@@ -97,8 +96,7 @@ namespace Game
                     // only if player got damaged
                     if (player.GetHpRatio() == 1) break;
                     SetSlotCount(-1);
-                    player.RestoreHealth(100);
-                    UIManager.Instance.UpdateHealthBar(player.GetHpRatio());
+                    player.UseHealKit();
                     // Use recovery item
                     break;
             }

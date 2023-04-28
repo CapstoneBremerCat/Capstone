@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillInfo:
-    skillId: 4
+    skillId: 5
     skillName: Armor buff
     skillDescription: This is dummy.
     skillImage: {fileID: 21300000, guid: 74061e84e25199f46b523c3187e1af34, type: 3}
     skillType: 0
-  statusObject: {fileID: 11400000, guid: 8d53a69351839d94082a320e420c52cf, type: 2}
+    skillCode: 5
+    skillValue: 0

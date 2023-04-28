@@ -22,18 +22,61 @@ namespace BlockChain
         public TextMeshProUGUI shopKlay;
         public Button buyButton;
         public Button sellButton;
+        public Button sellingButton;
+
         public InputField priceInput;
         public Button checkButton;
+        public Button backButton;
+        public Button allButton;
+        public Button myNFTButton;
 
         private int selectedItemId = 0;
+        private bool IsAll = true;
 
-        public void StoreButtonOnClick()
+        long Firsttime = 0;   // 첫번째 클릭시간
+        private bool One_Click()
+        {
+            long CurrentTime = DateTime.Now.Ticks;
+            if (CurrentTime - Firsttime < 4000000) // 0.4초 ( MS에서는 더블클릭 평균 시간을 0.4초로 보는거 같다.)
+            {
+                Firsttime = CurrentTime;   // 더블클릭 또는 2회(2회, 3회 4회...)클릭 시 실행되지 않도록 함
+                return false;   // 더블클릭 됨
+            }
+            else
+            {
+                Firsttime = CurrentTime;   // 1번만 실행되도록 함
+                return true;   // 더블클릭 아님
+            }
+        }
+
+        public void RefreshStore()
         {
             Debug.Log("LoadItems");
-            StartCoroutine(NFTManager.Instance.LoadItems());
+            NFTManager.Instance.RefreshNFT();
             Debug.Log("DisplayItems");
+            if (IsAll == true) 
+            {
+                DisplayItems();
+            }
+            else
+            {
+                DisplayMyItems();
+            }
+        }
+
+        public void ALLButtonOnClick()
+        {
+            IsAll = true;
+            StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayItems();
         }
+        public void MyButtonOnClick()
+        {
+            IsAll = false;
+            StartCoroutine(NFTManager.Instance.LoadItems());
+            DisplayMyItems();
+        }
+
 
         private void DisplayItems()
         {
@@ -56,6 +99,24 @@ namespace BlockChain
             }
         }
 
+        private void DisplayMyItems()
+        {
+            // itemPanelContainer의 자식 오브젝트를 모두 삭제
+            foreach (Transform child in itemPanelContainer.transform)
+            {
+                Destroy(child.gameObject);
+            }
+
+            foreach (Item item in NFTManager.Instance.GetMyItems())
+            {
+                GameObject itemButton = Instantiate(itemButtonPrefab, itemPanelContainer.transform);
+                itemButton.GetComponent<ItemSlot>().SetSlot(item);
+
+                int itemId = item.tokenId;
+
+                itemButton.GetComponent<Button>().onClick.AddListener(() => ShowItemDetails(itemId));
+            }
+        }
         private void ShowItemDetails(int itemId)
         {
             selectedItemId = itemId;
@@ -67,32 +128,52 @@ namespace BlockChain
             var preOwnedTokens = OwnedTokens.GetOwnedTokens();
             if (Array.Exists(preOwnedTokens, x => x == selectedItem.tokenId))
             {
-
-                checkButton.onClick.AddListener(() =>
+                if (selectedItem.isSelling)
                 {
-                    if (priceInput.text != "")
+                    sellingButton.gameObject.SetActive(true);
+                }
+                else
+                {
+                    checkButton.onClick.RemoveAllListeners();
+                    checkButton.onClick.AddListener(() =>
                     {
-                        NFTManager.Instance.SellNFTItem(selectedItem.tokenId, float.Parse(priceInput.text));
-                        // 숫자 초기화하는 코드 만들어야함 근데 귀찮아서 아직 안만듦
-                        HideItemDetails();
+                        if (One_Click()) // 한번만 터치되도록 한다. ( 이중 터치 실행 방지 )
+                        {
+                            if (priceInput.text != "")
+                            {
+                                NFTManager.Instance.SellNFTItem(selectedItem.tokenId, float.Parse(priceInput.text));
+                                // 숫자 초기화하는 코드 만들어야함 근데 귀찮아서 아직 안만듦
+                                HideItemDetails();
+
+                                priceInput.text = "";
+                                RefreshStore();
+                            }
+                        }
+                        sellButton.gameObject.SetActive(false);
+                    });
+                    if (selectedItem.tokenId != 1)
+                    {
+                        sellButton.gameObject.SetActive(true);
                     }
-                });
-                if (selectedItem.tokenId != 1)
-                {
-                    sellButton.gameObject.SetActive(true);
                 }
             }
             else if (selectedItem.isSelling)
             {
+                buyButton.onClick.RemoveAllListeners();
                 buyButton.onClick.AddListener(() =>
                 {
-                    //var addr = LoginManager.Instance.GetAddr();
-                    var addr = "0xd026F9247E982f087F8CcB4FD334C7d78039c37A";
-                    Application.OpenURL($"http://localhost:3000/buy/{selectedItem.tokenId}/{selectedItem.price}/{addr}");
+                    var addr = LoginManager.Instance.GetAddr();
+                    Application.OpenURL($"http://localhost:3000/nfts/buy/{selectedItem.tokenId}/{selectedItem.price}/{addr}");
                     HideItemDetails();
                 });
                 buyButton.gameObject.SetActive(true);
             }
+
+            backButton.onClick.AddListener(() =>
+            {
+                RefreshStore();
+            });
+
         }
 
         public void HideItemDetails()

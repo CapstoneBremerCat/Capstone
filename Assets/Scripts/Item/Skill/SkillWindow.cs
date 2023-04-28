@@ -14,7 +14,7 @@ namespace Game
         [SerializeField] private Transform tf_SkillSlotsParent;
         [SerializeField] private SkillSlot[] skillSlots;
 
-        private void Start()
+        private void OnEnable()
         {
             // Get all the SkillSlots from the skillSlotsParent
             skillSlots = tf_SkillSlotsParent.GetComponentsInChildren<SkillSlot>();

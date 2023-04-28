@@ -48,29 +48,6 @@ namespace Game
 
         private void Start()
         {
-            InitUI();
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (!SceneManager.GetActiveScene().name.Contains("Cinema"))
-                    optionWindow.SetActive(!optionWindow.activeSelf);
-            }
-        }
-
-        public void SwitchCanvas(CavasIndex index)
-        {
-            foreach(GameObject canvas in canvasList)
-            {
-                canvas.SetActive(false);
-            }
-            canvasList[(int)index].SetActive(true);
-        }
-
-        public void InitUI()
-        {
             // 시작 버튼
             if (startButton) startButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
             // 종료 버튼
@@ -81,8 +58,41 @@ namespace Game
 
             // 스테이지 UI
             if (!stageUIController) stageUIController = FindObjectOfType<StageUIController>();
+            InitUI();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (!SceneManager.GetActiveScene().name.Contains("Cinema"))
+                {
+                    bool isActive = optionWindow.activeSelf;
+                    optionWindow.SetActive(!isActive);
+                    GameManager.Instance.SetPause(!isActive);
+                }
+            }
+        }
+
+        public void ClearCanvas()
+        {
+            foreach (GameObject canvas in canvasList)
+            {
+                canvas.SetActive(false);
+            }
+        }
+
+        public void SwitchCanvas(CavasIndex index)
+        {
+            ClearCanvas();
+            canvasList[(int)index].SetActive(true);
+        }
+
+        public void InitUI()
+        {
             stageUIController.InitUI();
             DisableActiveSkill();
+            DisableWaveUI();
         }
 
         public void UpdateHealthBar(float ratio)

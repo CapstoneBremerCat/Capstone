@@ -50,4 +50,5 @@ MonoBehaviour:
     skillDescription: This is dummy.
     skillImage: {fileID: 21300000, guid: 74061e84e25199f46b523c3187e1af34, type: 3}
     skillType: 0
-  statusObject: {fileID: 11400000, guid: 20e11b94da243a3409eff80ba6c55293, type: 2}
+    skillCode: 7
+    skillValue: 0

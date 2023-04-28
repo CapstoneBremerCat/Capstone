@@ -15,6 +15,7 @@ public enum GameEvent
     EQUIPPED_SKILL,
     ITEM_PICKED_UP,
     ACHIEVEMENT_UNLOCKED,
+    NFTTICKET_EARNED,
     RESTART
 }
 public class Mediator : MonoBehaviour, IMediator

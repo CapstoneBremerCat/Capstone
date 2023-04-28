@@ -41,4 +41,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/99_Stage_Rank.unity
     guid: d71d40730925b114296af122421fcb14
+  - enabled: 1
+    path: Assets/Scenes/GetRing.unity
+    guid: b79d2e8ca41e07f4e987974367e70c6d
   m_configObjects: {}

@@ -579,7 +579,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533628696576047424}
-  m_LocalRotation: {x: -0.0040154248, y: 0.99523, z: 0.08555251, w: 0.04671133}
+  m_LocalRotation: {x: -0.004015426, y: 0.99523, z: 0.08555252, w: 0.04671133}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -657,8 +657,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533628696779984786}
-  m_LocalRotation: {x: -0.00074587914, y: 0.998774, z: 0.015891682, w: 0.046877664}
-  m_LocalPosition: {x: 0, y: 0.20000005, z: 0}
+  m_LocalRotation: {x: -0.0026934082, y: 0.9972507, z: 0.05738566, w: 0.046806168}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1201,6 +1201,7 @@ GameObject:
   - component: {fileID: 1533628697851658294}
   - component: {fileID: 1533628697851658298}
   - component: {fileID: 1533628697851658297}
+  - component: {fileID: 2902949658573836680}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1325,6 +1326,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   actionText: {fileID: 928387301006524969}
+--- !u!114 &2902949658573836680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533628697851658288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d22ed243699dd4847a30b2ac3c823c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1533628697953849342
 GameObject:
   m_ObjectHideFlags: 3
@@ -1349,7 +1362,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533628697953849342}
-  m_LocalRotation: {x: -0.0053089634, y: 0.99247545, z: 0.113112606, w: 0.046582036}
+  m_LocalRotation: {x: -0.005308964, y: 0.99247545, z: 0.11311261, w: 0.04658204}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2750,7 +2763,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5721980650789400738}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: 0.6}
+  m_LocalPosition: {x: 0, y: 0.28, z: 0.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3032,6 +3045,7 @@ MonoBehaviour:
   deathSound: {fileID: 8300000, guid: 7b6b33682babad5438d7b5414f5bcc87, type: 3}
   hitSound: {fileID: 8300000, guid: 13a58eb5deb3e46599037ffb43ae7600, type: 3}
   hitEffect: {fileID: 1727100609379742678}
+  healEffect: {fileID: 1042361525996828, guid: 6943138a0c4a8fd4ea27b63049acac96, type: 3}
   anim: {fileID: 1448768891157480084}
   weaponSocket: {fileID: 4341216751612229823}
 --- !u!114 &3871873335462535943
@@ -3071,6 +3085,7 @@ MonoBehaviour:
   SkillWindowButtonName: SkillWindow
   EquipWindowButtonName: EquipWindow
   StatusWindowButtonName: StatusWindow
+  UseHealKitName: UseHealKit
 --- !u!1 &7277916584705164507
 GameObject:
   m_ObjectHideFlags: 0

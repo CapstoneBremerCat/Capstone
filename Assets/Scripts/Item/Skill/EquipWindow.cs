@@ -18,6 +18,10 @@ namespace Game
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, RefreshEquippedWeapon);
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshEquippedSkills);
         }
+        private void OnEnable()
+        {
+            Initialize();
+        }
 
         public void Initialize()
         {

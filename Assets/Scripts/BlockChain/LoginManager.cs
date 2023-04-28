@@ -128,8 +128,8 @@ namespace BlockChain
                         //string temp = LoginManager.Instance.GetAddr();
                         //Debug.Log("loginAddr : " + temp);
                         //resourceText.text = temp;
-
-                        //SceneManager.LoadScene("main");
+                        yield return new WaitForSeconds(2.0f);
+                        NFTManager.Instance.InitNFT();
                     }
                 }
                 finally

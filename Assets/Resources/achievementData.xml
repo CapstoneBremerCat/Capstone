@@ -7,5 +7,5 @@
   <AchievementData code="32" name="Zombie Exterminator" description="Defeat 100 Zombies" isCompleted="False" />
   <AchievementData code="64" name="Zombie Annihilator" description="Defeat 1000 Zombies" isCompleted="False" />
   <AchievementData code="128" name="Giant Slayer" description="Defeat the Giant Zombie" isCompleted="False" />
-  <AchievementData code="256" name="Steel Destroyer" description="Defeat the Metal Zombie" isCompleted="False" />
+  <AchievementData code="256" name="Steel Destroyer" description="Defeat the Metal Zombie" isCompleted="True" />
 </root>

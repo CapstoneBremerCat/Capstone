@@ -98,6 +98,8 @@ namespace Game
         // Spawn an item
         public bool SpawnItem(Vector3 position)
         {
+            var isDrop = Random.Range(0, 10);
+            if (isDrop < 7) return false;
             var item = CreateItem(GetRandomItemPrefab());
             if (!item) return false;
             item.transform.position = position;

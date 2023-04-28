@@ -28,6 +28,7 @@ namespace Game
         #endregion
 
         [SerializeField] private List<Skill> skillPool = new List<Skill>();
+        [SerializeField] private List<StatusObject> statusObjectPool = new List<StatusObject>();
         private List<Skill> owenedSkills = new List<Skill>();
         private List<ActiveSkill> activeSkills = new List<ActiveSkill>();
         private List<PassiveSkill> passiveSkills = new List<PassiveSkill>();
@@ -43,10 +44,12 @@ namespace Game
         }
         public void LoadOwnedSkills(List<SkillInfo> owenedNFTSkills)
         {
+            activeSkills.Clear();
+            passiveSkills.Clear();
             if (owenedNFTSkills == null) return;
             foreach (SkillInfo skillInfo in owenedNFTSkills)
             {
-                Skill targetSkill = skillPool.Find(s => s.skillInfo.skillId == skillInfo.skillId);
+                Skill targetSkill = skillPool.Find(s => s.skillInfo.skillCode == skillInfo.skillCode);
                 if (targetSkill == null)
                 {
                     continue;
@@ -59,6 +62,8 @@ namespace Game
                         break;
                     case SkillType.Passive:
                         targetSkill.SetSkillInfo(skillInfo);
+                        var passive = targetSkill as PassiveSkill;
+                        passive.SetStatusData(GetStatusData(skillInfo.skillCode, skillInfo.skillValue));
                         passiveSkills.Add(targetSkill as PassiveSkill);
                         break;
                     default:
@@ -67,6 +72,25 @@ namespace Game
                 owenedSkills.Add(targetSkill);
             }
             isSkillLoaded = true;
+        }
+
+        // Returns the StatusData for the given skillCode and skillValue.
+        // Searches the statusObjectPool for the StatusObject with a matching skillCode.
+        // Returns null if no matching StatusObject is found.
+        private StatusData GetStatusData(int skillCode, int skillValue)
+        {
+            // Find the StatusObject in the statusObjectPool that matches the skillCode.
+            StatusObject target = statusObjectPool.Find(x => x.skillCode == skillCode);
+
+            if (target == null)
+            {
+                Debug.LogError("StatusObject with skillCode " + skillCode + " not found.");
+                return null;
+            }
+            // for basic value
+            if (skillValue == 0) skillValue = 10;
+            // Calculate the StatusData based on the target StatusObject and the skillValue.
+            return target.status.GetMultipliedStat(skillValue);
         }
     }
 }

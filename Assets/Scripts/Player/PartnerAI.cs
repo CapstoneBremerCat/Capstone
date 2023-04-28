@@ -15,6 +15,7 @@ namespace Game
 
     public class PartnerAI : Status
     {
+        [SerializeField] private Transform weaponSocket; // 무기 소켓
         [SerializeField] private Weapon weapon; // 총
         [SerializeField] [Range(0, 100)] private float followRange;
         [SerializeField] [Range(0, 100)] private float searchRange;
@@ -62,7 +63,8 @@ namespace Game
             // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
             if (agent) agent.isStopped = false;
             StartCoroutine(UpdatePath());
-
+            weapon = Instantiate(weapon, weaponSocket);
+            weapon.Init(weaponSocket);
         }
 
         // Gizmo를 이용하여 target을 찾는 가시 범위를 벌 수 있다.

@@ -50,4 +50,6 @@ MonoBehaviour:
     skillDescription: 
     skillImage: {fileID: 0}
     skillType: 1
-  cooldown: 5
+    skillCode: 2
+    skillValue: 0
+  Cooldown: 0

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 99.GodMode
   m_EditorClassIdentifier: 
   id: 8
+  skillCode: 99
   status:
     healthGauge:
       maxValue: 1000
@@ -25,10 +26,9 @@ MonoBehaviour:
       regenValue: 0
     moveSpeed: 2
     attackSpeed: 2
-    attackPower: 1000
-    defense: 100
-    damageIncrease: 100
-    damageReduction: 100
+    damage: 0
+    armor: 0
+    coolTimeReduce: 0
     runSpeedMult: 0.5
     runStamina: 0
     jumpPower: 0

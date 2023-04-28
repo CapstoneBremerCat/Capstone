@@ -50,8 +50,6 @@ namespace Game
 
         [SerializeField] private Transform startPoint; // 스테이지 시작 지점
 
-        [SerializeField] private AchievementController achievementController;   // 업적 관리
-
         [Header("Game")]
         [SerializeField] private int maxWave = 10;  // 최대 Wave 카운트.
         public int Wave { get; private set; }  // 현재 Wave 카운트.
@@ -115,6 +113,7 @@ namespace Game
             /* 
              * 시간의 변화에 따라 밝기 변화, 하늘 회전
             */
+            UIManager.Instance.UpdateHealthBar(player.GetHpRatio());
 
             // 시간이 변했을 경우에만 동작한다.
             if (lastSavedHour != playTime.Hour)
@@ -152,6 +151,11 @@ namespace Game
             isRankStart = true;
         }
 
+        public void SetMovement(bool value)
+        {
+            player.SetInputState(value);
+        }
+
         // 스테이지 시작 세팅
         public void InitNewStage()
         {
@@ -162,8 +166,9 @@ namespace Game
             if (!spawner && spawnerObj) spawner = spawnerObj.GetComponent<Spawner>();
             if (!startPoint) startPoint = GameObject.FindWithTag("Start").transform;
 
-            player = FindObjectOfType<Player>();
-            if(!player) player = LoadCharacter(playerPrefab).GetComponent<Player>();
+            //player = FindObjectOfType<Player>();
+            //if(!player) player = LoadCharacter(playerPrefab).GetComponent<Player>();
+            player = LoadCharacter(playerPrefab).GetComponent<Player>();
             if (startPoint && player)
             {
                 // 플레이어 위치를 시작지점으로 변경
@@ -191,10 +196,10 @@ namespace Game
             // 태양 초기화
             sun.InitSun();
 
+            // UIManager 초기화
+            UIManager.Instance.InitUI();
             // 현재 날짜 UI 정보를 갱신.
             UIManager.Instance.UpdateDateUI(playTime.Day);
-            // 웨이브 UI 비활성화
-            UIManager.Instance.DisableWaveUI();
 
             // 게임 시작 신호 활성화.
             isGameOver = false;
@@ -202,6 +207,7 @@ namespace Game
 
             Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, player);
         }
+
         private GameObject LoadCharacter(GameObject prefab)
         {
             // Check if the character prefab is assigned
@@ -328,8 +334,6 @@ namespace Game
 
         public void CheckKillAchievements()
         {
-            if (!achievementController) return;
-
             if (enemyKilledCount >= 1000)
             {
                 Mediator.Instance.Notify(this, GameEvent.ACHIEVEMENT_UNLOCKED, Achievement.ZombieAnnihilator);
@@ -344,13 +348,9 @@ namespace Game
             }
         }
 
-        public void OnPause()
+        public void SetPause(bool value)
         {
-            Time.timeScale = 0;
-        }
-        public void OffPause()
-        {
-            Time.timeScale = 1;
+            Time.timeScale = value ? 0 : 1;
         }
 
         public void StageClear()
@@ -364,18 +364,35 @@ namespace Game
 
         public void GameOver()
         {
+            if (isGameOver) return;
+            player.OnGodMode();
+            player.SetInputState(false);
+            isGameOver = true;
+            isGameStart = false;
+            var count = 0;
+            foreach (BlockChain.Item item in NFTManager.Instance.GetMyItems())
+            {
+                if (item.nftType[0].Equals("R"))
+                {
+                    count++;
+                }
+            }
+            score += count * 1000;
+
             // if Rank mode, Save highScore
-            if(isRankStart)
+            if (isRankStart)
             {
                 highScore = (score > highScore) ? score : highScore;
                 // score 저장
                 isRankStart = false;
             }
             else highScore = (score > highScore) ? score : highScore;
+
             if (NFTManager.Instance.GetWinner() < highScore)
+            {
                 NFTManager.Instance.newWinner(highScore);
-            isGameOver = true;
-            isGameStart = false;
+                isOwner = true;
+            }
             UIManager.Instance.EnableGameOverUI();
         }
 
@@ -395,6 +412,7 @@ namespace Game
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
 
+            yield return null;
             // 씬 로드가 완료될 때까지 대기
             while (!asyncLoad.isDone)
             {
@@ -416,9 +434,19 @@ namespace Game
                 StartCoroutine(MoveScene(currSceneIdx + 1));
         }
 
+        private bool isOwner;
         public void ToMain()
         {
-            StartCoroutine(MoveScene(0));
+            if(isOwner)
+            {
+                UIManager.Instance.ClearCanvas();
+                StartCoroutine(MoveScene("GetRing"));
+            }
+            else
+                StartCoroutine(MoveScene(0));
+            isOwner = false;
+            SetPause(false);
+            NFTManager.Instance.RefreshNFT();
         }
 
         public IEnumerator MoveScene(int sceneIndex)
@@ -432,6 +460,12 @@ namespace Game
                 yield return null;
             }
 
+/*            sun = null;
+            spawner = null;
+            startPoint = null;
+            player = null;
+            partner = null;*/
+
             // 이동한 씬이 Main 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Main"))
             {
@@ -440,8 +474,8 @@ namespace Game
             // 이동한 씬이 Stage 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Stage"))
             {
-                InitNewStage();
                 UIManager.Instance.SwitchCanvas(CavasIndex.Stage);
+                InitNewStage();
             }
             // 이동한 씬이 Cinema 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Cinema"))
@@ -469,8 +503,8 @@ namespace Game
             // 이동한 씬이 Stage 면 스테이지 초기화
             if (sceneName.Contains("Stage"))
             {
-                InitNewStage();
                 UIManager.Instance.SwitchCanvas(CavasIndex.Stage);
+                InitNewStage();
             }
             // 이동한 씬이 Cinema 면 스테이지 초기화
             if (sceneName.Contains("Cinema"))

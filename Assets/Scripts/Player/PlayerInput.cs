@@ -17,7 +17,7 @@ namespace Game
         [SerializeField] private string SkillWindowButtonName = "SkillWindow";
         [SerializeField] private string EquipWindowButtonName = "EquipWindow";
         [SerializeField] private string StatusWindowButtonName = "StatusWindow";
-
+        [SerializeField] private string UseHealKitName = "UseHealKit";
         public Vector2 moveInput { get; private set; }  // Horizontal, Vertical
         public bool run { get; private set; }
         public bool jump { get; private set; }
@@ -28,6 +28,7 @@ namespace Game
         public bool skillWindow { get; private set; }
         public bool equipWindow { get; private set; }
         public bool statusWindow { get; private set; }
+        public bool useHealKit { get; private set; }
 
         //public event System.Action<float, float> MoveHandler;
 
@@ -62,6 +63,7 @@ namespace Game
             skillWindow = Input.GetButtonDown(SkillWindowButtonName);
             equipWindow = Input.GetButtonDown(EquipWindowButtonName);
             statusWindow = Input.GetButtonDown(StatusWindowButtonName);
+            useHealKit = Input.GetButtonDown(UseHealKitName);
 
             Mediator.Instance.Notify(this, GameEvent.INPUT_UPDATED, null);
         }

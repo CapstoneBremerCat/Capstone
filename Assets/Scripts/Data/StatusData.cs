@@ -75,5 +75,25 @@ namespace Game
             coolTimeReduce -= target.coolTimeReduce;
         }
 
+        public StatusData GetMultipliedStat(int ratio)
+        {
+            float percentage = ratio * 0.01f;
+            StatusData statusData = new StatusData();
+            statusData.healthGauge.maxValue = healthGauge.maxValue * percentage;
+            statusData.healthGauge.maxValue = healthGauge.maxValue * percentage;
+            statusData.healthGauge.regenValue = healthGauge.regenValue * percentage;
+            statusData.manaGauge.maxValue = manaGauge.maxValue * percentage;
+            statusData.manaGauge.regenValue = manaGauge.regenValue * percentage;
+            statusData.staminaGauge.maxValue = staminaGauge.maxValue * percentage;
+            statusData.staminaGauge.regenValue = staminaGauge.regenValue * percentage;
+            statusData.moveSpeed = moveSpeed * percentage;
+            statusData.attackSpeed = attackSpeed * percentage;
+            statusData.damage = damage * percentage;
+            statusData.armor = armor * percentage;
+            statusData.coolTimeReduce = coolTimeReduce * percentage;
+
+            return statusData;
+        }
+
     }
 }

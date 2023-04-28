@@ -10,7 +10,7 @@ namespace Game
         [SerializeField] private TextMeshProUGUI[] texts;
         // Start is called before the first frame update
 
-        private void Start()
+        private void OnEnable()
         {
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);
@@ -30,7 +30,7 @@ namespace Game
             texts[7].text = string.Format("-{0:F1}%", player.coolTimeReduce);
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
             Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);

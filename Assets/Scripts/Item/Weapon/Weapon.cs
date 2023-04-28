@@ -59,7 +59,8 @@ namespace Game
             projectilePool = new List<GameObject>();
             for (int i = 0; i < poolSize; i++)
             {
-                GameObject projectileObj = Instantiate(projectilePrefab, transform);
+                GameObject projectileObj = Instantiate(projectilePrefab, Vector3.zero, Quaternion.identity);
+                projectileObj.transform.SetParent(null);
                 projectileObj.SetActive(false);
                 projectilePool.Add(projectileObj);
             }
@@ -132,7 +133,8 @@ namespace Game
             }
 
             // 풀에 빈 공간이 없으면 새로운 오브젝트를 생성하여 추가한다.
-            GameObject projectileObj = Instantiate(projectilePrefab, transform);
+            GameObject projectileObj = Instantiate(projectilePrefab, Vector3.zero, Quaternion.identity);
+            projectileObj.transform.SetParent(null);
             projectileObj.SetActive(false);
             projectilePool.Add(projectileObj);
             return projectileObj;

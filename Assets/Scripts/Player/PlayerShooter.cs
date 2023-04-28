@@ -9,7 +9,6 @@ namespace Game
         [SerializeField] private Weapon weapon;   // 무기 오브젝트
         [SerializeField] private Vector3 ScreenCenter;    // 에임 위치(정중앙)
         private Animator anim;
-
         // Start is called before the first frame update
         private void Awake()
         {

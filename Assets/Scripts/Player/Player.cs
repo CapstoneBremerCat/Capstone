@@ -32,6 +32,7 @@ namespace Game
         [SerializeField] private AudioClip deathSound;  // Sound effect for death
         [SerializeField] private AudioClip hitSound; // Sound effect for getting hit
         [SerializeField] private ParticleSystem hitEffect;  // Particle effect for getting hit
+        [SerializeField] private GameObject healEffect;  // Particle effect for getting hit
         [SerializeField] private Animator anim; // Animation
         private AudioSource audioSource;    // Audio source for playing sounds
         private int animSpeed = 0;   // Animation speed
@@ -43,6 +44,7 @@ namespace Game
         private bool isCoolTime;
         private bool isRun;
         public bool inputState { get; private set; }
+        private Inventory inventory;
         private void Awake()
         {
             OnDeath += () =>
@@ -64,6 +66,7 @@ namespace Game
         private void Start()
         {
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, InitWeaponStatus);
+            inventory = GameObject.FindWithTag("Inventory")?.GetComponent<Inventory>();
         }
         public int GetEquippedPassiveSkillCount()
         {
@@ -91,7 +94,7 @@ namespace Game
         }
         public void UnequipActiveSkill()
         {
-            Destroy(equippedActiveSkill);
+            if(equippedActiveSkill) Destroy(equippedActiveSkill);
             equippedActiveSkill = null;
         }
 
@@ -102,6 +105,8 @@ namespace Game
             SetPlayerPosition(initPos);
             SetInputState(true);
             //Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
+            UnequipActiveSkill();
+            equippedPassiveSkills.Clear();
         }
 
         public void SetPlayerPosition(Vector3 pos)
@@ -142,6 +147,27 @@ namespace Game
             return equippedEquipmentIds;
         }
 
+        public void UseHealKit()
+        {
+            // if inventory does not have healkit or Hp is full, return.
+            if (!inventory.TryUseHealKit() || GetHpRatio() == 1) return;
+            RestoreHealth(100);
+            UIManager.Instance.UpdateHealthBar(GetHpRatio());
+            var hitInstance = Instantiate(healEffect, transform.position, Quaternion.identity);
+
+            //Destroy hit effects depending on particle Duration time
+            var hitPs = hitInstance.GetComponent<ParticleSystem>();
+            if (hitPs != null)
+            {
+                Destroy(hitInstance, hitPs.main.duration);
+            }
+            else
+            {
+                var hitPsParts = hitInstance.transform.GetChild(0).GetComponent<ParticleSystem>();
+                Destroy(hitInstance, hitPsParts.main.duration);
+            }
+        }
+
 /*        public void LoadSavedEquipments()
         {
             List<int> equippedEquipmentIds = DataManager.Instance.LoadEquipmentsById();
@@ -166,15 +192,12 @@ namespace Game
         public void SetInputState(bool value)
         {
             inputState = value;
+            Rotate();
+            MoveAnim(0, 0);
         }
 
         public void OnInputUpdated()
         {
-            // if inputState is false, return.
-            if (!inputState) return;
-            // 입력값에 따라 적절한 처리를 수행합니다.
-            if (playerShooter && playerInput.fire) playerShooter.ShootUpdate(playerInput.fire);
-            if (equippedActiveSkill && playerInput.skillSlot1) UseSkill(equippedActiveSkill);
             if (playerInput.inventory) UIManager.Instance.ToggleInventoryUI();
             if (playerInput.skillWindow) UIManager.Instance.ToggleSkillWindowUI();
             if (playerInput.equipWindow) UIManager.Instance.ToggleEquipWindowUI();
@@ -183,6 +206,16 @@ namespace Game
                 Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
                 UIManager.Instance.ToggleStatusUI();
             }
+            // if inputState is false, return.
+            if (!inputState) return;
+            // 입력값에 따라 적절한 처리를 수행합니다.
+            if (playerShooter && playerInput.fire)
+            {
+                playerShooter.ShootUpdate(playerInput.fire);
+            }
+            if (equippedActiveSkill && playerInput.skillSlot1) UseSkill(equippedActiveSkill);
+
+            if (playerInput.useHealKit) UseHealKit();
         }
 
         // 물리 갱신 주기에 맞춰 회전, 이동 실행.  
@@ -236,7 +269,7 @@ namespace Game
             var moveDirection = Vector3.Normalize(transform.forward * moveInput.y + transform.right * moveInput.x);
 
             // �̵� �Է��� ���� ��� ĳ���� �ٵ� ������ ���� �̵��������� ����
-            if (moveInput.magnitude != 0) charBody.forward = moveDirection;
+            if (!playerInput.fire && moveInput.magnitude != 0) charBody.forward = moveDirection;
 
             var smoothTime = charController.isGrounded ? speedSmoothTime : speedSmoothTime / airControlPercent;
 
@@ -272,6 +305,9 @@ namespace Game
 
             transform.eulerAngles = Vector3.up * Mathf.SmoothDampAngle(transform.eulerAngles.y, targetRotation,
                                         ref turnSmoothVelocity, turnSmoothTime);
+            Vector3 camForward = cam.transform.forward;
+            camForward.y = 0; // y 축 값 제거
+            charBody.forward = camForward;
         }
 
         public void Jump()
@@ -308,6 +344,7 @@ namespace Game
         public void MoveAnim(float h, float v)
         {
             float value = Mathf.Abs(v) > Mathf.Abs(h) ? v : h;
+            if (!inputState) value = 0.0f;
             // �޸��� �Է� �� �� �ι�� ����
             if (anim) anim.SetFloat("Magnitude", value * animSpeed);
         }

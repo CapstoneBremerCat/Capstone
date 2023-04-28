@@ -23,15 +23,15 @@ public enum Achievement
 public class AchievementController : MonoBehaviour
 {
     [SerializeField] private GameObject achievementUnlockedWindow;
+    [SerializeField] private GameObject achievementUnlockedPopup;
     [SerializeField] private TextMeshProUGUI achievementUnlockedText;
 
     [SerializeField] private GameObject achievementsPanel;
     [SerializeField] private GameObject achievementSlotPrefab;
     [SerializeField] private List<AchievementSlot> achievementSlotList;
     [SerializeField] private TextMeshProUGUI achievedText;
-    [SerializeField] private TextMeshProUGUI tokensText;
+    [SerializeField] private TextMeshProUGUI ticketsText;
     [SerializeField] private Button getNFTButton;
-    private int tokens;
 
     public void OpenAchievementWindow()
     {
@@ -41,15 +41,13 @@ public class AchievementController : MonoBehaviour
             // Refresh the slot's achievement state
             slot.RefreshUI();
         }
-        // Update the tokens and achieved text elements with the initial values
-        UpdateTokensText();
+        // Update the tickets and achieved text elements with the initial values
+        UpdateTicketsText();
         UpdateAchievedText();
     }
 
-    void Start()
+    public void initAchievement()
     {
-        // Set the initial value of tokens
-        tokens = 0;
         var index = 1;
         achievementSlotList.Clear();
         // Initialize each achievement slot
@@ -60,23 +58,23 @@ public class AchievementController : MonoBehaviour
 
             AchievementSlot slot = Instantiate(achievementSlotPrefab, achievementsPanel.transform).GetComponent<AchievementSlot>();
             // Set the slot's achievement information
-            bool isEarned = (achievementData.code & 0/*블록체인 데이터*/) != 0;
+            bool isEarned = (achievementData.code & NFTManager.Instance.achievementsCode) != 0;
             slot.SetAchievementSlot(achievementData, isEarned);
 
-             // Set the slot's complete button click listener
+            // Set the slot's complete button click listener
             slot.CompleteButton.onClick.AddListener(() => {
                 // If the achievement is not yet completed, mark it as completed and add a token
                 if (slot.IsCompleted)
                 {
                     slot.OnComplete();
-                    tokens++;
+                    NFTManager.Instance.AddRewardTickets();
                     UpdateAchievedText();
-                    UpdateTokensText();
+                    UpdateTicketsText();
 
                     // Save achievement completion to database
                     AchievementDatabase.Instance.SetAchievementData(slot.achievementData);
                     // save
-                    // slot.IsEarned;
+
                 }
             });
             achievementSlotList.Add(slot);
@@ -92,23 +90,30 @@ public class AchievementController : MonoBehaviour
         // Set the getNFTButton click listener
         getNFTButton.onClick.AddListener(() => {
             // If the player has at least one token, spend one token and give the player an NFT
-            if (tokens > 0)
+            if (OwnedRewardTickets.GetOwnedRewardTickets() > 0)
             {
-                tokens--;
-                UpdateTokensText();
+                NFTManager.Instance.UseRewardTicket();
+                UpdateTicketsText();
                 GivePlayerNFT();
+
             }
         });
 
-        // Update the tokens and achieved text elements with the initial values
-        UpdateTokensText();
+        // Update the tickets and achieved text elements with the initial values
+        UpdateTicketsText();
         UpdateAchievedText();
+    }
+
+    void Start()
+    {
         Mediator.Instance.RegisterEventHandler(GameEvent.ACHIEVEMENT_UNLOCKED, UnlockAchievement);
+        Mediator.Instance.RegisterEventHandler(GameEvent.NFTTICKET_EARNED, RefreshTicketsText);
     }
 
     private void OnDestroy()
     {
         Mediator.Instance.UnregisterEventHandler(GameEvent.ACHIEVEMENT_UNLOCKED, UnlockAchievement);
+        Mediator.Instance.UnregisterEventHandler(GameEvent.NFTTICKET_EARNED, RefreshTicketsText);
     }
 
     public void UnlockAchievement(object achievement)
@@ -117,13 +122,14 @@ public class AchievementController : MonoBehaviour
         {
             if(slot.achievementData.code == (int)achievement)
             {
-                if (!slot.IsCompleted /*&& !slot.IsEarned*/)
+                if (!slot.IsCompleted && !slot.IsEarned)
                 {
                     slot.Complete();
                     AchievementDatabase.Instance.SetAchievementData(slot.achievementData);
                     // complete 연출
                     achievementUnlockedText.text = slot.achievementData.name;
                     StartCoroutine(ShowAchievementPopup());
+                    NFTManager.Instance.MintRewardNFT(slot.achievementData.code);
                 }
                 break;
             }
@@ -132,13 +138,15 @@ public class AchievementController : MonoBehaviour
 
     private IEnumerator ShowAchievementPopup()
     {
-        Animation animation = achievementUnlockedWindow.GetComponent<Animation>();
+        Animation animation = achievementUnlockedPopup.GetComponent<Animation>();
         achievementUnlockedWindow.gameObject.SetActive(true);
+        achievementUnlockedPopup.gameObject.SetActive(true);
         do
         {
             yield return null;
         } while (animation.isPlaying);
         achievementUnlockedWindow.gameObject.SetActive(false);
+        achievementUnlockedPopup.gameObject.SetActive(false);
     }
 
     private void UpdateAchievedText()
@@ -155,12 +163,16 @@ public class AchievementController : MonoBehaviour
         achievedText.text = string.Format("{0} / {1}", achievedCount, achievementSlotList.Count);
     }
 
-    private void UpdateTokensText()
+    private void UpdateTicketsText()
     {
-        // Update the tokens text element with the current value of tokens
-        tokensText.text = tokens.ToString();
+        // Update the tickets text element with the current value of tickets
+        ticketsText.text = OwnedRewardTickets.GetOwnedRewardTickets().ToString();
     }
-
+    public void RefreshTicketsText(object tickets)
+    {
+        // Update the tickets text element with the current value of tickets
+        ticketsText.text = ((int)tickets).ToString();
+    }
     private void GivePlayerNFT()
     {
         // Give the player an NFT

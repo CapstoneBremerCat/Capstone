@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillInfo:
-    skillId: 4
+    skillId: 6
     skillName: Cool time buff
     skillDescription: This is dummy.
     skillImage: {fileID: 21300000, guid: 74061e84e25199f46b523c3187e1af34, type: 3}
     skillType: 0
-  statusObject: {fileID: 11400000, guid: 7b1da0062eb441d42b6eba035cc9f3be, type: 2}
+    skillCode: 6
+    skillValue: 0

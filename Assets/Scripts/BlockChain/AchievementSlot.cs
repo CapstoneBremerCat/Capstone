@@ -31,19 +31,22 @@ public class AchievementSlot : MonoBehaviour
     public void RefreshUI()
     {
         // If the achievement has already been earned, disable the complete button
-        completeButton.interactable = !IsEarned;
+        completeButton.interactable = IsCompleted;
 
-        // If the achievement has not yet been completed, hide the complete button
-        completeButton.gameObject.SetActive(IsCompleted);
+        // If the achievement has not yet been completed and not earned, hide the complete button
+        completeButton.gameObject.SetActive(IsCompleted | IsEarned);
     }
     public void Complete()
     {
-        achievementData.isCompleted = IsCompleted = true;
+        IsCompleted = true;
+        achievementData.isCompleted = true; 
     }
 
     public void OnComplete()
     {
+        IsCompleted = false;
         IsEarned = true;
+        achievementData.isCompleted = false; 
         CompleteButton.interactable = false;
     }
 }

@@ -12,6 +12,7 @@ TagManager:
   - UI
   - Spawner
   - Sun
+  - Inventory
   layers:
   - Default
   - TransparentFX

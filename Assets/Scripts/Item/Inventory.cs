@@ -24,6 +24,11 @@ namespace Game
             Mediator.Instance.RegisterEventHandler(GameEvent.ITEM_PICKED_UP, AcquireItem);
         }
 
+        private void OnEnable()
+        {
+            InitInventory();
+        }
+
         public void InitInventory()
         {
             for (int i = 0; i < slots.Length; i++)
@@ -86,6 +91,19 @@ namespace Game
                 }
             }
             return null;
+        }
+
+        public bool TryUseHealKit()
+        {
+            foreach (Slot slot in slots)
+            {
+                if (slot.Item?.itemType != null && slot.Item?.itemType == Item.ItemType.Used)
+                {
+                    slot.SetSlotCount(-1);
+                    return true;
+                }
+            }
+            return false;
         }
         private void OnDisable()
         {
