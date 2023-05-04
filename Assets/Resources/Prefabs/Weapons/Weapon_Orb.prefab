@@ -51,7 +51,7 @@ MonoBehaviour:
   hitRange: 100
   timeBetFire: 0.64
   reloadTime: 0.64
-  damage: 30
+  damage: 35
   muzzleFlashEffect: {fileID: 0}
   shootSound: {fileID: 0}
   reloadSound: {fileID: 0}
