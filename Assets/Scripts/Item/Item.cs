@@ -16,7 +16,8 @@ namespace Game
         {
             Weapon,
             Used,
-            ETC
+            ETC,
+            Partner
         }
     }
 }

@@ -175,13 +175,7 @@ namespace Game
                 player.Init(startPoint.position);
                 player.gameObject.SetActive(true);
             }
-            // 파트너 위치도 변경
-            if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
-            if (partner)
-            {
-                partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
-                partner.gameObject.SetActive(true);
-            }
+ 
             //CurFatigue = maxFatigue;
 
             // 게임모드 초기화
@@ -221,6 +215,17 @@ namespace Game
             GameObject character = Instantiate(prefab);
 
             return character;
+        }
+
+        public void SpawnPartner(GameObject partnerPrefab)
+        {
+            // 파트너 위치도 변경
+            if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
+            if (partner)
+            {
+                partner.transform.position = player.transform.position + new Vector3(1, 0, 0);
+                partner.gameObject.SetActive(true);
+            }
         }
 
         public void EquipSkill(Skill skill)
