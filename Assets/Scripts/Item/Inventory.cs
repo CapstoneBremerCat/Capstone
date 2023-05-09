@@ -44,6 +44,10 @@ namespace Game
 
         public void AcquireItem(Item _item, int _count = 1)
         {
+            if (_item.itemType == Item.ItemType.Partner)
+            {
+                GameManager.Instance.SpawnPartner(_item.itemPrefab);
+            }
             // looks for an existing slot that contains the same item.
             Slot sameItemSlot = GetSameItemSlot(_item);
             if (sameItemSlot != null)

@@ -9328,6 +9328,7 @@ GameObject:
   - component: {fileID: 1863052250637835292}
   - component: {fileID: 1863052250647259518}
   - component: {fileID: 9030154647160400197}
+  - component: {fileID: 1134636671}
   m_Layer: 8
   m_Name: BossAgent
   m_TagString: Enemy
@@ -9438,6 +9439,19 @@ MonoBehaviour:
   BossBody: {fileID: 1863052250637867803}
   BossMomentHide: {fileID: 9030154645950295595}
   FallingWarning: {fileID: 7900542571367836056}
+--- !u!114 &1134636671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1863052250637867807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f81bc0a16ab72148a59dd0e7fdaf233, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  achievement: 128
 --- !u!1 &7900542571367836056
 GameObject:
   m_ObjectHideFlags: 0
