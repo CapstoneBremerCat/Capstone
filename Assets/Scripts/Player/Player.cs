@@ -78,7 +78,7 @@ namespace Game
             ApplyStatus(passive.statusData);
             // Notify the mediator that equipment was equipped
             Mediator.Instance.Notify(this, GameEvent.EQUIPPED_PASSIVE, this);
-
+            SoundManager.Instance.OnPlaySFX("Equip");
             //playerStatusWindow.RefreshStatusUI(this);
         }
         public void UnequipPassiveSkill(PassiveSkill passive)
@@ -87,15 +87,18 @@ namespace Game
             RemoveStatus(passive.statusData);
             // Notify the mediator that equipment was equipped
             Mediator.Instance.Notify(this, GameEvent.EQUIPPED_PASSIVE, this);
+            SoundManager.Instance.OnPlaySFX("Equip");
         }
         public void EquipActiveSkill(ActiveSkill active)
         {
             equippedActiveSkill = Instantiate(active, transform);
+            SoundManager.Instance.OnPlaySFX("Equip");
         }
         public void UnequipActiveSkill()
         {
             if(equippedActiveSkill) Destroy(equippedActiveSkill);
             equippedActiveSkill = null;
+            SoundManager.Instance.OnPlaySFX("Equip");
         }
 
         public void Init(Vector3 initPos)
@@ -114,6 +117,11 @@ namespace Game
             charController.enabled = false;
             this.transform.position = pos;
             charController.enabled = true;
+        }
+
+        public Vector3 GetCharacterPosition()
+        {
+            return charBody.position;
         }
 
         private void InitWeaponStatus(object weaponItem)
@@ -153,6 +161,7 @@ namespace Game
             if (!inventory.TryUseHealKit() || GetHpRatio() == 1) return;
             RestoreHealth(100);
             UIManager.Instance.UpdateHealthBar(GetHpRatio());
+            SoundManager.Instance.OnPlaySFX("Item_Heal");
             var hitInstance = Instantiate(healEffect, transform.position, Quaternion.identity);
 
             //Destroy hit effects depending on particle Duration time

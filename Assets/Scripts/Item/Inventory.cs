@@ -23,7 +23,10 @@ namespace Game
             slots = go_SlotsParent.GetComponentsInChildren<Slot>();
             Mediator.Instance.RegisterEventHandler(GameEvent.ITEM_PICKED_UP, AcquireItem);
         }
-
+        private void OnDestroy()
+        {
+            Mediator.Instance.UnregisterEventHandler(GameEvent.ITEM_PICKED_UP, AcquireItem);
+        }
         private void OnEnable()
         {
             InitInventory();
@@ -108,10 +111,6 @@ namespace Game
                 }
             }
             return false;
-        }
-        private void OnDisable()
-        {
-            Mediator.Instance.UnregisterEventHandler(GameEvent.ITEM_PICKED_UP, AcquireItem);
         }
     }
 }

@@ -87,6 +87,7 @@ namespace Game
             if (player) player.gameObject.SetActive(false);
             if (partner) partner.gameObject.SetActive(false);
             UIManager.Instance.SwitchCanvas(CavasIndex.Main);
+            SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyMain);
         }
 
         // Update is called once per frame
@@ -124,11 +125,13 @@ namespace Game
                         gameMode = GAMEMODE.MORNING;
                         //EndWave();
                         NextDay();
+                        SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageSun);
                         // 조명 off
                         break;
                     case (int)GAMEMODE.NIGHT:
                         gameMode = GAMEMODE.NIGHT;
                         StartCoroutine(StartWave());
+                        SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
                         // 조명 On
                         break;
                 }
@@ -223,7 +226,7 @@ namespace Game
             if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
             if (partner)
             {
-                partner.transform.position = player.transform.position + new Vector3(1, 0, 0);
+                partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
                 partner.gameObject.SetActive(true);
             }
         }
@@ -282,6 +285,7 @@ namespace Game
 
         public IEnumerator StartWave()
         {
+
             // 웨이브 시작 연출 실행
             UIManager.Instance.PlayWaveStartUI();
 
@@ -399,6 +403,7 @@ namespace Game
                 isOwner = true;
             }
             UIManager.Instance.EnableGameOverUI();
+            SoundManager.Instance.OnPlaySFX("GameOver");
         }
 
 
@@ -485,6 +490,7 @@ namespace Game
             // 이동한 씬이 Cinema 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Cinema"))
             {
+                SoundManager.Instance.StopBGM();
                 UIManager.Instance.SwitchCanvas(CavasIndex.Cinema);
             }
         }
@@ -514,6 +520,7 @@ namespace Game
             // 이동한 씬이 Cinema 면 스테이지 초기화
             if (sceneName.Contains("Cinema"))
             {
+                SoundManager.Instance.StopBGM();
                 UIManager.Instance.SwitchCanvas(CavasIndex.Cinema);
             }
         }

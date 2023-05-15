@@ -2,17 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class Window : MonoBehaviour, IPointerDownHandler
+using Game;
+namespace Game
 {
-    [SerializeField] private RectTransform dragRectTransform; //움직일대상지정
-
-    private void OnEnable()
+    public class Window : MonoBehaviour, IPointerDownHandler
     {
-        dragRectTransform.SetAsLastSibling();
-    }
+        [SerializeField] private RectTransform dragRectTransform; //움직일대상지정
 
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        dragRectTransform.SetAsLastSibling();
+        private void OnEnable()
+        {
+            SoundManager.Instance.OnPlaySFX("Window");
+            dragRectTransform.SetAsLastSibling();
+        }
+
+        public void OnPointerDown(PointerEventData eventData)
+        {
+            dragRectTransform.SetAsLastSibling();
+        }
     }
 }

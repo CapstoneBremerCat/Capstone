@@ -130,6 +130,7 @@ public class AchievementController : MonoBehaviour
                     achievementUnlockedText.text = slot.achievementData.name;
                     StartCoroutine(ShowAchievementPopup());
                     NFTManager.Instance.MintRewardNFT(slot.achievementData.code);
+                    SoundManager.Instance.OnPlaySFX("Achieve");
                 }
                 break;
             }

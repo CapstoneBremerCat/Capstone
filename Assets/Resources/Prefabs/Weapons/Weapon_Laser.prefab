@@ -49,9 +49,9 @@ MonoBehaviour:
   firePos: {fileID: 5415851943861316259}
   _weaponId: 10003
   hitRange: 100
-  timeBetFire: 2
-  reloadTime: 2
-  damage: 100
+  timeBetFire: 3
+  reloadTime: 3
+  damage: 200
   muzzleFlashEffect: {fileID: 0}
   shootSound: {fileID: 0}
   reloadSound: {fileID: 0}

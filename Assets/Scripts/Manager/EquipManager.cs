@@ -78,6 +78,7 @@ namespace Game
                 PlayerPrefs.SetInt(EQUIPPED_WEAPON_KEY, weaponItem.itemCode);
                 PlayerPrefs.Save();
             }
+            SoundManager.Instance.OnPlaySFX("Equip");
             Mediator.Instance.Notify(this, GameEvent.EQUIPPED_WEAPON, weaponItem);
         }
 

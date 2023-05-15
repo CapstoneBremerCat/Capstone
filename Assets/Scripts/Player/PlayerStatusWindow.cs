@@ -15,6 +15,7 @@ namespace Game
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_PASSIVE, RefreshStatusUI);
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_SKILL, RefreshStatusUI);
             Mediator.Instance.RegisterEventHandler(GameEvent.REFRESH_STATUS, RefreshStatusUI);
+
         }
 
         public void RefreshStatusUI(object playerObject)

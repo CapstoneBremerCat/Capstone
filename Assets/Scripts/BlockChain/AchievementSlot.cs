@@ -16,6 +16,11 @@ public class AchievementSlot : MonoBehaviour
     public Button CompleteButton { get { return completeButton; } }
     public AchievementData achievementData { get; private set; }
 
+    private void Start()
+    {
+        completeButton.onClick.AddListener(() => SoundManager.Instance.OnPlaySFX("Get_Button"));
+    }
+
     public void SetAchievementSlot(AchievementData achievementData, bool isEarned)
     {
         this.achievementData = achievementData;

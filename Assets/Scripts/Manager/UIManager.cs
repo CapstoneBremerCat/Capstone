@@ -37,8 +37,10 @@ namespace Game
 
         [SerializeField] private GameObject optionWindow;    // 옵션 창
         [SerializeField] private GameObject[] canvasList;    // 캔버스 목록
+        [SerializeField] private Button[] defaultButtons;    // 기본 버튼음을 사용하는 버튼 목록
         [Header("Main UI")]
         [SerializeField] private Button startButton;    // 시작 버튼
+
         [SerializeField] private Button quitButton;    // 종료 버튼
         [Header("Cinema UI")]
         [SerializeField] private Button skipButton;
@@ -48,6 +50,15 @@ namespace Game
 
         private void Start()
         {
+            for(int i = 0; i < defaultButtons.Length; i++)
+            {
+                int index = i; // i를 임시 변수로 복사
+                defaultButtons[index].onClick.AddListener(() => {
+                    StartCoroutine(BtnInterval(defaultButtons[index]));
+                    SoundManager.Instance.OnPlaySFX("Default_Button");
+                });
+            }
+
             // 시작 버튼
             if (startButton) startButton.onClick.AddListener(() => GameManager.Instance.LoadScene());
             // 종료 버튼
@@ -214,6 +225,12 @@ namespace Game
         {
             stageUIController.InitUI();
             if (null != RestartEvent) RestartEvent();
+        }
+        private IEnumerator BtnInterval(Button btn)
+        {
+            btn.interactable = false;
+            yield return new WaitForSeconds(0.2f);
+            btn.interactable = true;
         }
     }
 }
