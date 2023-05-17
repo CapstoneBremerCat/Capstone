@@ -91,6 +91,11 @@ namespace Game
             ui.SetActive(active);
         }
 
+        public bool IsPlayerWindowOpen()
+        {
+            return statusWindowUI.activeSelf | inventoryUI.activeSelf | skillWindowUI.activeSelf | equipWindowUI.activeSelf;
+        }
+
         public void SetEnableActiveSkill(bool value)
         {
 

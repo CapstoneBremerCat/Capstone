@@ -54,7 +54,7 @@ namespace Game
             {
                 if (slider) slider.value = GetHpRatio();
                 // 더 이상 피격 판정이 되지 않게 collider를 끈다.
-                //if (collider) collider.enabled = false;
+                if (collider) collider.enabled = false;
                 if (agent && agent.enabled) agent.isStopped = true;  // navigation 정지.
                 if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
                 if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.

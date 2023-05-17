@@ -187,11 +187,13 @@ namespace Game
             Wave = 0;
             // 적 제거 수 초기화.
             enemyKilledCount = 0;
+            spawnCount = 0;
+            UIManager.Instance.UpdateWaveUI(Wave, spawnCount);
             // 플레이 시작 시간 저장.
             playTime = new Timer();
             playTime.SetTimeScale(timeScale);
             // 태양 초기화
-            sun.InitSun();
+            if(sun) sun.InitSun();
 
             // UIManager 초기화
             UIManager.Instance.InitUI();
@@ -226,7 +228,7 @@ namespace Game
             if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
             if (partner)
             {
-                partner.transform.position = startPoint.position + new Vector3(3, 0, 0);
+                partner.transform.localPosition = player.GetCharacterPosition() + new Vector3(3, 0, 0);
                 partner.gameObject.SetActive(true);
             }
         }
@@ -295,7 +297,7 @@ namespace Game
             // 웨이브에 맞춰 적 스폰
             Wave++;
             spawnCount += EnemySpawnCount;
-            if (spawnCount < 200) spawner.SpawnEnemy(spawnCount, Wave);
+            if (spawnCount < 100) spawner.SpawnEnemy(spawnCount, Wave);
 
             // 웨이브 UI 활성화
             UIManager.Instance.EnableWaveUI();

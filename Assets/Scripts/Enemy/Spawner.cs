@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Game;
 namespace Game
 {
@@ -10,6 +11,7 @@ namespace Game
 
         [SerializeField] private List<GameObject> enemyPrefabs = new List<GameObject>();  // 다양한 적 프리팹을 담는 리스트
         [SerializeField] private Transform[] spawnPoints;   // 적 AI를 소환할 위치들
+        [SerializeField] private GameObject spawnParent;   // 적 AI를 소환할 위치들
 
         // spawnCount만큼 적을 생성
         public void SpawnEnemy(int spawnCount, int wave)
@@ -18,7 +20,8 @@ namespace Game
             for (int i = 0; i < spawnCount; i++)
             {
                 // 적 생성 및 배치
-                SetEnemyPos(CreateEnemy(wave));
+                GameObject enemyInstance = CreateEnemy(wave);
+                SetEnemyPos(enemyInstance);
             }
         }
 
@@ -49,16 +52,21 @@ namespace Game
                 }
             }
             // If all objects in the pool are active, create a new one
-            var newEnemy = Instantiate(enemyPrefab);
+            var newEnemy = Instantiate(enemyPrefab, spawnParent.transform);
             enemies.Add(newEnemy);
             return newEnemy;
         }
 
         // 적 배치
-        private void SetEnemyPos(GameObject enemyPrefab)
+        private void SetEnemyPos(GameObject enemyInstance)
         {
             var spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)];
-            enemyPrefab.transform.position = spawnPoint.position;
+            enemyInstance.transform.position = spawnPoint.position;
+
+            NavMeshAgent navMeshAgent = enemyInstance.GetComponent<NavMeshAgent>();
+            navMeshAgent.enabled = true; // NavMeshAgent 활성화
+
+            navMeshAgent.Warp(spawnPoint.position); // NavMesh에 배치된 위치로 순간이동
         }
     }
 }

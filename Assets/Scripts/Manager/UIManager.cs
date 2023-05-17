@@ -221,6 +221,11 @@ namespace Game
             if (stageUIController) stageUIController.ToggleEquipWindowUI();
         }
 
+        public bool IsWindowOpen()
+        {
+            return stageUIController.IsPlayerWindowOpen();
+        }
+
         public void RestartGame()
         {
             stageUIController.InitUI();

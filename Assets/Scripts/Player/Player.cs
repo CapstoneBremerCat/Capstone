@@ -218,7 +218,7 @@ namespace Game
             // if inputState is false, return.
             if (!inputState) return;
             // 입력값에 따라 적절한 처리를 수행합니다.
-            if (playerShooter && playerInput.fire)
+            if (playerShooter && playerInput.fire && !UIManager.Instance.IsWindowOpen())
             {
                 playerShooter.ShootUpdate(playerInput.fire);
             }
