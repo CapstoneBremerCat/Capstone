@@ -16,16 +16,11 @@ namespace Game
         [SerializeField]
         private LayerMask layerMask;
 
-        // ÇÊ¿äÇÑ ÄÄÆ÷³ÍÆ®
-        [SerializeField]
-        private Text actionText;
-
         // Update is called once per frame
         void Update()
         {
             CheckItem();
             TryAction();
-
         }
 
         private void TryAction()
@@ -67,15 +62,17 @@ namespace Game
         private void ItemInfoAppear()
         {
             pickupActivated = true;
-            actionText.gameObject.SetActive(true);
-            actionText.text = hitInfo.transform.GetComponent<ItemPickUp>().Item.name + " È¹µæ " + "<color=yellow>" + "(E)" + "</color>";
 
+            string itemName = hitInfo.transform.GetComponent<ItemPickUp>().Item.name;
+            string formattedString = string.Format("{0} È¹µæ <color=yellow>(E)</color>", itemName);
+
+            UIManager.Instance.DisplayItemInfoText(formattedString);
         }
 
         private void InfoDisappear()
         {
             pickupActivated = false;
-            actionText.gameObject.SetActive(false);
+            UIManager.Instance.DisableItemInfoText();
         }
     }
 }

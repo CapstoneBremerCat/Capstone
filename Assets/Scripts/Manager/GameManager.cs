@@ -44,7 +44,7 @@ namespace Game
         [SerializeField] private GameObject playerPrefab;     // 플레이어 프리팹
         [SerializeField] private Player player;     // 플레이어
 
-        [SerializeField] private GameObject partnerPrefab;     // 파트너 프리팹
+        [SerializeField] private GameObject[] partnerPrefabs;     // 파트너 프리팹
         [SerializeField] private PartnerAI partner;     // 파트너
         [SerializeField] private Spawner spawner; // 스포너
 
@@ -178,7 +178,13 @@ namespace Game
                 player.Init(startPoint.position);
                 player.gameObject.SetActive(true);
             }
- 
+
+            // 랭크모드에선 랜덤한 동료가 추가
+            if (isRankStart)
+            {
+                var index = Random.Range(0,partnerPrefabs.Length);
+                SpawnPartner(partnerPrefabs[index]);
+            }
             //CurFatigue = maxFatigue;
 
             // 게임모드 초기화
@@ -224,11 +230,17 @@ namespace Game
 
         public void SpawnPartner(GameObject partnerPrefab)
         {
+            // 파트너가 죽은 상태면 파트너 초기화.
+            if (partner)
+            {
+                if (partner.isDead) partner = null;
+                else return;
+            }
             // 파트너 위치도 변경
             if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
             if (partner)
             {
-                partner.transform.localPosition = player.GetCharacterPosition() + new Vector3(3, 0, 0);
+                partner.SetPartnerPosition(player.GetCharacterPosition()+ new Vector3(1, 0, 0));
                 partner.gameObject.SetActive(true);
             }
         }
@@ -370,7 +382,7 @@ namespace Game
             player.SetInputState(false);
             clearTime = playTime;
             isGameStart = false;
-            UIManager.Instance.PlayStageClearUI();
+            UIManager.Instance.PlayStageClearUI(playTime, score);
         }
 
         public void GameOver()
@@ -381,13 +393,13 @@ namespace Game
             isGameOver = true;
             isGameStart = false;
             var count = 0;
-            foreach (BlockChain.Item item in NFTManager.Instance.GetMyItems())
+/*            foreach (BlockChain.Item item in NFTManager.Instance.GetMyItems())
             {
                 if (item.nftType[0].Equals("R"))
                 {
                     count++;
                 }
-            }
+            }*/
             score += count * 1000;
 
             // if Rank mode, Save highScore
@@ -399,11 +411,11 @@ namespace Game
             }
             else highScore = (score > highScore) ? score : highScore;
 
-            if (NFTManager.Instance.GetWinner() < highScore)
+/*            if (NFTManager.Instance.GetWinner() < highScore)
             {
                 NFTManager.Instance.newWinner(highScore);
                 isOwner = true;
-            }
+            }*/
             UIManager.Instance.EnableGameOverUI();
             SoundManager.Instance.OnPlaySFX("GameOver");
         }
@@ -454,11 +466,14 @@ namespace Game
                 UIManager.Instance.ClearCanvas();
                 StartCoroutine(MoveScene("GetRing"));
             }
-            else
+            else {
                 StartCoroutine(MoveScene(0));
+            }
+
             isOwner = false;
             SetPause(false);
-            NFTManager.Instance.RefreshNFT();
+            ResetGame();
+/*            NFTManager.Instance.RefreshNFT();*/
         }
 
         public IEnumerator MoveScene(int sceneIndex)
@@ -471,12 +486,6 @@ namespace Game
             {
                 yield return null;
             }
-
-/*            sun = null;
-            spawner = null;
-            startPoint = null;
-            player = null;
-            partner = null;*/
 
             // 이동한 씬이 Main 면 스테이지 초기화
             if (sceneList[sceneIndex].Contains("Main"))
@@ -536,9 +545,31 @@ namespace Game
 
         public void ResetGame()
         {
-            CurFatigue = maxFatigue;
+            // 게임 상태 초기화
+            isGameOver = false;
+            isGameStart = false;
+            isRankStart = false;
+            enemyKilledCount = 0;
             spawnCount = 0;
             Wave = 0;
+            score = 0;
+
+            // 플레이어 초기화
+            if (player)
+            {
+                player = null;
+            }
+
+            // 동료 초기화
+            if (partner)
+            {
+                partner = null;
+            }
+            // 태양 초기화
+            if (sun)
+            {
+                sun = null;
+            }
         }
 
         public void ExitGame()

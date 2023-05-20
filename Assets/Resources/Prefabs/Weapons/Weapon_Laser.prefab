@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   poolSize: 10
-  projectilePrefab: {fileID: 8456836126314961647, guid: 899e2133a3b3c9e4aafbd4a5e88c8f97, type: 3}
+  projectilePrefab: {fileID: 8456836126314961647, guid: 4644ce1bdef58584793ce9df9e6400c1, type: 3}
   firePos: {fileID: 5415851943861316259}
   _weaponId: 10003
   hitRange: 100

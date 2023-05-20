@@ -45,6 +45,8 @@ namespace Game
         [SerializeField] private TextMeshProUGUI beforeDayText; // Text for displaying the previous day
         [SerializeField] private TextMeshProUGUI afterDayText;  // Text for displaying the next day
         [SerializeField] private Text dayText;   // Text for displaying the day
+        [SerializeField] private TextMeshProUGUI clearTimeText; // Text for displaying the previous day
+        [SerializeField] private TextMeshProUGUI clearScoreText; // Text for displaying the previous day
 
         [Header("Game Over UI")]
         [SerializeField] private GameObject gameOverUI; // UI to display when the game is over
@@ -188,8 +190,10 @@ namespace Game
             if (waveClearUI) StartCoroutine(PlayAnim(waveClearUI));
         }
 
-        public void StageClear()
+        public void StageClear(Timer clearTime, int clearScore)
         {
+            if (clearTimeText) clearTimeText.text = string.Format("{0:D2}:{1:D2}:{2:D2}", clearTime.Hour, clearTime.Minute, clearTime.Second);
+            if (clearTimeText) clearScoreText.text = clearScore.ToString();
             if (stageClearUI) StartCoroutine(PlayAnim(stageClearUI));
         }
 

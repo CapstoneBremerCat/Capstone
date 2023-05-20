@@ -31,10 +31,11 @@ namespace Game
         [Header("SFX")]
         [SerializeField] private AudioClip deathSound;  // Sound effect for death
         [SerializeField] private AudioClip hitSound; // Sound effect for getting hit
+        [SerializeField] private AudioClip idleSound; // Sound effect for getting hit
         [SerializeField] private ParticleSystem hitEffect;  // Particle effect for getting hit
         [SerializeField] private GameObject healEffect;  // Particle effect for getting hit
         [SerializeField] private Animator anim; // Animation
-        private AudioSource audioSource;    // Audio source for playing sounds
+        [SerializeField] private AudioSource audioSource;    // Audio source for playing sounds
         private int animSpeed = 0;   // Animation speed
 
         [Header("Game")]
@@ -110,6 +111,7 @@ namespace Game
             //Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, this);
             UnequipActiveSkill();
             equippedPassiveSkills.Clear();
+            StartCoroutine(SoundRoutine(5));
         }
 
         public void SetPlayerPosition(Vector3 pos)
@@ -250,7 +252,11 @@ namespace Game
                 }
 
                 // Play hit sound.
-                if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
+                if (audioSource && hitSound)
+                {
+                    audioSource.clip = hitSound;
+                    audioSource.Play();
+                }
                 anim.SetTrigger("Damaged"); // Trigger the damaged animation.
             }
         }
@@ -349,6 +355,19 @@ namespace Game
             }
             isCoolTime = false;
         }
+        private IEnumerator SoundRoutine(float interval)
+        {
+            while (true)
+            {
+                var randomInterval = interval + Random.Range(1, 20);
+                yield return new WaitForSeconds(randomInterval);
+                if (audioSource && idleSound)
+                {
+                    audioSource.clip = idleSound;
+                    audioSource.Play();
+                }
+            }
+        }
 
         public void MoveAnim(float h, float v)
         {
@@ -356,6 +375,10 @@ namespace Game
             if (!inputState) value = 0.0f;
             // �޸��� �Է� �� �� �ι�� ����
             if (anim) anim.SetFloat("Magnitude", value * animSpeed);
+        }
+        private void OnDisable()
+        {
+            StopAllCoroutines();
         }
     }
 }

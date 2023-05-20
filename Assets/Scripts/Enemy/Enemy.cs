@@ -30,7 +30,9 @@ namespace Game
         {
             totalStat.damage = damage;
             if (agent) agent.speed = speed;
+            agent.enabled = false;
             transform.position = pos;
+            agent.enabled = true;
             gameObject.SetActive(true);
 
         }
@@ -184,6 +186,7 @@ namespace Game
 
         private void OnDisable()
         {
+            StopAllCoroutines();
             //if (EnemyMgr.Instance) EnemyMgr.Instance.SetPooling(this);
         }
     }

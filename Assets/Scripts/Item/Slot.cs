@@ -99,6 +99,10 @@ namespace Game
                     player.UseHealKit();
                     // Use recovery item
                     break;
+                case Item.ItemType.Partner:
+                    Debug.Log("Summon: " + item.itemPrefab.name);
+                    GameManager.Instance.SpawnPartner(item.itemPrefab);
+                    break;
             }
         }
 

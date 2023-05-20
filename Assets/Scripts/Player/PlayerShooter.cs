@@ -16,7 +16,7 @@ namespace Game
         }
         private void Start()
         {
-            ScreenCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
+            ScreenCenter = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2 + 32);
             anim = GetComponent<Animator>();
         }
 

@@ -46,6 +46,8 @@ namespace Game
         [SerializeField] private Button skipButton;
         [Header("Stage UI")]
         [SerializeField] private StageUIController stageUIController;
+        [SerializeField] private PartnerHUD partnerHUD; // 파트너 체력 바.
+        [SerializeField] private Text itemInfoText; // 아이템 획득 UI
         public event System.Action RestartEvent;
 
         private void Start()
@@ -70,6 +72,26 @@ namespace Game
             // 스테이지 UI
             if (!stageUIController) stageUIController = FindObjectOfType<StageUIController>();
             InitUI();
+            SetPartnerHUD(false);
+        }
+
+        public void SetPartnerHUD(bool value)
+        {
+            partnerHUD.gameObject.SetActive(value);
+        }
+        public void SetPartnerHealthBar(float ratio)
+        {
+            if (partnerHUD) partnerHUD.SetHealthBar(ratio);
+        }
+
+        public void DisplayItemInfoText(string text)
+        {
+            itemInfoText.gameObject.SetActive(true);
+            itemInfoText.text = text;
+        }
+        public void DisableItemInfoText()
+        {
+            itemInfoText.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -189,11 +211,11 @@ namespace Game
                 stageUIController.WaveClear();
             }
         }
-        public void PlayStageClearUI()
+        public void PlayStageClearUI(Timer clearTime, int clearScore)
         {
             if (stageUIController != null)
             {
-                stageUIController.StageClear();
+                stageUIController.StageClear(clearTime, clearScore);
             }
         }
 
