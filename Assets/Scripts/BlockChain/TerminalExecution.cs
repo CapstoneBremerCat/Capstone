@@ -66,7 +66,7 @@ public class TerminalExecution : MonoBehaviour
         {
             // 주 창을 닫아 종료를 유도합니다.
             process.CloseMainWindow();
-            process.Kill();
+            //process.Kill();
             process.WaitForExit();
         }
     }

@@ -4,8 +4,12 @@ using UnityEngine;
 using Game;
 public class Goal_Item : Goal
 {
-    private void OnDisable()
+    private void Start()
     {
-        Complete();
+        var itemPickUp = gameObject.GetComponent<ItemPickUp>();
+        itemPickUp.OnPickup += () =>
+        {
+            Complete();
+        };
     }
 }

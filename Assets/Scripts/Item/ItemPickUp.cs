@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,12 @@ namespace Game
         [SerializeField] private Item item;
         public Item Item { get { return item; } }
         [SerializeField] private int remainingTime;
-        private bool isPickable = true;
+        public bool isPickable { get; private set; }
+        public event Action OnPickup; 
+
         void OnEnable()
         {
+            isPickable = true;
             if (remainingTime != 0) StartCoroutine(SpawnRemainingRoutine());
         }
 
@@ -24,6 +28,10 @@ namespace Game
         public void SetPickable(bool value)
         {
             isPickable = value;
+        }
+        public void Pickup()
+        {
+            if (null != OnPickup) OnPickup();
         }
     }
 }

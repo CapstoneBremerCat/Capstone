@@ -38,7 +38,9 @@ namespace Game
             {
                 if (hitInfo.transform != null)
                 {
-                    Mediator.Instance.Notify(this, GameEvent.ITEM_PICKED_UP, hitInfo.transform.GetComponent<ItemPickUp>().Item);
+                    var pickup = hitInfo.transform.GetComponent<ItemPickUp>();
+                    pickup.Pickup();
+                    Mediator.Instance.Notify(this, GameEvent.ITEM_PICKED_UP, pickup.Item);
                     Destroy(hitInfo.transform.gameObject);
                     InfoDisappear();
 
@@ -62,8 +64,8 @@ namespace Game
         private void ItemInfoAppear()
         {
             pickupActivated = true;
-
-            string itemName = hitInfo.transform.GetComponent<ItemPickUp>().Item.name;
+            var pickup = hitInfo.transform.GetComponent<ItemPickUp>();
+            string itemName = pickup.Item.name;
             string formattedString = string.Format("{0} È¹µæ <color=yellow>(E)</color>", itemName);
 
             UIManager.Instance.DisplayItemInfoText(formattedString);

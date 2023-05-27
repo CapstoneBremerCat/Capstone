@@ -39,6 +39,7 @@ namespace Game
                 audioSource.gameObject.SetActive(false);
                 pool.Add(audioSource);
             }
+            curPlayingSounds = 0;
         }
         #endregion
 
@@ -67,6 +68,16 @@ namespace Game
 
         public bool BGMSoundMute { get { return (masterMute || BGMMute); } }
         public float BGMSoundVolume { get { return (BGMVolume * masterVolume); } }
+
+        public int curPlayingSounds { get; private set; } // 동시 재생을 허용할 프리팹의 최대 개수
+        public void AddPlayingSounds()
+        {
+            curPlayingSounds++;
+        }
+        public void InitPlayingSounds()
+        {
+            curPlayingSounds = 0;
+        }
 
         private void SetAudioDictionary(Dictionary<string, AudioClip> dictionary, string path)
         {

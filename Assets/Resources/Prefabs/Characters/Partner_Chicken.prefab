@@ -103,6 +103,8 @@ MonoBehaviour:
   agent: {fileID: 1368568321463892386}
   hitEffect: {fileID: 7364518018014343544, guid: 3feb2f2941fd74f46a6627b08eaabe9f, type: 3}
   hitSound: {fileID: 8300000, guid: 13a58eb5deb3e46599037ffb43ae7600, type: 3}
+  idleSound: {fileID: 0}
+  audioSource: {fileID: 0}
   anim: {fileID: 3442428870745525989}
   currentState: 0
 --- !u!195 &1368568321463892386
@@ -119,7 +121,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 5
+  m_StoppingDistance: 4
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

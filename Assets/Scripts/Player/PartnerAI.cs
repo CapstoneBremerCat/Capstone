@@ -50,6 +50,7 @@ namespace Game
             OnDeath += () =>
             {
                 this.gameObject.SetActive(false);
+                Destroy(this.gameObject);
                 UIManager.Instance.SetPartnerHUD(false);
             };
         }
@@ -93,15 +94,25 @@ namespace Game
 
         private void FixedUpdate()
         {
-            switch (currentState)
+            if(currentState == PartnerState.Moving)
+            {
+                agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
+            }
+            if (currentState == PartnerState.Attacking)
+            {
+                SearchEnemy();
+                LookTarget();
+            }
+/*            switch (currentState)
             {
                 case PartnerState.Moving:
                     agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
                     break;
                 case PartnerState.Attacking:
+                    SearchEnemy();
                     LookTarget();
                     break;
-            }
+            }*/
         }
 
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
@@ -191,7 +202,7 @@ namespace Game
                     }
                 }
                 if (anim) anim.SetFloat("Magnitude", agent.velocity.normalized.magnitude * 2.0f);
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(1.0f);
             }
         }
 

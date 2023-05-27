@@ -22,9 +22,11 @@ namespace Game
         [SerializeField] protected AudioClip hitSound; // 피격 효과음.
         [SerializeField] protected ParticleSystem hitEffect;  // 피격 이펙트.
         protected AudioSource audioSource;    // 효과음을 출력하는데 사용.
-
+        private int maxPlayingSounds = 5; // 동시 재생을 허용할 프리팹의 최대 개수
         [SerializeField] private bool isWaveEnemy;   // 웨이브 적인지 판단
         public bool isDamaged { get; private set; }
+        private float clipLength = 0f; // AudioClip의 길이
+
 
         public void Setup(float damage, float maxhealth, float speed, Vector3 pos)
         {
@@ -63,11 +65,33 @@ namespace Game
                     agent.enabled = false;  // navigation 정지.
                 }
                 if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
-                if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
+                // 사망 효과음 1회 재생.
+                if (audioSource && deathSound)
+                {
+                    PlayOneShotWithLimit(deathSound);
+                }
                 if (GameManager.Instance) GameManager.Instance.KillEnemy(isWaveEnemy);
                 //gameObject.SetActive(false);
                 if (ItemMgr.Instance) ItemMgr.Instance.SpawnItem(transform.position + Vector3.up);
             };
+        }
+        public void PlayOneShotWithLimit(AudioClip clip)
+        {
+            if (SoundManager.Instance.curPlayingSounds < maxPlayingSounds)
+            {
+                SoundManager.Instance.AddPlayingSounds();
+                audioSource.volume = SoundManager.Instance.SFXSoundVolume; // 원하는 볼륨 값으로 변경
+                audioSource.mute = SoundManager.Instance.SFXSoundMute; // 원하는 볼륨 값으로 변경
+                audioSource.PlayOneShot(clip);
+                StartCoroutine(ResetAfterClipLength(clip.length));
+            }
+        }
+
+        private IEnumerator ResetAfterClipLength(float clipLength)
+        {
+            yield return new WaitForSeconds(clipLength);
+            // 초기화 작업 수행
+            SoundManager.Instance.InitPlayingSounds();
         }
 
         protected override void OnEnable()
@@ -96,7 +120,10 @@ namespace Game
                 }
 
                 // 피격 효과음 1회 재생.
-                if (audioSource && hitSound) audioSource.PlayOneShot(hitSound);
+                if (audioSource && hitSound)
+                {
+                    PlayOneShotWithLimit(hitSound);
+                }
                 anim.SetTrigger("Damaged"); // 데미지를 입고 죽지 않았다면, 피격 애니메이션 실행.
                 if (!isDamaged) StartCoroutine(DamagedReact()); // 피해를 입지 않은 상태일 경우 피격 코루틴 실행
             }
