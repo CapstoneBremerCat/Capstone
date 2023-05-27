@@ -29,6 +29,7 @@ namespace Game
         public void SetSlot(Skill skill)
         {
             equippedSkill = skill;
+            skillType = skill.skillInfo.skillType;
             icon.sprite = skill.skillInfo.skillImage;
             icon.enabled = true;
             baseRect = transform.parent.parent.GetComponent<RectTransform>().rect;
@@ -102,20 +103,35 @@ namespace Game
             }
         }
 
+        // 드랍한 지점의 슬롯에서 호출
         private void ChangeSlot()
         {
-            var tempSkill = equippedSkill;
-            SkillSlot skillSlot = DragSlot.instance.dragSlot.GetComponent<SkillSlot>();
-            if (!skillSlot|| skillType != skillSlot.equippedSkill.skillInfo.skillType) return;
-            SetSlot(skillSlot.equippedSkill);
+            var tempSkill = equippedSkill; // 현재 슬롯의 스킬
+            SkillSlot skillSlot = DragSlot.instance.dragSlot.GetComponent<SkillSlot>(); // 드래그한 슬롯의 스킬
+            if (!skillSlot) return;
+
+            //장비창은 고정
+            if (skillSlot.slotType == SlotType.EquipWindow && slotType == SlotType.EquipWindow)
+            {
+                return;
+            }
             // Check if the dragged skill slot has an equipped skill
             if (tempSkill != null)
             {
-  
+                // 인벤토리-인벤토리일 경우
+                if (skillSlot.slotType == SlotType.Inventory && slotType == SlotType.Inventory)
+                {
+                    SetSlot(skillSlot.equippedSkill);   // 드래그한 슬롯 장착
+                    skillSlot.SetSlot(tempSkill);
+                    return;
+                }
+                if (skillType != skillSlot.equippedSkill.skillInfo.skillType)
+                {
+                    return;
+                }
                 // 할당된 슬롯이 인벤토리 -> 장비창일 경우
                 if (skillSlot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
                 {
-
                     GameManager.Instance.UnEquipSkill(tempSkill);
                     GameManager.Instance.EquipSkill(skillSlot.equippedSkill);
                 }
@@ -125,7 +141,7 @@ namespace Game
                     GameManager.Instance.UnEquipSkill(skillSlot.equippedSkill);
                     GameManager.Instance.EquipSkill(tempSkill);
                 }
-                // If the skill slot has an equipped skill, swap it with the current skill slot
+                SetSlot(skillSlot.equippedSkill);   // 드래그한 슬롯 장착
                 skillSlot.SetSlot(tempSkill);
             }
             else
@@ -133,6 +149,10 @@ namespace Game
                 // 할당된 슬롯이 인벤토리 -> 장비창일 경우
                 if (skillSlot.slotType == SlotType.Inventory && slotType == SlotType.EquipWindow)
                 {
+                    if (skillType != skillSlot.equippedSkill.skillInfo.skillType)
+                    {
+                        return;
+                    }
                     GameManager.Instance.EquipSkill(skillSlot.equippedSkill);
                 }
                 // 장비창에서 가져온 슬롯일 경우
@@ -141,6 +161,7 @@ namespace Game
                     GameManager.Instance.UnEquipSkill(skillSlot.equippedSkill);
                 }
                 // If the skill slot doesn't have an equipped skill, just move the current skill to the dragged skill slot
+                SetSlot(skillSlot.equippedSkill);   // 드래그한 슬롯 장착
                 skillSlot.ClearSlot();
             }
 

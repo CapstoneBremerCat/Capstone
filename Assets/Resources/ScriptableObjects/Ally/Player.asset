@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Player
   m_EditorClassIdentifier: 
   id: 0
+  skillCode: 0
   status:
     healthGauge:
       maxValue: 100
       regenValue: 1
     manaGauge:
-      maxValue: 100
+      maxValue: 40
       regenValue: 5
     staminaGauge:
       maxValue: 100

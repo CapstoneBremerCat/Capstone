@@ -48,7 +48,8 @@ namespace Game
         [SerializeField] private PartnerAI partner;     // 파트너
         [SerializeField] private Spawner spawner; // 스포너
 
-        [SerializeField] private Transform startPoint; // 스테이지 시작 지점
+        private Transform startPoint; // 스테이지 시작 지점
+        private StageArea stageGoal; // 스테이지 목표
 
         [Header("Game")]
         [SerializeField] private int maxWave = 10;  // 최대 Wave 카운트.
@@ -130,7 +131,7 @@ namespace Game
                         break;
                     case (int)GAMEMODE.NIGHT:
                         gameMode = GAMEMODE.NIGHT;
-                        StartCoroutine(StartWave());
+                        if(spawner) StartCoroutine(StartWave());
                         SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
                         // 조명 On
                         break;
@@ -168,6 +169,7 @@ namespace Game
             var spawnerObj = GameObject.FindWithTag("Spawner");
             if (!spawner && spawnerObj) spawner = spawnerObj.GetComponent<Spawner>();
             if (!startPoint) startPoint = GameObject.FindWithTag("Start").transform;
+            if (!stageGoal) stageGoal = GameObject.FindWithTag("End")?.GetComponent<StageArea>();
 
             //player = FindObjectOfType<Player>();
             //if(!player) player = LoadCharacter(playerPrefab).GetComponent<Player>();
@@ -205,6 +207,8 @@ namespace Game
             UIManager.Instance.InitUI();
             // 현재 날짜 UI 정보를 갱신.
             UIManager.Instance.UpdateDateUI(playTime.Day);
+
+            if(stageGoal) stageGoal.SetGoal();
 
             // 게임 시작 신호 활성화.
             isGameOver = false;
@@ -309,7 +313,7 @@ namespace Game
             // 웨이브에 맞춰 적 스폰
             Wave++;
             spawnCount += EnemySpawnCount;
-            if (spawnCount < 100) spawner.SpawnEnemy(spawnCount, Wave);
+            if (spawnCount < 100 && spawner) spawner.SpawnEnemy(spawnCount, Wave);
 
             // 웨이브 UI 활성화
             UIManager.Instance.EnableWaveUI();
@@ -478,6 +482,7 @@ namespace Game
 
         public IEnumerator MoveScene(int sceneIndex)
         {
+            UIManager.Instance.ClearPopup();
             SceneManager.LoadScene(sceneList[sceneIndex]);
             var async = SceneManager.LoadSceneAsync(sceneList[sceneIndex]);
 
@@ -508,6 +513,7 @@ namespace Game
 
         public IEnumerator MoveScene(string sceneName)
         {
+            UIManager.Instance.ClearPopup();
             SceneManager.LoadScene(sceneName);
             var async = SceneManager.LoadSceneAsync(sceneName);
 

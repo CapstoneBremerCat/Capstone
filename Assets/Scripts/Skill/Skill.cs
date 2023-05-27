@@ -7,7 +7,8 @@ namespace Game
     public enum SkillType
     {
         Passive,
-        Active
+        Active,
+        Reward
     }
 
     [System.Serializable]
@@ -45,6 +46,10 @@ namespace Game
             else if (nftType[0] == 'P')
             {
                 skillType = SkillType.Passive;
+            }
+            else if (nftType[0] == 'R')
+            {
+                skillType = SkillType.Reward;
             }
         }
     }

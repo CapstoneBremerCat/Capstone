@@ -44,7 +44,7 @@ namespace Game
         [SerializeField] private Text waveText; // Text for displaying the enemy wave count
         [SerializeField] private TextMeshProUGUI beforeDayText; // Text for displaying the previous day
         [SerializeField] private TextMeshProUGUI afterDayText;  // Text for displaying the next day
-        [SerializeField] private Text dayText;   // Text for displaying the day
+        [SerializeField] private TextMeshProUGUI dayText;   // Text for displaying the day
         [SerializeField] private TextMeshProUGUI clearTimeText; // Text for displaying the previous day
         [SerializeField] private TextMeshProUGUI clearScoreText; // Text for displaying the previous day
 
@@ -90,7 +90,14 @@ namespace Game
         {
             if (!ui) return;
             var active = !ui.activeSelf;
-            ui.SetActive(active);
+            if (active)
+            {
+                UIManager.Instance.OpenPopup(ui);
+            }
+            else
+            {
+                UIManager.Instance.RemovePopup(ui);
+            }
         }
 
         public bool IsPlayerWindowOpen()

@@ -40,6 +40,7 @@ namespace Game
         private bool isAttack = false; // 정확히 타겟을 향해 포신 회전 완료시 True (총구 방향과 적 방향이 일치할 때)
 
         private Transform tf_Target; // 현재 설정된 타겟의 트랜스폼
+        private Vector3 targetPos; // 현재 설정된 타겟의 위치
 
         // Start is called before the first frame update
         void Awake()
@@ -70,6 +71,7 @@ namespace Game
         }
         private void OnDisable()
         {
+            UIManager.Instance.SetPartnerHUD(false);
             StopAllCoroutines();
         }
         // Gizmo를 이용하여 target을 찾는 가시 범위를 벌 수 있다.
@@ -80,10 +82,26 @@ namespace Game
         }
 
         // Update is called once per frame
-        void Update()
+        /*        void Update()
+                {
+                    if(currentState == PartnerState.Attacking)
+                    {
+                        SearchEnemy();
+                        LookTarget();
+                    }
+                }*/
+
+        private void FixedUpdate()
         {
-            SearchEnemy();
-            LookTarget();
+            switch (currentState)
+            {
+                case PartnerState.Moving:
+                    agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
+                    break;
+                case PartnerState.Attacking:
+                    LookTarget();
+                    break;
+            }
         }
 
         public override void OnDamage(float damage, Vector3 hitPoint, Vector3 hitNormal)
@@ -135,22 +153,22 @@ namespace Game
                     var player = target[0].GetComponent<Status>();
                     if (player && !player.isHpZero)
                     { // 대상이 존재하고 죽지 않았을 경우.
-                        var targetPos = player.transform.position;
+                        targetPos = player.transform.position;
                         switch (currentState)
                         {
                             case PartnerState.Idle:
-                                if (Vector3.Distance(targetPos, transform.position) <= agent.stoppingDistance)   // 탐색 범위 내에 Target(Player)이 있으면 공격 가능
+                                if (Vector3.Distance(targetPos, transform.position) <= agent.stoppingDistance)   
                                 {
-                                    currentState = PartnerState.Attacking;
+                                    SearchEnemy();
+                                    if(isFindTarget) currentState = PartnerState.Attacking;
                                 }
-                                else
+                                else // 플레이어가 일정 거리(stoppingDistance)이상 멀어졌을 경우,
                                 {
                                     currentState = PartnerState.Moving;
                                 }
                                 break;
 
                             case PartnerState.Moving:
-                                agent.SetDestination(targetPos);    // 해당 Target을 향하여 이동.
                                 if (Vector3.Distance(targetPos, transform.position) <= agent.stoppingDistance)   // 일정 거리(stoppingDistance)만큼 다가갔을 경우,
                                 {
                                     currentState = PartnerState.Idle;
@@ -158,26 +176,22 @@ namespace Game
                                 break;
 
                             case PartnerState.Attacking:
-                                if (Vector3.Distance(targetPos, transform.position) > agent.stoppingDistance)   // 일정 거리(stoppingDistance)만큼 떨어졌을 경우,
+                                if (Vector3.Distance(targetPos, transform.position) > agent.stoppingDistance)   // 플레이어가 일정 거리(stoppingDistance)이상 멀어졌을 경우,
                                 {
                                     currentState = PartnerState.Moving;
                                 }
-                                if (isFindTarget)
+/*                                else
                                 {
                                     SearchEnemy();
                                     LookTarget();
-                                }
-                                else
-                                {
-                                    currentState = PartnerState.Moving;
-                                }
+                                }*/
                                 break;
                         }
 
                     }
                 }
                 if (anim) anim.SetFloat("Magnitude", agent.velocity.normalized.magnitude * 2.0f);
-                yield return new WaitForSeconds(0.04f);
+                yield return new WaitForSeconds(0.5f);
             }
         }
 

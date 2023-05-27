@@ -1,5 +1,5 @@
 <root>
-  <AchievementData code="1" name="Survivor" description="Clear Stage 1" isCompleted="True" />
+  <AchievementData code="1" name="Survivor" description="Clear Stage 1" isCompleted="False" />
   <AchievementData code="2" name="Savior" description="Clear All Stages" isCompleted="False" />
   <AchievementData code="4" name="Ring Owner" description="Being the absolute ring owner" isCompleted="False" />
   <AchievementData code="8" name="NFT Pioneer" description="Buying NFT items for the first time" isCompleted="False" />
@@ -7,5 +7,7 @@
   <AchievementData code="32" name="Zombie Exterminator" description="Defeat 100 Zombies" isCompleted="False" />
   <AchievementData code="64" name="Zombie Annihilator" description="Defeat 1000 Zombies" isCompleted="False" />
   <AchievementData code="128" name="Giant Slayer" description="Defeat the Giant Zombie" isCompleted="False" />
-  <AchievementData code="256" name="Steel Destroyer" description="Defeat the Metal Zombie" isCompleted="True" />
+  <AchievementData code="256" name="Steel Destroyer" description="Defeat the Metal Zombie" isCompleted="False" />
+  <AchievementData code="512" name="First Partner" description="Meet your partner for the first time" isCompleted="True" />
+  <AchievementData code="1024" name="The Avengers" description="Meet all partners" isCompleted="False" />
 </root>

@@ -57,7 +57,11 @@ namespace Game
                 if (slider) slider.value = GetHpRatio();
                 // 더 이상 피격 판정이 되지 않게 collider를 끈다.
                 if (collider) collider.enabled = false;
-                if (agent && agent.enabled) agent.isStopped = true;  // navigation 정지.
+                if (agent && agent.enabled)
+                {
+                    //agent.isStopped = true;  // navigation 정지.
+                    agent.enabled = false;  // navigation 정지.
+                }
                 if (anim) anim.SetBool("isDead", isDead);   // Zombie Death 애니메이션 실행.
                 if (audioSource && deathSound) audioSource.PlayOneShot(deathSound);     // 사망 효과음 1회 재생.
                 if (GameManager.Instance) GameManager.Instance.KillEnemy(isWaveEnemy);
@@ -71,8 +75,6 @@ namespace Game
             base.OnEnable();    // Status의 OnEnable() 호출.
             if (collider) collider.enabled = true;  // 피격을 받을 수 있도록 collider를 활성화.
             InitStatus();
-            // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
-            if (agent) agent.isStopped = false;
             isDamaged = false;
             StartCoroutine(UpdatePath());
         }

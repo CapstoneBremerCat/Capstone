@@ -17,7 +17,9 @@ public enum Achievement
     ZombieExterminator = 1 << 5,
     ZombieAnnihilator = 1 << 6,
     GiantSlayer = 1 << 7,
-    SteelDestroyer = 1 << 8
+    SteelDestroyer = 1 << 8,
+    FirstPartner = 1 << 9,
+    TheAvengers = 1 << 10,
 }
 
 public class AchievementController : MonoBehaviour

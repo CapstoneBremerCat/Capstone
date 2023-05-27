@@ -48,6 +48,8 @@ namespace Game
         [SerializeField] private StageUIController stageUIController;
         [SerializeField] private PartnerHUD partnerHUD; // 파트너 체력 바.
         [SerializeField] private Text itemInfoText; // 아이템 획득 UI
+        [SerializeField] private TextMeshProUGUI[] stageGoalTexts; // 스테이지 목표 UI
+        [SerializeField] private PopupController popupController; // 스테이지 목표 UI
         public event System.Action RestartEvent;
 
         private void Start()
@@ -74,6 +76,28 @@ namespace Game
             InitUI();
             SetPartnerHUD(false);
         }
+        public void ClearPopup()
+        {
+            popupController.ClearPopup();
+        }
+
+        // 팝업을 열기 위한 메서드
+        public void OpenPopup(GameObject popup)
+        {
+            popupController.OpenPopup(popup);
+        }
+
+        // 팝업을 닫기 위한 메서드
+        public void ClosePopup()
+        {
+            popupController.ClosePopup();
+        }
+
+        // 팝업을 제거하기 위한 메서드
+        public void RemovePopup(GameObject popup)
+        {
+            popupController.RemovePopup(popup);
+        }
 
         public void SetPartnerHUD(bool value)
         {
@@ -93,16 +117,31 @@ namespace Game
         {
             itemInfoText.gameObject.SetActive(false);
         }
-
+        public void SetDisplayGoal(int index, string contents)
+        {
+            if (!stageGoalTexts[index].gameObject.activeSelf)
+                stageGoalTexts[index].gameObject.SetActive(true);
+            stageGoalTexts[index].text = contents;
+        }
+        public void ReSetDisplayGoal()
+        {
+            foreach (var text in stageGoalTexts)
+                text.gameObject.SetActive(false);
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (!SceneManager.GetActiveScene().name.Contains("Cinema"))
+                if (!SceneManager.GetActiveScene().name.Contains("Cinema") &&
+                    popupController.IsPopupEmpty())
                 {
                     bool isActive = optionWindow.activeSelf;
                     optionWindow.SetActive(!isActive);
                     GameManager.Instance.SetPause(!isActive);
+                }
+                else
+                {
+                    popupController.ClosePopup();
                 }
             }
         }
@@ -126,6 +165,7 @@ namespace Game
             stageUIController.InitUI();
             DisableActiveSkill();
             DisableWaveUI();
+            ReSetDisplayGoal();
         }
 
         public void UpdateHealthBar(float ratio)

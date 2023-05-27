@@ -79,6 +79,7 @@ namespace BlockChain
         {
 
             Application.OpenURL("http://localhost:3000/");
+            //Application.OpenURL("https://aeong-psi.vercel.app/");
 
         }
 
@@ -124,7 +125,7 @@ namespace BlockChain
                         Debug.Log(result);
                         login_res_upload responseResult = JsonConvert.DeserializeObject<login_res_upload>(result);
                         Debug.Log("addr : " + responseResult.addr);
-                        LoginManager.Instance.SetAddr(responseResult.addr);
+                        SetAddr(responseResult.addr);
                         //string temp = LoginManager.Instance.GetAddr();
                         //Debug.Log("loginAddr : " + temp);
                         //resourceText.text = temp;

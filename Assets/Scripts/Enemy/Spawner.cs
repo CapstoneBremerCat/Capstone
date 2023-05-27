@@ -65,6 +65,7 @@ namespace Game
 
             NavMeshAgent navMeshAgent = enemyInstance.GetComponent<NavMeshAgent>();
             navMeshAgent.enabled = true; // NavMeshAgent 활성화
+            //navMeshAgent.isStopped = false;
 
             navMeshAgent.Warp(spawnPoint.position); // NavMesh에 배치된 위치로 순간이동
         }

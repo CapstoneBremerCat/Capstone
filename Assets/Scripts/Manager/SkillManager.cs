@@ -50,7 +50,7 @@ namespace Game
             foreach (SkillInfo skillInfo in owenedNFTSkills)
             {
                 Skill targetSkill = skillPool.Find(s => s.skillInfo.skillCode == skillInfo.skillCode);
-                if (targetSkill == null)
+                if (targetSkill == null || skillInfo.skillType == SkillType.Reward)
                 {
                     continue;
                 }

@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: RegenZombie
   m_EditorClassIdentifier: 
   id: 1
+  skillCode: 0
   status:
     healthGauge:
-      maxValue: 100
+      maxValue: 200
       regenValue: 16
     manaGauge:
       maxValue: 100

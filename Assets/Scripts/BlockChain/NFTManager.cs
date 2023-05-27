@@ -221,24 +221,26 @@ namespace BlockChain
             LoadNFTSkillInfos();
             SkillManager.Instance.LoadOwnedSkills(GetOwnedNFTSkillInfos());
             achievementController.initAchievement();
+            StartCoroutine(LoadItems());
         }
-        private IEnumerator RefreshInfo()
+        public IEnumerator RefreshInfo()
         {
             LoadingPanel.SetActive(true);
             isLoaded = false;
-            Debug.Log("FirstLoadItems Start");
             yield return StartCoroutine(LoadTotalSupply());
             var pre_totalSupply = totalSupply;
             totalSupply = TotalSupply.GetTotalSupply();
-            if (pre_totalSupply == totalSupply) isLoaded = true;
+            if (pre_totalSupply == totalSupply)
+            {
+                isLoaded = true;
+                LoadingPanel.SetActive(false);
+                yield break;
+            }
             // totalSupply 받아왔으니 이걸로 이제 for문 돌려서 데이터 받아옴.
             for (int i = pre_totalSupply + 1; i <= totalSupply; i++)
             {
                 yield return StartCoroutine(LoadNFT(i));
             }
-            GetWinner();
-            GetAchivements();
-
             yield return null;
 
             while (isLoaded == false)
@@ -246,12 +248,7 @@ namespace BlockChain
                 yield return null;
             }
             // 모든 아이템이 로딩되었다는 플래그가 true일 경우,
-            Debug.Log("Done");
             LoadingPanel.SetActive(false);
-            // 이후 코드 실행
-            LoadNFTSkillInfos();
-            SkillManager.Instance.LoadOwnedSkills(GetOwnedNFTSkillInfos());
-            achievementController.initAchievement();
         }
         IEnumerator LoadTotalSupply()
         {
@@ -664,7 +661,7 @@ namespace BlockChain
                                     continue; // Skip adding this item as a skill
                                 }*/
                 // Create a new SkillInfo object with the item's information
-
+                if (skillItem.nftType[0] == 'R') continue;
                 SkillInfo skillInfo = new SkillInfo(skillItem.tokenId, skillItem.name, skillItem.description, skillItem.image, skillItem.nftType);
                 skillInfoList.Add(skillInfo);
                 skillInfoDictionary.Add(skillInfo.skillId, skillInfo);
