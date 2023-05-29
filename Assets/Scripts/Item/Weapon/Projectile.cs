@@ -6,8 +6,10 @@ namespace Game
 {
     public class Projectile : MonoBehaviour
     {
-        [SerializeField] private Rigidbody rigid;   // Åõ»çÃ¼ÀÇ rigidbody
-        [SerializeField] private float force = 100.0f; // °¡ÇØÁö´Â Èû
+        [SerializeField] private Rigidbody rigid;   // ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ rigidbody
+        [SerializeField] private float force = 100.0f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+        [SerializeField] protected AudioSource audioSource;
+        [SerializeField] private GameObject[] projectiles;
         public float damage { get; private set; }
         public void InitProjectile(Transform transform, float damage)
         {
@@ -19,6 +21,10 @@ namespace Game
         private void OnEnable()
         {
             StopAllCoroutines();
+            foreach (var obj in projectiles)
+            {
+                obj.SetActive(true);
+            }
             Shoot();
             StartCoroutine(ExistTime(5.0f));
         }
@@ -27,7 +33,7 @@ namespace Game
         {
             if (other.tag == "Enemy")
             {
-                gameObject.SetActive(false);
+                StartCoroutine(DisableGameObjectCoroutine());
                 Vector3 hitPoint = other.ClosestPoint(transform.position);
                 Vector3 hitNormal = other.ClosestPoint(transform.position) - other.transform.position;
                 Enemy target = other.GetComponent<Enemy>();
@@ -40,10 +46,24 @@ namespace Game
             rigid.velocity = transform.forward * force;
         }
 
-        // ÃÑ¾ËÀÌ ÀÏÁ¤ ½Ã°£µ¿¾È Á¸Àç ÈÄ ºñÈ°¼ºÈ­µÇµµ·Ï Ã³¸®
+        // ï¿½Ñ¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ï¿½Çµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         protected IEnumerator ExistTime(float seconds)
         {
             yield return new WaitForSeconds(seconds);
+            gameObject.SetActive(false);
+        }
+
+        private IEnumerator DisableGameObjectCoroutine()
+        {
+            foreach (var obj in projectiles)
+            {
+                obj.SetActive(false);
+            }
+            while (audioSource.isPlaying)
+            {
+                yield return null;
+            }
+
             gameObject.SetActive(false);
         }
     }

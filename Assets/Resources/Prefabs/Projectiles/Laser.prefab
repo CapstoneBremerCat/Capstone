@@ -78601,6 +78601,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid: {fileID: 2331155092276648885}
   force: 0
+  audioSource: {fileID: 5835000299837580405}
+  projectiles: []
   trigger: {fileID: 35116012813960404}
 --- !u!65 &35116012813960404
 BoxCollider:

@@ -39074,6 +39074,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid: {fileID: 8687320733934604233}
   force: 60
+  audioSource: {fileID: 2171528770045220134}
+  projectiles:
+  - {fileID: 7580682999980670073}
+  - {fileID: 5744701917743472294}
 --- !u!135 &1536916237981481263
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -39264,6 +39268,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9d1f52e709876143b75f93f52a48156, type: 3}
+--- !u!1 &7580682999980670073 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1840367976591474, guid: e9d1f52e709876143b75f93f52a48156, type: 3}
+  m_PrefabInstance: {fileID: 7581096150039563275}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7582507056723668809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4238852237075266, guid: e9d1f52e709876143b75f93f52a48156, type: 3}

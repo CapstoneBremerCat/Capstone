@@ -6,7 +6,7 @@ namespace Game
 {
     public class Laser : Projectile
     {
-        [SerializeField] private Collider trigger;   // Åõ»çÃ¼ÀÇ rigidbody
+        [SerializeField] private Collider trigger;   // ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½ rigidbody
 
         private void OnEnable()
         {
@@ -14,6 +14,7 @@ namespace Game
             StopAllCoroutines();
             trigger.enabled = false;
             StartCoroutine(TriggerOn(1.0f));
+            audioSource.Play();
         }
         private void OnDisable()
         {

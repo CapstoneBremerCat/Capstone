@@ -9839,6 +9839,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid: {fileID: 5826708308639197096}
   force: 60
+  audioSource: {fileID: 7759567638409135164}
+  projectiles:
+  - {fileID: 2832717407272257034}
+  - {fileID: 299392911122937530}
 --- !u!54 &5826708308639197096
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10044,5 +10048,10 @@ PrefabInstance:
 --- !u!4 &2829084589148573010 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4118957034245954, guid: 8f3f932519e18564e81c0a4c89d87f11, type: 3}
+  m_PrefabInstance: {fileID: 2831725516852331024}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2832717407272257034 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1013902274184218, guid: 8f3f932519e18564e81c0a4c89d87f11, type: 3}
   m_PrefabInstance: {fileID: 2831725516852331024}
   m_PrefabAsset: {fileID: 0}

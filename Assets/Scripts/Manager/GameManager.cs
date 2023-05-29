@@ -8,8 +8,8 @@ namespace Game
 {
     public enum GAMEMODE
     {
-        MORNING = 8,        // ³· - »ýÁ¸ °ÔÀÓ(¼öÁý, »ç³É, °ÇÃà)
-        NIGHT = 20       // ¹ã - µðÆæ½º °ÔÀÓ(¿þÀÌºê ¹æ¾î)
+        MORNING = 8,        // ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½)
+        NIGHT = 20       // ï¿½ï¿½ - ï¿½ï¿½ï¿½æ½º ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½)
     }
 
     public class GameManager : MonoBehaviour
@@ -20,49 +20,49 @@ namespace Game
 
         private void Awake()
         {
-            // Scene¿¡ ÀÌ¹Ì ÀÎ½ºÅÏ½º°¡ Á¸Àç ÇÏ´ÂÁö È®ÀÎ ÈÄ Ã³¸®
+            // Sceneï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½
             if (instance)
             {
                 Destroy(this.gameObject);
                 return;
             }
-            // instance¸¦ À¯ÀÏ ¿ÀºêÁ§Æ®·Î ¸¸µç´Ù
+            // instanceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
             instance = this;
 
-            // Scene ÀÌµ¿ ½Ã »èÁ¦ µÇÁö ¾Êµµ·Ï Ã³¸®
+            // Scene ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
             DontDestroyOnLoad(this.gameObject);
 
-            // DelayedUpdate°¡ 1ÃÊ ÈÄºÎÅÍ(StartÀÌÈÄ) 1ÃÊ¸¶´Ù ¹Ýº¹ÇØ¼­ ½ÇÇà
+            // DelayedUpdateï¿½ï¿½ 1ï¿½ï¿½ ï¿½Äºï¿½ï¿½ï¿½(Startï¿½ï¿½ï¿½ï¿½) 1ï¿½Ê¸ï¿½ï¿½ï¿½ ï¿½Ýºï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½
             InvokeRepeating("DelayedUpdate", 1.0f, 1.0f);
         }
         #endregion
 
-        [SerializeField] private List<string> sceneList;     // ¾À ÀÌ¸§ ¸®½ºÆ®
+        [SerializeField] private List<string> sceneList;     // ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®
 
         [Header("Component")]
-        [SerializeField] private DayAndNight sun; // ÅÂ¾ç
-        [SerializeField] private GameObject playerPrefab;     // ÇÃ·¹ÀÌ¾î ÇÁ¸®ÆÕ
-        [SerializeField] private Player player;     // ÇÃ·¹ÀÌ¾î
+        [SerializeField] private DayAndNight sun; // ï¿½Â¾ï¿½
+        [SerializeField] private GameObject playerPrefab;     // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        [SerializeField] private Player player;     // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½
 
-        [SerializeField] private GameObject[] partnerPrefabs;     // ÆÄÆ®³Ê ÇÁ¸®ÆÕ
-        [SerializeField] private PartnerAI partner;     // ÆÄÆ®³Ê
-        [SerializeField] private Spawner spawner; // ½ºÆ÷³Ê
+        [SerializeField] private GameObject[] partnerPrefabs;     // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        [SerializeField] private PartnerAI partner;     // ï¿½ï¿½Æ®ï¿½ï¿½
+        [SerializeField] private Spawner spawner; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-        private Transform startPoint; // ½ºÅ×ÀÌÁö ½ÃÀÛ ÁöÁ¡
-        private StageArea stageGoal; // ½ºÅ×ÀÌÁö ¸ñÇ¥
+        private Transform startPoint; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        private StageArea stageGoal; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥
 
         [Header("Game")]
-        [SerializeField] private int maxWave = 10;  // ÃÖ´ë Wave Ä«¿îÆ®.
-        public int Wave { get; private set; }  // ÇöÀç Wave Ä«¿îÆ®.
-                                               // ÀÌ¹ø Wave¿¡ ÃâÇöÇÒ EnemyÀÇ ¼ö.
+        [SerializeField] private int maxWave = 10;  // ï¿½Ö´ï¿½ Wave Ä«ï¿½ï¿½Æ®.
+        public int Wave { get; private set; }  // ï¿½ï¿½ï¿½ï¿½ Wave Ä«ï¿½ï¿½Æ®.
+                                               // ï¿½Ì¹ï¿½ Waveï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enemyï¿½ï¿½ ï¿½ï¿½.
         public int EnemySpawnCount { get { return Mathf.RoundToInt(10.0f + Wave * 2.0f); } }
 
-        private int spawnCount = 0; // ÇÊµå¿¡ Á¸ÀçÇÏ´Â EnemyÀÇ ¼ö.
-        public int enemyKilledCount { get; private set; } // ÇÊµå¿¡ Á¸ÀçÇÏ´Â EnemyÀÇ ¼ö.
+        private int spawnCount = 0; // ï¿½Êµå¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Enemyï¿½ï¿½ ï¿½ï¿½.
+        public int enemyKilledCount { get; private set; } // ï¿½Êµå¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ Enemyï¿½ï¿½ ï¿½ï¿½.
 
-        [SerializeField] private float maxFatigue = 100f;   // ÃÖ´ë ÇÇ·Îµµ
-        [SerializeField] private float recoverFatiguePerHour = 10f;   // ¼ö¸é ½Ã°£´ç È¸º¹ÇÏ´Â ÇÇ·Îµµ ¼öÄ¡
-        public float CurFatigue { get; private set; }   // ÇöÀç ÇÇ·Îµµ
+        [SerializeField] private float maxFatigue = 100f;   // ï¿½Ö´ï¿½ ï¿½Ç·Îµï¿½
+        [SerializeField] private float recoverFatiguePerHour = 10f;   // ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ç·Îµï¿½ ï¿½ï¿½Ä¡
+        public float CurFatigue { get; private set; }   // ï¿½ï¿½ï¿½ï¿½ ï¿½Ç·Îµï¿½
 
         [SerializeField] private GAMEMODE gameMode;
         private int score = 0;
@@ -70,13 +70,13 @@ namespace Game
         public Timer clearTime { get; private set; }
         public Timer playTime { get; private set; }
         [SerializeField] private float timeScale;
-        private int lastSavedHour;   // ¸¶Áö¸·À¸·Î ÀúÀåµÈ ½Ã°£
+        private int lastSavedHour;   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
 
-        private const float sleepWaitPeriod = 0.5f;    // ¼ö¸é ½Ã ¸Å ½Ã°£ÀÌ º¯ÇÏ´Â °£°Ý
+        private const float sleepWaitPeriod = 0.5f;    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½
         private const int MAX_EQUIPPED_PASSIVE_SKILLS = 4;
-        public bool isGameOver { get; private set; }    // °ÔÀÓ¿À¹ö ¿©ºÎ
-        public bool isGameStart { get; private set; }    // °ÔÀÓ½ÃÀÛ ¿©ºÎ
-        public bool isRankStart { get; private set; }    // °ÔÀÓ½ÃÀÛ ¿©ºÎ
+        public bool isGameOver { get; private set; }    // ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        public bool isGameStart { get; private set; }    // ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        public bool isRankStart { get; private set; }    // ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         // Start is called before the first frame update
         private void Start()
@@ -94,7 +94,7 @@ namespace Game
         // Update is called once per frame
         private void Update()
         {
-            // °ÔÀÓÀÌ ½ÃÀÛµÆÀ» °æ¿ì, °ÔÀÓ¿À¹öµÇÁö ¾Ê¾ÒÀ» °æ¿ì¿¡¸¸ ½ÇÇà
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (isGameStart && !isGameOver) stageUpdate();
             if (player) player.OnInputUpdated();
         }
@@ -106,18 +106,18 @@ namespace Game
 
         private void DelayedUpdate()
         {
-            // °ÔÀÓÀÌ ½ÃÀÛµÆÀ» °æ¿ì, °ÔÀÓ¿À¹öµÇÁö ¾Ê¾ÒÀ» °æ¿ì¿¡¸¸ ½ÇÇà
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (!isGameStart || isGameOver) return;
 
             playTime.UpdateTime();
             Debug.Log(playTime.Hour);
 
             /* 
-             * ½Ã°£ÀÇ º¯È­¿¡ µû¶ó ¹à±â º¯È­, ÇÏ´Ã È¸Àü
+             * ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È­, ï¿½Ï´ï¿½ È¸ï¿½ï¿½
             */
             UIManager.Instance.UpdateHealthBar(player.GetHpRatio());
 
-            // ½Ã°£ÀÌ º¯ÇßÀ» °æ¿ì¿¡¸¸ µ¿ÀÛÇÑ´Ù.
+            // ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
             if (lastSavedHour != playTime.Hour)
             {
                 switch (playTime.Hour)
@@ -127,17 +127,17 @@ namespace Game
                         //EndWave();
                         NextDay();
                         SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageSun);
-                        // Á¶¸í off
+                        // ï¿½ï¿½ï¿½ï¿½ off
                         break;
                     case (int)GAMEMODE.NIGHT:
                         gameMode = GAMEMODE.NIGHT;
                         if(spawner) StartCoroutine(StartWave());
                         SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
-                        // Á¶¸í On
+                        // ï¿½ï¿½ï¿½ï¿½ On
                         break;
                 }
             }
-            // ¸¶Áö¸· ½Ã°£ ÀúÀå
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½
             lastSavedHour = playTime.Hour;
         }
         public void DebugPlayer()
@@ -160,10 +160,10 @@ namespace Game
             player.SetInputState(value);
         }
 
-        // ½ºÅ×ÀÌÁö ½ÃÀÛ ¼¼ÆÃ
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         public void InitNewStage()
         {
-            // ÅÂ¾ç, ½ÃÀÛÁöÁ¡, ½ºÆ÷³Ê °¡Á®¿À±â
+            // ï¿½Â¾ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             var sunObj = GameObject.FindWithTag("Sun"); 
             if (!sun && sunObj) sun = sunObj.GetComponent<DayAndNight>();
             var spawnerObj = GameObject.FindWithTag("Spawner");
@@ -176,12 +176,12 @@ namespace Game
             player = LoadCharacter(playerPrefab).GetComponent<Player>();
             if (startPoint && player)
             {
-                // ÇÃ·¹ÀÌ¾î À§Ä¡¸¦ ½ÃÀÛÁöÁ¡À¸·Î º¯°æ
+                // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 player.Init(startPoint.position);
                 player.gameObject.SetActive(true);
             }
 
-            // ·©Å©¸ðµå¿¡¼± ·£´ýÇÑ µ¿·á°¡ Ãß°¡
+            // ï¿½ï¿½Å©ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½á°¡ ï¿½ß°ï¿½
             if (isRankStart)
             {
                 var index = Random.Range(0,partnerPrefabs.Length);
@@ -189,28 +189,28 @@ namespace Game
             }
             //CurFatigue = maxFatigue;
 
-            // °ÔÀÓ¸ðµå ÃÊ±âÈ­
+            // ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ ï¿½Ê±ï¿½È­
             gameMode = GAMEMODE.MORNING;
-            // ¿þÀÌºê ¼ö ÃÊ±âÈ­.
+            // ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½È­.
             Wave = 0;
-            // Àû Á¦°Å ¼ö ÃÊ±âÈ­.
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½È­.
             enemyKilledCount = 0;
             spawnCount = 0;
             UIManager.Instance.UpdateWaveUI(Wave, spawnCount);
-            // ÇÃ·¹ÀÌ ½ÃÀÛ ½Ã°£ ÀúÀå.
+            // ï¿½Ã·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½.
             playTime = new Timer();
             playTime.SetTimeScale(timeScale);
-            // ÅÂ¾ç ÃÊ±âÈ­
+            // ï¿½Â¾ï¿½ ï¿½Ê±ï¿½È­
             if(sun) sun.InitSun();
 
-            // UIManager ÃÊ±âÈ­
+            // UIManager ï¿½Ê±ï¿½È­
             UIManager.Instance.InitUI();
-            // ÇöÀç ³¯Â¥ UI Á¤º¸¸¦ °»½Å.
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â¥ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
             UIManager.Instance.UpdateDateUI(playTime.Day);
 
             if(stageGoal) stageGoal.SetGoal();
 
-            // °ÔÀÓ ½ÃÀÛ ½ÅÈ£ È°¼ºÈ­.
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ È°ï¿½ï¿½È­.
             isGameOver = false;
             isGameStart = true;
 
@@ -234,13 +234,13 @@ namespace Game
 
         public void SpawnPartner(GameObject partnerPrefab)
         {
-            // ÆÄÆ®³Ê°¡ Á×Àº »óÅÂ¸é ÆÄÆ®³Ê ÃÊ±âÈ­.
+            // ï¿½ï¿½Æ®ï¿½Ê°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ê±ï¿½È­.
             if (partner)
             {
                 if (partner.isDead) partner = null;
                 else return;
             }
-            // ÆÄÆ®³Ê À§Ä¡µµ º¯°æ
+            // ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (!partner) partner = LoadCharacter(partnerPrefab).GetComponent<PartnerAI>();
             if (partner)
             {
@@ -291,10 +291,10 @@ namespace Game
 
         public void DecreaseSpawnCount()
         {
-            // spawnCount¸¦ °¨¼ÒÇÏ°í UIÁ¤º¸¸¦ °»½ÅÇÑ´Ù.
+            // spawnCountï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ UIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
             UIManager.Instance.UpdateWaveUI(Wave, --spawnCount);
 
-            // ¼ÒÈ¯µÈ ¿þÀÌºê ÀûÀ» ¸ðµÎ Ã³Ä¡ÇÏ¿´À» °æ¿ì ¿þÀÌºê Á¾·á
+            // ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã³Ä¡ï¿½Ï¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½
             if (spawnCount <= 0)
             {
                 StartCoroutine(EndWave());
@@ -304,59 +304,59 @@ namespace Game
         public IEnumerator StartWave()
         {
 
-            // ¿þÀÌºê ½ÃÀÛ ¿¬Ãâ ½ÇÇà
+            // ï¿½ï¿½ï¿½Ìºï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             UIManager.Instance.PlayWaveStartUI();
 
-            /* ¿¬ÃâÀÌ ³¡³¯ ¶§ ±îÁö ´ë±â */
+            /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ */
             yield return null;
 
-            // ¿þÀÌºê¿¡ ¸ÂÃç Àû ½ºÆù
+            // ï¿½ï¿½ï¿½Ìºê¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             Wave++;
             spawnCount += EnemySpawnCount;
             if (spawnCount < 100 && spawner) spawner.SpawnEnemy(spawnCount, Wave);
 
-            // ¿þÀÌºê UI È°¼ºÈ­
+            // ï¿½ï¿½ï¿½Ìºï¿½ UI È°ï¿½ï¿½È­
             UIManager.Instance.EnableWaveUI();
             UIManager.Instance.UpdateWaveUI(Wave, spawnCount);
         }
 
         public IEnumerator EndWave()
         {
-            // ¿þÀÌºê Å¬¸®¾î ¿¬Ãâ ½ÇÇà
+            // ï¿½ï¿½ï¿½Ìºï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             UIManager.Instance.PlayWaveClearUI();
-            // ¿þÀÌºê UI ºñÈ°¼ºÈ­
+            // ï¿½ï¿½ï¿½Ìºï¿½ UI ï¿½ï¿½È°ï¿½ï¿½È­
             UIManager.Instance.DisableWaveUI();
-            // ¿¬ÃâÀÌ ³¡³¯ ¶§ ±îÁö ´ë±â
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             yield return null;
         }
 
         public void NextDay()
         {
-            // ´ÙÀ½ ³¯ ¿¬Ãâ ½ÇÇà
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             UIManager.Instance.PlayNextDayUI(playTime.Day);
             UIManager.Instance.UpdateDateUI(playTime.Day);
         }
 
-        // ÁöÁ¤ÇÑ ½Ã°£µ¿¾È ´ë±â(¼ö¸é)
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
         public IEnumerator SleepHours(int hours)
         {
             for (int repeat = 0; repeat < hours; repeat++)
             {
                 // UIManager.Instance.DisplaySleepUI(hours);
                 yield return new WaitForSeconds(sleepWaitPeriod);
-                // ¸Å ·çÇÁ¸¶´Ù 1½Ã°£¾¿ Ãß°¡
+                // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
                 playTime.AddTime(0, 1, 0, 0);
-                // ´ë±âÇÑ ½Ã°£ ´ç ÇÇ·Î ¼öÄ¡ °¨¼Ò. ÃÖ¼ÒÄ¡ 0
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ ï¿½Ç·ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½. ï¿½Ö¼ï¿½Ä¡ 0
                 CurFatigue = Mathf.Max(0.0f, CurFatigue - recoverFatiguePerHour);
             }
         }
 
         public void KillEnemy(bool isWaveEnemy)
         {
-            AddScore(100); // enemy Ã³Ä¡ ½Ã, 100 score »ó½Â.
+            AddScore(100); // enemy Ã³Ä¡ ï¿½ï¿½, 100 score ï¿½ï¿½ï¿½.
             enemyKilledCount++;
             CheckKillAchievements();
-            if (isWaveEnemy) DecreaseSpawnCount(); // enemy Ã³Ä¡ ½Ã, Spawn Count °¨¼Ò.
+            if (isWaveEnemy) DecreaseSpawnCount(); // enemy Ã³Ä¡ ï¿½ï¿½, Spawn Count ï¿½ï¿½ï¿½ï¿½.
         }
 
         public void CheckKillAchievements()
@@ -387,6 +387,7 @@ namespace Game
             clearTime = playTime;
             isGameStart = false;
             UIManager.Instance.PlayStageClearUI(playTime, score);
+            SoundManager.Instance.OnPlaySFX("Get_AbsoluteRing");
         }
 
         public void GameOver()
@@ -410,7 +411,7 @@ namespace Game
             if (isRankStart)
             {
                 highScore = (score > highScore) ? score : highScore;
-                // score ÀúÀå
+                // score ï¿½ï¿½ï¿½ï¿½
                 isRankStart = false;
             }
             else highScore = (score > highScore) ? score : highScore;
@@ -428,7 +429,7 @@ namespace Game
         public void AddScore(int value)
         {
             score += value;
-            // UIÀÇ ScoreText¸¦ °»½Å.
+            // UIï¿½ï¿½ ScoreTextï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
             UIManager.Instance.UpdateScoreText(score);
         }
         public void RestartGame()
@@ -441,13 +442,13 @@ namespace Game
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
 
             yield return null;
-            // ¾À ·Îµå°¡ ¿Ï·áµÉ ¶§±îÁö ´ë±â
+            // ï¿½ï¿½ ï¿½Îµå°¡ ï¿½Ï·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             while (!asyncLoad.isDone)
             {
                 yield return null;
             }
 
-            // ·Îµå ¿Ï·á ÈÄ ½ÇÇàÇÒ ÄÚµå
+            // ï¿½Îµï¿½ ï¿½Ï·ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½
             InitNewStage();
             UIManager.Instance.RestartGame();
             Mediator.Instance.Notify(this, GameEvent.RESTART, null);
@@ -455,9 +456,22 @@ namespace Game
 
         public void MextScene()
         {
-            // ¾À ¸í¸í ±ÔÄ¢ 1: ¾ÕÀÚ¸® µÎ ¹®ÀÚ´Â 00~99 µÎ ÀÚ¸® ¼ýÀÚ·Î ½ÃÀÛÇØ¾ßÇÑ´Ù.
-            // ¾À ¸í¸í ±ÔÄ¢ 2: ÀÎ°ÔÀÓ(½ºÅ×ÀÌÁö) ÀÇ °æ¿ì¿¡´Â ¾À ÀÌ¸§¿¡ ¹Ýµå½Ã Stage°¡ Æ÷ÇÔµÇ¾î¾ß ÇÑ´Ù.
-            // ÇöÀç ¾ÀÀÇ ¼ýÀÚ¸¦ ÂüÁ¶ÇÏ¿© ´ÙÀ½ ¾ÀÀ¸·Î ÀÌµ¿ÇÑ´Ù.
+            if(isRankStart){
+                isRankStart = false;
+                highScore = (score > highScore) ? score : highScore;
+
+                // if (NFTManager.Instance.GetWinner() < highScore)
+                // {
+                //     NFTManager.Instance.newWinner(highScore);
+                //     isOwner = true;
+                // }
+                ToMain();
+                
+                return;
+            }
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¢ 1: ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ú´ï¿½ 00~99 ï¿½ï¿½ ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ï¿½Ñ´ï¿½.
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¢ 2: ï¿½Î°ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ýµï¿½ï¿½ Stageï¿½ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ï¿½ ï¿½Ñ´ï¿½.
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ñ´ï¿½.
             if (int.TryParse(SceneManager.GetActiveScene().name.Substring(0, 2), out int currSceneIdx))
                 StartCoroutine(MoveScene(currSceneIdx + 1));
         }
@@ -486,24 +500,24 @@ namespace Game
             SceneManager.LoadScene(sceneList[sceneIndex]);
             var async = SceneManager.LoadSceneAsync(sceneList[sceneIndex]);
 
-            // ¾À ÀÌµ¿ÀÌ ³¡³¯ ¶§ ±îÁö ´ë±â
+            // ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             while (!async.isDone)
             {
                 yield return null;
             }
 
-            // ÀÌµ¿ÇÑ ¾ÀÀÌ Main ¸é ½ºÅ×ÀÌÁö ÃÊ±âÈ­
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Main ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (sceneList[sceneIndex].Contains("Main"))
             {
                 UIManager.Instance.SwitchCanvas(CavasIndex.Main);
             }
-            // ÀÌµ¿ÇÑ ¾ÀÀÌ Stage ¸é ½ºÅ×ÀÌÁö ÃÊ±âÈ­
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Stage ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (sceneList[sceneIndex].Contains("Stage"))
             {
                 UIManager.Instance.SwitchCanvas(CavasIndex.Stage);
                 InitNewStage();
             }
-            // ÀÌµ¿ÇÑ ¾ÀÀÌ Cinema ¸é ½ºÅ×ÀÌÁö ÃÊ±âÈ­
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Cinema ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (sceneList[sceneIndex].Contains("Cinema"))
             {
                 SoundManager.Instance.StopBGM();
@@ -517,24 +531,24 @@ namespace Game
             SceneManager.LoadScene(sceneName);
             var async = SceneManager.LoadSceneAsync(sceneName);
 
-            // ¾À ÀÌµ¿ÀÌ ³¡³¯ ¶§ ±îÁö ´ë±â
+            // ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             while (!async.isDone)
             {
                 yield return null;
             }
 
-            // ÀÌµ¿ÇÑ ¾ÀÀÌ Main ¸é ½ºÅ×ÀÌÁö ÃÊ±âÈ­
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Main ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (sceneName.Contains("Main"))
             {
                 UIManager.Instance.SwitchCanvas(CavasIndex.Main);
             }
-            // ÀÌµ¿ÇÑ ¾ÀÀÌ Stage ¸é ½ºÅ×ÀÌÁö ÃÊ±âÈ­
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Stage ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (sceneName.Contains("Stage"))
             {
                 UIManager.Instance.SwitchCanvas(CavasIndex.Stage);
                 InitNewStage();
             }
-            // ÀÌµ¿ÇÑ ¾ÀÀÌ Cinema ¸é ½ºÅ×ÀÌÁö ÃÊ±âÈ­
+            // ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Cinema ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (sceneName.Contains("Cinema"))
             {
                 SoundManager.Instance.StopBGM();
@@ -545,13 +559,13 @@ namespace Game
         public void LoadScene()
         {
             int sceneIndex = 1;
-            /* ÀúÀåµÈ ÀÎµ¦½º(¾À À§Ä¡) ºÒ·¯¿À±â */
+            /* ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½(ï¿½ï¿½ ï¿½ï¿½Ä¡) ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ */
             StartCoroutine(MoveScene(sceneIndex));
         }
 
         public void ResetGame()
         {
-            // °ÔÀÓ »óÅÂ ÃÊ±âÈ­
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             isGameOver = false;
             isGameStart = false;
             isRankStart = false;
@@ -560,18 +574,18 @@ namespace Game
             Wave = 0;
             score = 0;
 
-            // ÇÃ·¹ÀÌ¾î ÃÊ±âÈ­
+            // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ê±ï¿½È­
             if (player)
             {
                 player = null;
             }
 
-            // µ¿·á ÃÊ±âÈ­
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
             if (partner)
             {
                 partner = null;
             }
-            // ÅÂ¾ç ÃÊ±âÈ­
+            // ï¿½Â¾ï¿½ ï¿½Ê±ï¿½È­
             if (sun)
             {
                 sun = null;
