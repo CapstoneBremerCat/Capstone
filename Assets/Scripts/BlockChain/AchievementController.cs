@@ -120,6 +120,7 @@ public class AchievementController : MonoBehaviour
 
     public void UnlockAchievement(object achievement)
     {
+        if (!GameManager.Instance.isOnNFT) return;
         foreach (AchievementSlot slot in achievementSlotList)
         {
             if(slot.achievementData.code == (int)achievement)

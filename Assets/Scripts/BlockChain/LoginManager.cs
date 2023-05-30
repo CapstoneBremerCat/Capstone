@@ -11,6 +11,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using TMPro;
 using BlockChain;
+using Game;
 namespace BlockChain
 {
     [System.Serializable]
@@ -78,15 +79,15 @@ namespace BlockChain
         public void LoginOnClickButton()
         {
 
-            Application.OpenURL("http://localhost:3000/");
-            //Application.OpenURL("https://aeong-psi.vercel.app/");
+            //Application.OpenURL("http://localhost:3000/");
+            Application.OpenURL("https://aeong-psi.vercel.app/");
 
         }
 
 
         public void LoginCheckOnClickButton()
         {
-
+            GameManager.Instance.StartNFT();
             MessageParam param = new MessageParam
             {
                 message = "login addr request",

@@ -199,7 +199,7 @@ namespace Game
 
         public void StageClear(Timer clearTime, int clearScore)
         {
-            if (clearTimeText) clearTimeText.text = string.Format("{0:D2}:{1:D2}:{2:D2}", clearTime.Hour, clearTime.Minute, clearTime.Second);
+            if (clearTimeText) clearTimeText.text = string.Format("{0}d {1:D2}h {2:D2}m", clearTime.Day, clearTime.Hour, clearTime.Minute);
             if (clearTimeText) clearScoreText.text = clearScore.ToString();
             if (stageClearUI) StartCoroutine(PlayAnim(stageClearUI));
         }

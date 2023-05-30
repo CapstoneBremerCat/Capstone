@@ -3788,6 +3788,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3211779619060657493, guid: fb1290aaab142e14a96908452fc09870, type: 3}
+      propertyPath: remainingTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 440311773952267251, guid: fb1290aaab142e14a96908452fc09870, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -30258,6 +30262,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3211779619060657493, guid: fb1290aaab142e14a96908452fc09870, type: 3}
+      propertyPath: remainingTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 440311773952267251, guid: fb1290aaab142e14a96908452fc09870, type: 3}
       propertyPath: m_RootOrder
       value: 6
@@ -35255,6 +35263,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5155365483587319721, guid: 916e9e80bc318ec45ae584d7a8eb9f6a, type: 3}
+      propertyPath: remainingTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8575605846966483904, guid: 916e9e80bc318ec45ae584d7a8eb9f6a, type: 3}
       propertyPath: m_Name
       value: item_Arrow

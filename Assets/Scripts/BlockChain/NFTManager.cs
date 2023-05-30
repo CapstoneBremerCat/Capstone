@@ -185,15 +185,18 @@ namespace BlockChain
         public int achievementsCode { get; private set; }
         public void InitNFT()
         {
+            if (!GameManager.Instance.isOnNFT) return;
             StartCoroutine(FirstLoadItems());
         }
         public void RefreshNFT()
         {
+            if (!GameManager.Instance.isOnNFT) return;
             StartCoroutine(RefreshInfo());
         }
 
         private IEnumerator FirstLoadItems()
         {
+            LoadingPanel.SetActive(true);
             isLoaded = false;
             Debug.Log("FirstLoadItems Start");
             yield return StartCoroutine(LoadTotalSupply());
@@ -375,6 +378,8 @@ namespace BlockChain
         [SerializeField] private NFTItemPopup itemPopup;
         public void UseRewardTicket() //티켓 사용하면 아이템 발행되고 발행된 아이템 정보 알려줌
         {
+            if (!GameManager.Instance.isOnNFT) return;
+            LoadingPanel.SetActive(true);
             Sprite resultSprite = null;
             var rewardReqUpload = new reward_req_upload();
             rewardReqUpload.addr = LoginManager.Instance.GetAddr();

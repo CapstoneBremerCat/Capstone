@@ -12,8 +12,8 @@ public class TerminalExecution2 : MonoBehaviour
     async void Start()
     {
         // 실행할 명령어와 인자를 설정합니다.
-        string command = "next";
-        string arguments = "dev";
+        string command = "node";
+        string arguments = "index";
 
         // 새로운 프로세스를 생성합니다.
         process = new Process();
@@ -21,12 +21,11 @@ public class TerminalExecution2 : MonoBehaviour
         // 프로젝트 디렉토리의 상대 경로를 설정합니다.
         string projectPath = Application.dataPath;
         string backendPath = Path.Combine(projectPath, "BlockchainServer", "backend");
-        string frontendPath = Path.Combine(projectPath, "BlockchainServer", "frontend");
 
         // 프로세스 정보를 설정합니다.
         process.StartInfo.FileName = command;
         process.StartInfo.Arguments = arguments;
-        process.StartInfo.WorkingDirectory = frontendPath;
+        process.StartInfo.WorkingDirectory = backendPath;
 
         // 출력을 받을지 여부를 설정합니다. (필요에 따라 설정)
         process.StartInfo.RedirectStandardOutput = true;
@@ -45,7 +44,7 @@ public class TerminalExecution2 : MonoBehaviour
         process.BeginErrorReadLine();
 
         // Unity 종료 시 이벤트 핸들러를 등록합니다.
-        Application.quitting += StopProcess;
+        Application.wantsToQuit += WantsToQuit;
     }
 
     void OnDestroy()
@@ -54,7 +53,12 @@ public class TerminalExecution2 : MonoBehaviour
         process.OutputDataReceived -= OnOutputDataReceived;
         process.ErrorDataReceived -= OnErrorDataReceived;
         // 객체가 파괴될 때 Unity 종료 이벤트 핸들러를 제거합니다.
-        Application.quitting -= StopProcess;
+        Application.wantsToQuit -= WantsToQuit;
+    }
+    bool WantsToQuit()
+    {
+        StopProcess();
+        return true;
     }
 
     void StopProcess()

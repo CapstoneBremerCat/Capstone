@@ -77,10 +77,15 @@ namespace Game
         public bool isGameOver { get; private set; }    // ���ӿ��� ����
         public bool isGameStart { get; private set; }    // ���ӽ��� ����
         public bool isRankStart { get; private set; }    // ���ӽ��� ����
-
+        public bool isOnNFT { get; private set; }
+        public void StartNFT()
+        {
+            isOnNFT = true;
+        }
         // Start is called before the first frame update
         private void Start()
         {
+            isOnNFT = false;
             isGameStart = false;
             isRankStart = false;
             isGameOver = false;
@@ -132,7 +137,7 @@ namespace Game
                     case (int)GAMEMODE.NIGHT:
                         gameMode = GAMEMODE.NIGHT;
                         if(spawner) StartCoroutine(StartWave());
-                        SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
+                        //SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
                         // ���� On
                         break;
                 }
@@ -193,6 +198,7 @@ namespace Game
             gameMode = GAMEMODE.MORNING;
             // ���̺� �� �ʱ�ȭ.
             Wave = 0;
+            score = 0;
             // �� ���� �� �ʱ�ȭ.
             enemyKilledCount = 0;
             spawnCount = 0;
@@ -207,8 +213,8 @@ namespace Game
             UIManager.Instance.InitUI();
             // ���� ��¥ UI ������ ����.
             UIManager.Instance.UpdateDateUI(playTime.Day);
-
-            if(stageGoal) stageGoal.SetGoal();
+            UIManager.Instance.UpdateScoreText(score);
+            if (stageGoal) stageGoal.SetGoal();
 
             // ���� ���� ��ȣ Ȱ��ȭ.
             isGameOver = false;
@@ -318,6 +324,7 @@ namespace Game
             // ���̺� UI Ȱ��ȭ
             UIManager.Instance.EnableWaveUI();
             UIManager.Instance.UpdateWaveUI(Wave, spawnCount);
+            SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
         }
 
         public IEnumerator EndWave()
@@ -326,6 +333,7 @@ namespace Game
             UIManager.Instance.PlayWaveClearUI();
             // ���̺� UI ��Ȱ��ȭ
             UIManager.Instance.DisableWaveUI();
+            SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageSun);
             // ������ ���� �� ���� ���
             yield return null;
         }
@@ -398,13 +406,16 @@ namespace Game
             isGameOver = true;
             isGameStart = false;
             var count = 0;
-/*            foreach (BlockChain.Item item in NFTManager.Instance.GetMyItems())
+            if (isOnNFT)
             {
-                if (item.nftType[0].Equals("R"))
+                foreach (BlockChain.Item item in NFTManager.Instance.GetMyItems())
                 {
-                    count++;
+                    if (item.nftType[0].Equals("R"))
+                    {
+                        count++;
+                    }
                 }
-            }*/
+            }
             score += count * 1000;
 
             // if Rank mode, Save highScore
@@ -416,11 +427,14 @@ namespace Game
             }
             else highScore = (score > highScore) ? score : highScore;
 
-/*            if (NFTManager.Instance.GetWinner() < highScore)
+            if (isOnNFT)
             {
-                NFTManager.Instance.newWinner(highScore);
-                isOwner = true;
-            }*/
+                if (NFTManager.Instance.GetWinner() < highScore)
+                {
+                    NFTManager.Instance.newWinner(highScore);
+                    isOwner = true;
+                }
+            }
             UIManager.Instance.EnableGameOverUI();
             SoundManager.Instance.OnPlaySFX("GameOver");
         }

@@ -63,6 +63,7 @@ namespace BlockChain
 
         public void RefreshStore()
         {
+            if (!GameManager.Instance.isOnNFT) return;
             StartCoroutine(refreshStoreRoutine());
         }
 
@@ -75,12 +76,14 @@ namespace BlockChain
 
         public void ALLButtonOnClick()
         {
+            if (!GameManager.Instance.isOnNFT) return;
             IsAll = true;
             //StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayItems();
         }
         public void MyButtonOnClick()
         {
+            if (!GameManager.Instance.isOnNFT) return;
             IsAll = false;
             //StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayMyItems();
@@ -172,9 +175,9 @@ namespace BlockChain
                 buyButton.onClick.AddListener(() =>
                 {
                     var addr = LoginManager.Instance.GetAddr();
-                    Application.OpenURL($"http://localhost:3000/nfts/buy/{selectedItem.tokenId}/{selectedItem.price}/{addr}");
+                    //Application.OpenURL($"http://localhost:3000/nfts/buy/{selectedItem.tokenId}/{selectedItem.price}/{addr}");
 
-                    //Application.OpenURL($"https://aeong-psi.vercel.app/nfts/buy/{selectedItem.tokenId}/{selectedItem.price}/{addr}");
+                    Application.OpenURL($"https://aeong-psi.vercel.app/nfts/buy/{selectedItem.tokenId}/{selectedItem.price}/{addr}");
                     HideItemDetails();
                 });
                 buyButton.gameObject.SetActive(true);
