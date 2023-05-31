@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class RotateLoadingImage : MonoBehaviour
 {
+    public GameObject loadingPanel; // 로딩 패널
     public float rotationSpeed = -100f; // 회전 속도
+    public float maxRotationTime = 100f; // 회전 속도
 
     private RectTransform rectTransform; // RectTransform 컴포넌트
 
@@ -28,7 +30,8 @@ public class RotateLoadingImage : MonoBehaviour
 
     private IEnumerator Rotate()
     {
-        while (true)
+        float elapsedTime = 0f;
+        while (elapsedTime <= maxRotationTime)
         {
             // z축 회전 각도 계산
             float angle = rotationSpeed * Time.deltaTime;
@@ -37,8 +40,11 @@ public class RotateLoadingImage : MonoBehaviour
             // z축 회전 적용
             rectTransform.Rotate(rotation);
 
+            elapsedTime += Time.deltaTime;
+
             yield return null;
         }
+        loadingPanel.SetActive(false);
     }
 }
 

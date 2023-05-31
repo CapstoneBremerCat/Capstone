@@ -19,7 +19,7 @@ namespace Game
         [SerializeField] private float timeBetFire = 2.0f;    // 투사체 발사 간격.
         private float lastFireTime; // 마지막으로 발사한 시점.
 
-        [SerializeField] private float reloadTime = 0.9f;   // 재장전 소요 시간.
+        //[SerializeField] private float reloadTime = 0.9f;   // 재장전 소요 시간.
 
         [SerializeField] private float damage = 25;   // 무기의 공격력
         private float totalDamage;   // 총 공격력

@@ -9,7 +9,7 @@ public class TerminalExecution2 : MonoBehaviour
 {
     private Process process;
 
-    async void Start()
+    private void Start()
     {
         // 실행할 명령어와 인자를 설정합니다.
         string command = "node";

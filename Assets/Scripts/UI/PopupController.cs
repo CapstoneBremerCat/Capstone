@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game;
 
 public class PopupController : MonoBehaviour
 {
@@ -23,6 +24,9 @@ public class PopupController : MonoBehaviour
 
     public void OpenPopup(GameObject popup)
     {
+        // 마우스 활성화
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         popup.SetActive(true);
         popup.transform.SetAsLastSibling();
         popupStack.Push(popup);
@@ -39,6 +43,12 @@ public class PopupController : MonoBehaviour
             {
                 GameObject previousPopup = popupStack.Peek();
                 previousPopup.SetActive(true);
+            }
+            else if (GameManager.Instance.isGameStart)
+            {
+                // 창이 모두 닫혀있고, 게임 중일 경우 마우스 비활성화
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }
@@ -67,6 +77,12 @@ public class PopupController : MonoBehaviour
             {
                 GameObject previousPopup = popupStack.Peek();
                 previousPopup.SetActive(true);
+            }
+            else if (GameManager.Instance.isGameStart)
+            {
+                // 창이 모두 닫혀있고, 게임 중일 경우 마우스 비활성화
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }

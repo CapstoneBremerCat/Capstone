@@ -181,6 +181,7 @@ namespace BlockChain
         [SerializeField] private GameObject LoadingPanel;
         private int nftImgCount = 0;
         private int totalSupply = 0;
+        
         public int rewardTickets { get; private set; }
         public int achievementsCode { get; private set; }
         public void InitNFT()
@@ -798,7 +799,7 @@ namespace BlockChain
             webRequest.Dispose();
         }
 
-        IEnumerator GetImgCID(string URL, System.Action<string> OnCompleteUpload)
+/*        IEnumerator GetImgCID(string URL, System.Action<string> OnCompleteUpload)
         {
             using (WWW www = new WWW(URL))
             {
@@ -818,7 +819,7 @@ namespace BlockChain
                     }
                 }
             }
-        }
+        }*/
         IEnumerator GetImgCID2(string URL, System.Action<string> OnCompleteUpload)
         {
             using (UnityWebRequest www = UnityWebRequest.Get(URL))
@@ -868,6 +869,5 @@ namespace BlockChain
                 }
             }
         }
-
     }
 }

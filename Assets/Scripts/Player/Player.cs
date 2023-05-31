@@ -67,6 +67,7 @@ namespace Game
         private void Start()
         {
             Mediator.Instance.RegisterEventHandler(GameEvent.EQUIPPED_WEAPON, InitWeaponStatus);
+            Mediator.Instance.RegisterEventHandler(GameEvent.UPGRADED_WEAPON, InitWeaponStatus);
             inventory = GameObject.FindWithTag("Inventory")?.GetComponent<Inventory>();
         }
         public int GetEquippedPassiveSkillCount()
@@ -133,7 +134,8 @@ namespace Game
             if (weapon)
             {
                 weapon.Init(weaponSocket);
-                SetWeaponDamage(weapon.Damage);
+                var damage = weapon.Damage + (weapon.Damage * EquipManager.Instance.weaponUpgrade * 0.02f);
+                SetWeaponDamage(damage);
                 weapon.UpdateWeaponStats(this);
             }
             else SetWeaponDamage(0);
@@ -143,6 +145,7 @@ namespace Game
         private void OnDestroy()
         {
             Mediator.Instance.UnregisterEventHandler(GameEvent.EQUIPPED_WEAPON, InitWeaponStatus);
+            Mediator.Instance.UnregisterEventHandler(GameEvent.UPGRADED_WEAPON, InitWeaponStatus);
             DataManager.Instance.SaveEquipmentsById(GetEquipmentIds());
         }
 

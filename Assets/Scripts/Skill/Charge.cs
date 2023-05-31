@@ -7,7 +7,7 @@ namespace Game
     public class Charge : MonoBehaviour
     {
         [SerializeField] private float damage = 10.0f;
-        [SerializeField] private float speed = 20.0f;
+/*        [SerializeField] private float speed = 20.0f;*/
         [SerializeField] private float effectiveDistance;  // 사정거리.
         [SerializeField] private LayerMask obstacle;  // 장애물
         [SerializeField] private float knockbackForce = 10.0f;

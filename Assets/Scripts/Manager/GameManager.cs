@@ -51,8 +51,8 @@ namespace Game
         private Transform startPoint; // �������� ���� ����
         private StageArea stageGoal; // �������� ��ǥ
 
-        [Header("Game")]
-        [SerializeField] private int maxWave = 10;  // �ִ� Wave ī��Ʈ.
+/*        [Header("Game")]
+        [SerializeField] private int maxWave = 10;  // �ִ� Wave ī��Ʈ.*/
         public int Wave { get; private set; }  // ���� Wave ī��Ʈ.
                                                // �̹� Wave�� ������ Enemy�� ��.
         public int EnemySpawnCount { get { return Mathf.RoundToInt(10.0f + Wave * 2.0f); } }
@@ -60,16 +60,16 @@ namespace Game
         private int spawnCount = 0; // �ʵ忡 �����ϴ� Enemy�� ��.
         public int enemyKilledCount { get; private set; } // �ʵ忡 �����ϴ� Enemy�� ��.
 
-        [SerializeField] private float maxFatigue = 100f;   // �ִ� �Ƿε�
-        [SerializeField] private float recoverFatiguePerHour = 10f;   // ���� �ð��� ȸ���ϴ� �Ƿε� ��ġ
-        public float CurFatigue { get; private set; }   // ���� �Ƿε�
+        //[SerializeField] private float maxFatigue = 100f;   // �ִ� �Ƿε�
+        //[SerializeField] private float recoverFatiguePerHour = 10f;   // ���� �ð��� ȸ���ϴ� �Ƿε� ��ġ
+        //public float CurFatigue { get; private set; }   // ���� �Ƿε�
 
-        [SerializeField] private GAMEMODE gameMode;
         private int score = 0;
         public int highScore { get; private set; }
         public Timer clearTime { get; private set; }
         public Timer playTime { get; private set; }
         [SerializeField] private float timeScale;
+        //[SerializeField] private GAMEMODE gameMode;
         private int lastSavedHour;   // ���������� ����� �ð�
 
         private const float sleepWaitPeriod = 0.5f;    // ���� �� �� �ð��� ���ϴ� ����
@@ -128,14 +128,14 @@ namespace Game
                 switch (playTime.Hour)
                 {
                     case (int)GAMEMODE.MORNING:
-                        gameMode = GAMEMODE.MORNING;
+                        //gameMode = GAMEMODE.MORNING;
                         //EndWave();
                         NextDay();
-                        SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageSun);
+
                         // ���� off
                         break;
                     case (int)GAMEMODE.NIGHT:
-                        gameMode = GAMEMODE.NIGHT;
+                        //gameMode = GAMEMODE.NIGHT;
                         if(spawner) StartCoroutine(StartWave());
                         //SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
                         // ���� On
@@ -149,10 +149,7 @@ namespace Game
         {
             player.Init(startPoint.position);
         }
-        public void DebugWave()
-        {
-            StartCoroutine(StartWave());
-        }
+
 
         public void StartRankMode()
         {
@@ -194,8 +191,10 @@ namespace Game
             }
             //CurFatigue = maxFatigue;
 
+            EquipManager.Instance.InitUpgrade();
+
             // ���Ӹ�� �ʱ�ȭ
-            gameMode = GAMEMODE.MORNING;
+            //gameMode = GAMEMODE.MORNING;
             // ���̺� �� �ʱ�ȭ.
             Wave = 0;
             score = 0;
@@ -219,8 +218,10 @@ namespace Game
             // ���� ���� ��ȣ Ȱ��ȭ.
             isGameOver = false;
             isGameStart = true;
-
+            SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageSun);
             Mediator.Instance.Notify(this, GameEvent.REFRESH_STATUS, player);
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         private GameObject LoadCharacter(GameObject prefab)
@@ -355,7 +356,7 @@ namespace Game
                 // �� �������� 1�ð��� �߰�
                 playTime.AddTime(0, 1, 0, 0);
                 // ����� �ð� �� �Ƿ� ��ġ ����. �ּ�ġ 0
-                CurFatigue = Mathf.Max(0.0f, CurFatigue - recoverFatiguePerHour);
+                //CurFatigue = Mathf.Max(0.0f, CurFatigue - recoverFatiguePerHour);
             }
         }
 
@@ -385,6 +386,11 @@ namespace Game
 
         public void SetPause(bool value)
         {
+            if (isGameStart)
+            {
+                Cursor.visible = value;
+                Cursor.lockState = value ? CursorLockMode.None : CursorLockMode.Locked;
+            }
             Time.timeScale = value ? 0 : 1;
         }
 
@@ -396,6 +402,7 @@ namespace Game
             isGameStart = false;
             UIManager.Instance.PlayStageClearUI(playTime, score);
             SoundManager.Instance.OnPlaySFX("Get_AbsoluteRing");
+            SoundManager.Instance.StopBGM();
         }
 
         public void GameOver()
@@ -474,11 +481,14 @@ namespace Game
                 isRankStart = false;
                 highScore = (score > highScore) ? score : highScore;
 
-                // if (NFTManager.Instance.GetWinner() < highScore)
-                // {
-                //     NFTManager.Instance.newWinner(highScore);
-                //     isOwner = true;
-                // }
+                if (isOnNFT)
+                {
+                    if (NFTManager.Instance.GetWinner() < highScore)
+                    {
+                        NFTManager.Instance.newWinner(highScore);
+                        isOwner = true;
+                    }
+                }
                 ToMain();
                 
                 return;
@@ -505,7 +515,10 @@ namespace Game
             isOwner = false;
             SetPause(false);
             ResetGame();
-/*            NFTManager.Instance.RefreshNFT();*/
+            SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyMain);
+            if(isOnNFT) NFTManager.Instance.RefreshNFT();
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
         }
 
         public IEnumerator MoveScene(int sceneIndex)

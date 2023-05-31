@@ -49,6 +49,7 @@ namespace Game
         [SerializeField] private PartnerHUD partnerHUD; // 파트너 체력 바.
         [SerializeField] private Text itemInfoText; // 아이템 획득 UI
         [SerializeField] private TextMeshProUGUI[] stageGoalTexts; // 스테이지 목표 UI
+        [SerializeField] private TextMeshProUGUI damageBuffText; // 데미지 버프 Text
         [SerializeField] private PopupController popupController; // 스테이지 목표 UI
         public event System.Action RestartEvent;
 
@@ -76,6 +77,12 @@ namespace Game
             InitUI();
             SetPartnerHUD(false);
         }
+
+        public void SetDamageBuff(int upgrade)
+        {
+            damageBuffText.text = string.Format("+{0}%", upgrade * 10);
+        }
+
         public void ClearPopup()
         {
             popupController.ClearPopup();

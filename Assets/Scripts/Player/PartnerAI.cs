@@ -156,6 +156,7 @@ namespace Game
             {
                 yield break;
             }
+            agent.enabled = true;
             while (!isHpZero)
             {
                 var target = Physics.OverlapSphere(transform.position, followRange, playerLayer);  // 설정한 탐색 범위 내에 Target(Player)이 있는 지 확인.

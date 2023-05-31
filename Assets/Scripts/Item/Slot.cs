@@ -90,7 +90,12 @@ namespace Game
             switch (item.itemType)
             {
                 case Item.ItemType.Weapon:
-                    //EquipManager.Instance.EquipWeapon(item);
+                    // 장착한 아이템이 하나는 있어야 한다.
+                    if (EquipManager.Instance.EquippedWeapon != null)
+                    {
+                        EquipManager.Instance.UpgradeWeapon();
+                        SetSlotCount(-1);
+                    }
                     break;
                 case Item.ItemType.Used:
                     // only if player got damaged

@@ -32,6 +32,12 @@ namespace Game
 
         private Weapon equippedWeapon;
         public Weapon EquippedWeapon { get { return equippedWeapon; } }
+        public int weaponUpgrade { get; private set; }
+        public void InitUpgrade()
+        {
+            weaponUpgrade = 0;
+            UIManager.Instance.SetDamageBuff(weaponUpgrade);
+        }
 
         public void EquipLoadedWeapon()
         {
@@ -41,6 +47,13 @@ namespace Game
                 int weaponId = PlayerPrefs.GetInt(EQUIPPED_WEAPON_KEY);
                 EquipWeapon(ItemMgr.Instance.GetItemById(weaponId));
             }
+        }
+
+        public void UpgradeWeapon()
+        {
+            weaponUpgrade++;
+            UIManager.Instance.SetDamageBuff(weaponUpgrade);
+            Mediator.Instance.Notify(this, GameEvent.UPGRADED_WEAPON, this);
         }
 
         public void SetWeaponSocket(Transform socketTransform)

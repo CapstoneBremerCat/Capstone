@@ -25,8 +25,6 @@ namespace Game
         private int maxPlayingSounds = 5; // 동시 재생을 허용할 프리팹의 최대 개수
         [SerializeField] private bool isWaveEnemy;   // 웨이브 적인지 판단
         public bool isDamaged { get; private set; }
-        private float clipLength = 0f; // AudioClip의 길이
-
 
         public void Setup(float damage, float maxhealth, float speed, Vector3 pos)
         {
@@ -56,6 +54,7 @@ namespace Game
             audioSource.playOnAwake = false;    // 플레이 시, 사운드 실행되지 않도록 한다.
             OnDeath += () =>
             {
+                StopAllCoroutines();
                 if (slider) slider.value = GetHpRatio();
                 // 더 이상 피격 판정이 되지 않게 collider를 끈다.
                 if (collider) collider.enabled = false;
@@ -147,6 +146,7 @@ namespace Game
 
         protected virtual IEnumerator UpdatePath()
         {
+            agent.enabled = true;
             while (!isHpZero)
             {
                 if (slider) slider.value = GetHpRatio();

@@ -34,7 +34,6 @@ namespace BlockChain
         public Button openShopButton;
 
         private int selectedItemId = 0;
-        private bool IsAll = true;
 
         long Firsttime = 0;   // 첫번째 클릭시간
 
@@ -77,14 +76,12 @@ namespace BlockChain
         public void ALLButtonOnClick()
         {
             if (!GameManager.Instance.isOnNFT) return;
-            IsAll = true;
             //StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayItems();
         }
         public void MyButtonOnClick()
         {
             if (!GameManager.Instance.isOnNFT) return;
-            IsAll = false;
             //StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayMyItems();
         }

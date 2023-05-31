@@ -4,26 +4,31 @@ using UnityEngine;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using BlockChain;
 
 public class TerminalExecution : MonoBehaviour
 {
-    private Process externalProcess;
-    private void Awake()
+    private static Process externalProcess;
+    public void Awake()
     {
-        // 프로젝트 디렉토리의 상대 경로를 설정합니다.
-        string projectPath = Application.streamingAssetsPath;
-        string exePath = Path.Combine(projectPath, "caver-win.exe");
-        externalProcess = Process.Start(exePath);
+        if (externalProcess == null)
+        {
+            // 프로젝트 디렉토리의 상대 경로를 설정합니다.
+            string projectPath = Application.streamingAssetsPath;
+            string exePath = Path.Combine(projectPath, "caver.exe");
+             externalProcess = Process.Start(exePath);
 
-        // Unity 종료 시 이벤트 핸들러를 등록합니다.
-        Application.wantsToQuit += WantsToQuit;
+            // Unity 종료 시 이벤트 핸들러를 등록합니다.
+            Application.wantsToQuit += WantsToQuit;
+        }
+
     }
-
-    void OnDestroy()
+    public void OnApplicationQuit()
     {
         // 객체가 파괴될 때 Unity 종료 이벤트 핸들러를 제거합니다.
         Application.wantsToQuit -= WantsToQuit;
     }
+
     bool WantsToQuit()
     {
         StopProcess();
@@ -45,7 +50,7 @@ public class TerminalExecution : MonoBehaviour
         }
     }
 
-    void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
+/*    void OnOutputDataReceived(object sender, DataReceivedEventArgs e)
     {
         // 출력을 Unity 콘솔 창과 Node.js 터미널에 표시합니다.
         string output = e.Data;
@@ -59,5 +64,5 @@ public class TerminalExecution : MonoBehaviour
         string error = e.Data;
         System.Diagnostics.Debug.WriteLine(error);
         UnityEngine.Debug.LogError(error); // Unity 콘솔 창에 출력 (에러 로그)
-    }
+    }*/
 }
