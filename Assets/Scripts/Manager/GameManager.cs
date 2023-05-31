@@ -497,7 +497,13 @@ namespace Game
             // �� ���� ��Ģ 2: �ΰ���(��������) �� ��쿡�� �� �̸��� �ݵ�� Stage�� ���ԵǾ�� �Ѵ�.
             // ���� ���� ���ڸ� �����Ͽ� ���� ������ �̵��Ѵ�.
             if (int.TryParse(SceneManager.GetActiveScene().name.Substring(0, 2), out int currSceneIdx))
-                StartCoroutine(MoveScene(currSceneIdx + 1));
+            {
+                if (currSceneIdx + 1 == sceneList.Count)
+                    ToMain();
+                else
+                    StartCoroutine(MoveScene(currSceneIdx + 1));
+            }
+
         }
 
         private bool isOwner;

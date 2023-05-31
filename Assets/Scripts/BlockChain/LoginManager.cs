@@ -36,6 +36,7 @@ namespace BlockChain
     public class LoginManager : MonoBehaviour
     {
         public static string loginAddr;
+        public TextMeshProUGUI addrText;
         #region instance
         private static LoginManager instance = null;
         public static LoginManager Instance { get { return instance; } }
@@ -127,9 +128,9 @@ namespace BlockChain
                         login_res_upload responseResult = JsonConvert.DeserializeObject<login_res_upload>(result);
                         Debug.Log("addr : " + responseResult.addr);
                         SetAddr(responseResult.addr);
-                        //string temp = LoginManager.Instance.GetAddr();
+                        string temp = GetAddr();
                         //Debug.Log("loginAddr : " + temp);
-                        //resourceText.text = temp;
+                        addrText.text = string.Format("My addr: {0}",temp);
                         yield return new WaitForSeconds(2.0f);
                         NFTManager.Instance.InitNFT();
                     }

@@ -408,11 +408,11 @@ namespace BlockChain
                     var getJsonResult = JsonConvert.DeserializeObject<JsonCID>(result2);
                     var imgCID = getJsonResult.image;
                     var url2 = $"https://aeong.infura-ipfs.io/ipfs/{imgCID.Substring(7)}";
-                    
+
                     StartCoroutine(GetTexture(url2, (sprite) =>
                     {
                         LoadingPanel.SetActive(false);
-                        resultSprite = sprite;;
+                        resultSprite = sprite; ;
                         itemPopup.SetNFTItem(randomItemResUpload.name, randomItemResUpload.description, resultSprite);
                         itemPopup.OpenPopup();
                     }));

@@ -34,7 +34,7 @@ namespace BlockChain
         public Button openShopButton;
 
         private int selectedItemId = 0;
-
+        private bool isAll = true;
         long Firsttime = 0;   // 첫번째 클릭시간
 
         private void Start()
@@ -70,17 +70,20 @@ namespace BlockChain
         {
             yield return StartCoroutine(NFTManager.Instance.RefreshInfo());
             yield return StartCoroutine(NFTManager.Instance.LoadItems());
-            ALLButtonOnClick();
+            if (isAll) ALLButtonOnClick();
+            else MyButtonOnClick();
         }
 
         public void ALLButtonOnClick()
         {
+            isAll = true;
             if (!GameManager.Instance.isOnNFT) return;
             //StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayItems();
         }
         public void MyButtonOnClick()
         {
+            isAll = false;
             if (!GameManager.Instance.isOnNFT) return;
             //StartCoroutine(NFTManager.Instance.LoadItems());
             DisplayMyItems();
@@ -182,6 +185,7 @@ namespace BlockChain
 
             backButton.onClick.AddListener(() =>
             {
+                itemDetailsPanel.SetActive(false);
                 RefreshStore();
             });
 
