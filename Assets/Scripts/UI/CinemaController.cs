@@ -31,6 +31,8 @@ namespace Game
         public IEnumerator OnSkip()
         {
             if (!skipButton) yield break;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             skipButton.gameObject.SetActive(true);
             yield return new WaitForSeconds(2.0f);
             skipButton.gameObject.SetActive(false);

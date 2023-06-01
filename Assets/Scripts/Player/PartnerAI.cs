@@ -199,7 +199,6 @@ namespace Game
                                 }*/
                                 break;
                         }
-
                     }
                 }
                 if (anim) anim.SetFloat("Magnitude", agent.velocity.normalized.magnitude * 2.0f);
