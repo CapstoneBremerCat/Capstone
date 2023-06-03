@@ -79,6 +79,14 @@ namespace Game
             Second = seconds;
         }
 
+        public int GetTime()
+        {
+            // 흘러간 시간 * 시간 배속 + 저장된 시간
+            SavedTimeData = (Time.time - initTime) * timeScale + loadedTime + modifiedTime;
+
+            return Mathf.RoundToInt(SavedTimeData);
+        }
+
         // 기존 시간에서 게임시간 추가
         public void AddTime(int day, int hour, int minute, int seconds)
         {

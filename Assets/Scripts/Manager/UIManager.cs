@@ -239,6 +239,8 @@ namespace Game
         }
         public void EnableGameOverUI()
         {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
             if (stageUIController != null)
             {
                 stageUIController.GameOver();

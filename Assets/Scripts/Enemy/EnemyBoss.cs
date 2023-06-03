@@ -32,6 +32,8 @@ namespace Game
         }
         private IEnumerator FallingAttack()
         {
+            if(assasin!=2) yield return new WaitForSeconds(3.0f);
+            else yield return new WaitForSeconds(0.5f);
             FallingWarning.SetActive(false); // 떨어지는 투사체 Anim 비활성화.
             // 떨어지는 투사체를 player위치에 맞게 변경 시킴.
             var targets = Physics.OverlapSphere(transform.position, searchRange, targetLayer);  // 설정한 탐색 범위 내에 Target(Player)이 있는 지 확인.
@@ -78,7 +80,7 @@ namespace Game
             base.OnDamage(damage, hitPoint, hitNormal);
             bossHealth.value = curHealth / maxHealth; // 체력 슬라이더 부분
             Debug.Log("Boss HIt: "+ damage);
-            if (curHealth == maxHealth * 0.66f) // 체력이 66퍼 밑으로 처음 떨어질때
+            if (assasin == 0 && curHealth <= maxHealth * 0.66f) // 체력이 66퍼 밑으로 처음 떨어질때
             {
                 agent.speed = 6;
                 BossMomentHide.SetActive(true);
@@ -87,8 +89,7 @@ namespace Game
                 capsuleCollider.enabled = false;
                 assasin = 1;
             }
-
-            if (curHealth == maxHealth * 0.33f) // 체력이 33퍼 밑으로 처음 떨어질때
+            else if (assasin == 1 && curHealth <= maxHealth * 0.33f) // 체력이 33퍼 밑으로 처음 떨어질때
             {
                 agent.speed = 12;
                 BossMomentHide.SetActive(true);
@@ -97,8 +98,7 @@ namespace Game
                 capsuleCollider.enabled = false;
                 assasin = 2;
             }
-
-            if (curHealth == 0) // 사망시 실명상태 해제
+            else if (curHealth <= 0) // 사망시 실명상태 해제
             {
                 panel.SetActive(false);
             }
@@ -128,11 +128,11 @@ namespace Game
                                 var dir = (targetPos - transform.position).normalized;
                                 transform.rotation = Quaternion.LookRotation(dir); //target을 향하여 바라보고,
                                 StartCoroutine(Attack(livingEntity));   // 공격을 시도한다. Transform을 LivingEntity로 변경.
-                                if (!isFallingAttack)
-                                {
-                                    StartCoroutine(FallingAttack()); // 떨어지는 공격 코루틴 실행
-                                    isFallingAttack = true;
-                                }
+                            }
+                            if (!isFallingAttack)
+                            {
+                                StartCoroutine(FallingAttack()); // 떨어지는 공격 코루틴 실행
+                                isFallingAttack = true;
                             }
                         }
                     }

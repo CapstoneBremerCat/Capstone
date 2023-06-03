@@ -422,13 +422,13 @@ namespace BlockChain
 
         }
 
-        public void RecordClearResult(string _mode, int _score, int _timestamp)
+        public void RecordClearResult(string _mode, int _score, Timer timer)
         {
             var clearReqUpload = new clear_req_upload();
             clearReqUpload.addr = LoginManager.Instance.GetAddr();
             clearReqUpload.mode = _mode;
             clearReqUpload.score = _score;
-            clearReqUpload.timestamp = _timestamp;
+            clearReqUpload.timestamp = timer.GetTime();
 
             var json = JsonConvert.SerializeObject(clearReqUpload);
 

@@ -441,6 +441,9 @@ namespace Game
                     NFTManager.Instance.newWinner(highScore);
                     isOwner = true;
                 }
+                // 스테이지 클리어 기록
+                var mode = isRankStart ? "Rank" : "Story"; 
+                NFTManager.Instance.RecordClearResult(mode, score, playTime);
             }
             UIManager.Instance.EnableGameOverUI();
             SoundManager.Instance.OnPlaySFX("GameOver");
