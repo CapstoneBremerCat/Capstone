@@ -58,12 +58,16 @@ namespace Game
         [SerializeField] private GameObject equipWindowUI; // Equipment window UI
         [SerializeField] private GameObject sleepUI; // Sleep UI
 
+        [SerializeField] private SkillWindow skillWindow; // Skill window UI
+        [SerializeField] private EquipWindow equipWindow; // Equipment window UI
 
         public void InitUI()
         {
             if (gameOverUI) gameOverUI.SetActive(false);
             StopAllCoroutines();
             coolTimeSlider.value = 0;
+            equipWindow.Initialize();
+            skillWindow.LoadOwnedSkills();
             Mediator.Instance.RegisterEventHandler(GameEvent.SKILL_ACTIVATED, DisplayCooltime);
         }
         private void OnDestroy()

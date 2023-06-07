@@ -299,7 +299,8 @@ namespace Game
 
         public void RestartGame()
         {
-            stageUIController.InitUI();
+            InitUI();
+            //stageUIController.InitUI();
             if (null != RestartEvent) RestartEvent();
         }
         private IEnumerator BtnInterval(Button btn)

@@ -21,7 +21,7 @@ namespace Game
             LoadOwnedSkills();
         }
 
-        private void LoadOwnedSkills()
+        public void LoadOwnedSkills()
         {
             ClearAllSlots();
             List<Skill> skillList = SkillManager.Instance.GetOwnedSkills();

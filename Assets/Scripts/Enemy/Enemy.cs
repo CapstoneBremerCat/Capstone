@@ -190,7 +190,7 @@ namespace Game
                     yield return new WaitForSeconds(1.1f);
 
                     // 피격 판정 타이밍에 target이 유효한 거리에 있는지 확인.
-                    if (Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
+                    if (!trTarget || Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
 
                     // TODO : Player Damageable Code 추가.
                     if (isDead || target.isDead) yield break;
@@ -200,7 +200,7 @@ namespace Game
                     yield return new WaitForSeconds(1.2f);
 
                     // 모션 종료 후, target이 유효한 거리에 있는지 확인.
-                    if (Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
+                    if (!trTarget || Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
                 }
             }
             // target과의 거리가 벌어진다면 다시 target을 쫓아 간다.

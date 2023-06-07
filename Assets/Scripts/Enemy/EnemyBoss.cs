@@ -26,13 +26,16 @@ namespace Game
             OnDeath += () =>
             {
                 if (ItemMgr.Instance) ItemMgr.Instance.SpawnItem(transform.position + Vector3.up);
+                canvas.SetActive(false);
+                panel.SetActive(false);
+                BossMomentHide.SetActive(false);
             };
             bossHealth.interactable = false;
             canvas.SetActive(false);
         }
         private IEnumerator FallingAttack()
         {
-            if(assasin!=2) yield return new WaitForSeconds(3.0f);
+            if (assasin != 2) yield return new WaitForSeconds(3.0f);
             else yield return new WaitForSeconds(0.5f);
             FallingWarning.SetActive(false); // 떨어지는 투사체 Anim 비활성화.
             // 떨어지는 투사체를 player위치에 맞게 변경 시킴.
@@ -82,7 +85,7 @@ namespace Game
             Debug.Log("Boss HIt: "+ damage);
             if (assasin == 0 && curHealth <= maxHealth * 0.66f) // 체력이 66퍼 밑으로 처음 떨어질때
             {
-                agent.speed = 6;
+                agent.speed = 8;
                 BossMomentHide.SetActive(true);
                 BossBody.SetActive(false); // 몸체만 사라짐.
                 CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
@@ -97,10 +100,6 @@ namespace Game
                 CapsuleCollider capsuleCollider = GetComponent<CapsuleCollider>();
                 capsuleCollider.enabled = false;
                 assasin = 2;
-            }
-            else if (curHealth <= 0) // 사망시 실명상태 해제
-            {
-                panel.SetActive(false);
             }
         }
 
@@ -139,6 +138,9 @@ namespace Game
                     else // 탐색 범위 내에 플레이어 오브젝트가 없는 경우
                     {
                         canvas.SetActive(false); // canvas 오브젝트 비활성화
+                        assasin = 0;
+                        panel.SetActive(false);
+                        BossMomentHide.SetActive(false);
                     }
                     // Enemy가 움직이는 속도(velocity)의 크기(magnitude)를 이용하여, 움직이는 애니메이션 처리를 한다.
                     if (anim) anim.SetFloat("Magnitude", agent.velocity.magnitude);
@@ -159,7 +161,7 @@ namespace Game
                 {
                     panel.SetActive(true);
                 }
-                assasin = 0;
+                //assasin = 0;
             }
 
             if (agent && target)
@@ -173,7 +175,7 @@ namespace Game
 
 
                     // 피격 판정 타이밍에 target이 유효한 거리에 있는지 확인.
-                    if (Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
+                    if (!trTarget || Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
 
                     // TODO : Player Damageable Code 추가.
                     if (isDead || target.isDead) yield break;
@@ -183,7 +185,7 @@ namespace Game
                     yield return new WaitForSeconds(1.2f);
 
                     // 모션 종료 후, target이 유효한 거리에 있는지 확인.
-                    if (Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
+                    if (!trTarget || Vector3.Distance(trTarget.position, transform.position) > agent.stoppingDistance) break;
                 }
             }
             // target과의 거리가 벌어진다면 다시 target을 쫓아 간다.

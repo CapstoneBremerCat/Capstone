@@ -48,6 +48,9 @@ EditorBuildSettings:
     path: Assets/Scenes/13_Stage_5.unity
     guid: f8f2b84aab1c73745b2fffe4c4959ed9
   - enabled: 1
+    path: Assets/Scenes/14_Cineme_Credit.unity
+    guid: 34b86d7d5cab9d14ea0b65b7b41d2756
+  - enabled: 1
     path: Assets/Scenes/99_Stage_Rank.unity
     guid: d71d40730925b114296af122421fcb14
   - enabled: 1

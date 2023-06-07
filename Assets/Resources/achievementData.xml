@@ -6,7 +6,7 @@
   <AchievementData code="16" name="Zombie Slayer" description="Defeat 10 Zombies" isCompleted="False" />
   <AchievementData code="32" name="Zombie Exterminator" description="Defeat 100 Zombies" isCompleted="False" />
   <AchievementData code="64" name="Zombie Annihilator" description="Defeat 1000 Zombies" isCompleted="False" />
-  <AchievementData code="128" name="Giant Slayer" description="Defeat the Giant Zombie" isCompleted="False" />
+  <AchievementData code="128" name="Giant Slayer" description="Defeat the Giant Zombie" isCompleted="True" />
   <AchievementData code="256" name="Steel Destroyer" description="Defeat the Metal Zombie" isCompleted="False" />
   <AchievementData code="512" name="First Partner" description="Meet your partner for the first time" isCompleted="False" />
   <AchievementData code="1024" name="The Avengers" description="Meet all partners" isCompleted="False" />

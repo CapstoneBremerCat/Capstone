@@ -98,7 +98,6 @@ GameObject:
   - component: {fileID: 3404339256304009487}
   - component: {fileID: 3404339256304009486}
   - component: {fileID: 3404339256296731757}
-  - component: {fileID: 530430157}
   m_Layer: 8
   m_Name: Zombie_Metal
   m_TagString: Enemy
@@ -204,19 +203,6 @@ CapsuleCollider:
   m_Height: 1.5
   m_Direction: 1
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &530430157
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3404339256303977996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f81bc0a16ab72148a59dd0e7fdaf233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  achievement: 256
 --- !u!1001 &3404339256858893654
 PrefabInstance:
   m_ObjectHideFlags: 0

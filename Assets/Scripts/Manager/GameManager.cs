@@ -320,12 +320,33 @@ namespace Game
             // ���̺꿡 ���� �� ����
             Wave++;
             spawnCount += EnemySpawnCount;
-            if (spawnCount < 100 && spawner) spawner.SpawnEnemy(spawnCount, Wave);
-
+            if (spawner)
+            {
+                StartCoroutine(SpawnRoutine());
+                //spawner.SpawnEnemy(EnemySpawnCount, Wave);
+            }
             // ���̺� UI Ȱ��ȭ
             UIManager.Instance.EnableWaveUI();
             UIManager.Instance.UpdateWaveUI(Wave, spawnCount);
             SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageMoon);
+        }
+
+        public IEnumerator SpawnRoutine()
+        {
+            int count = EnemySpawnCount;
+            while (count > 0)
+            {
+                if (spawnCount - EnemySpawnCount + count > 20)
+                {
+                    Debug.Log("Spawn Full");
+                    yield return null;
+                }
+                else
+                {
+                    spawner.SpawnEnemy(1, Wave);
+                    count--;
+                }
+            }
         }
 
         public IEnumerator EndWave()
@@ -335,6 +356,7 @@ namespace Game
             // ���̺� UI ��Ȱ��ȭ
             UIManager.Instance.DisableWaveUI();
             SoundManager.Instance.OnPlayBGM(SoundManager.Instance.keyStageSun);
+            spawnCount = 0;
             // ������ ���� �� ���� ���
             yield return null;
         }
@@ -425,26 +447,22 @@ namespace Game
             }
             score += count * 1000;
 
-            // if Rank mode, Save highScore
-            if (isRankStart)
+            if (score > highScore)
             {
-                highScore = (score > highScore) ? score : highScore;
-                // score ����
-                isRankStart = false;
-            }
-            else highScore = (score > highScore) ? score : highScore;
-
-            if (isOnNFT)
-            {
-                if (NFTManager.Instance.GetWinner() < highScore)
+                if (isOnNFT)
                 {
-                    NFTManager.Instance.newWinner(highScore);
-                    isOwner = true;
+                    if (NFTManager.Instance.GetWinner() < score)
+                    {
+                        NFTManager.Instance.newWinner(score);
+                        isOwner = true;
+                    }
                 }
+                highScore = score;
                 // 스테이지 클리어 기록
-                var mode = isRankStart ? "Rank" : "Story"; 
+                var mode = isRankStart ? "Rank" : "Story";
                 NFTManager.Instance.RecordClearResult(mode, score, playTime);
             }
+
             UIManager.Instance.EnableGameOverUI();
             SoundManager.Instance.OnPlaySFX("GameOver");
         }
@@ -475,23 +493,27 @@ namespace Game
             // �ε� �Ϸ� �� ������ �ڵ�
             InitNewStage();
             UIManager.Instance.RestartGame();
+            UIManager.Instance.InitUI();
             Mediator.Instance.Notify(this, GameEvent.RESTART, null);
         }
 
         public void MextScene()
         {
             if(isRankStart){
-                isRankStart = false;
-                highScore = (score > highScore) ? score : highScore;
-
-                if (isOnNFT)
+/*                if (score > highScore)
                 {
-                    if (NFTManager.Instance.GetWinner() < highScore)
+                    if (isOnNFT)
                     {
-                        NFTManager.Instance.newWinner(highScore);
-                        isOwner = true;
+                        if (NFTManager.Instance.GetWinner() < score)
+                        {
+                            NFTManager.Instance.newWinner(score);
+                            isOwner = true;
+                        }
                     }
-                }
+                    highScore = score;
+                    // 스테이지 클리어 기록
+                    NFTManager.Instance.RecordClearResult("Rank", score, playTime);
+                }*/
                 ToMain();
                 
                 return;
@@ -512,7 +534,24 @@ namespace Game
         private bool isOwner;
         public void ToMain()
         {
-            if(isOwner)
+            //highScore = (score > highScore) ? score : highScore;
+            if(score > highScore)
+            {
+                if (isOnNFT)
+                {
+                    if (NFTManager.Instance.GetWinner() < score)
+                    {
+                        NFTManager.Instance.newWinner(score);
+                        isOwner = true;
+                    }
+                    // 스테이지 클리어 기록
+                    var mode = isRankStart ? "Rank" : "Story";
+                    NFTManager.Instance.RecordClearResult(mode, score, playTime);
+                }
+                highScore = score;
+            }
+
+            if (isOwner)
             {
                 UIManager.Instance.ClearCanvas();
                 StartCoroutine(MoveScene("GetRing"));
@@ -520,7 +559,7 @@ namespace Game
             else {
                 StartCoroutine(MoveScene(0));
             }
-
+            isRankStart = false;
             isOwner = false;
             SetPause(false);
             ResetGame();

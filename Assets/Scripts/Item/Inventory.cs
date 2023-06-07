@@ -53,7 +53,7 @@ namespace Game
             }
             // looks for an existing slot that contains the same item.
             Slot sameItemSlot = GetSameItemSlot(_item);
-            if (sameItemSlot != null)
+            if (sameItemSlot != null && _item.itemType != Item.ItemType.Weapon)
             {
                 //if the acquired item is not a weapon, Increase the count of the item in the slot by the acquired count.
                 sameItemSlot.SetSlotCount(_count);

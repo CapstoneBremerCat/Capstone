@@ -24112,6 +24112,7 @@ MonoBehaviour:
   - {fileID: 5408840706509636579}
   - {fileID: 5408840707911727890}
   - {fileID: 5408840706221630331}
+  spawnParent: {fileID: 0}
 --- !u!1001 &950981008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24658,7 +24659,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 128
-  actionText: {fileID: 0}
 --- !u!114 &971281417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24709,7 +24709,6 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 0
-  actionText: {fileID: 0}
 --- !u!1001 &971392851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -42810,6 +42809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseStat: {fileID: 11400000, guid: 3364f3de6e661a640aebf52d965d7bda, type: 2}
+  weaponSocket: {fileID: 0}
   weapon: {fileID: 0}
   followRange: 24
   searchRange: 12
@@ -42828,8 +42828,10 @@ MonoBehaviour:
   agent: {fileID: 1669025364}
   hitEffect: {fileID: 7364518018014343544, guid: 3feb2f2941fd74f46a6627b08eaabe9f, type: 3}
   hitSound: {fileID: 8300000, guid: 13a58eb5deb3e46599037ffb43ae7600, type: 3}
+  idleSound: {fileID: 0}
+  audioSource: {fileID: 0}
   anim: {fileID: 0}
-  partnerHUD: {fileID: 0}
+  currentState: 0
 --- !u!114 &1672114166 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1653397521209622042, guid: 31d82a3b7dd915e4e85e139eaf8c0549, type: 3}
@@ -45590,6 +45592,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fb2c315f661ef046bd6cd0c1e5ec4a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  achievement: 0
+  goals: []
+  clearDescription: 
 --- !u!1001 &1765315071
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46352,14 +46357,9 @@ MonoBehaviour:
   sun: {fileID: 0}
   playerPrefab: {fileID: 0}
   player: {fileID: 2463601376043019009}
-  partnerPrefab: {fileID: 0}
+  partnerPrefabs: []
   partner: {fileID: 1669025365}
   spawner: {fileID: 0}
-  startPoint: {fileID: 0}
-  maxWave: 10
-  maxFatigue: 100
-  recoverFatiguePerHour: 10
-  gameMode: 8
   timeScale: 1440
 --- !u!4 &1791438763
 Transform:
@@ -56500,8 +56500,11 @@ MonoBehaviour:
   turnSmoothTime: 0.1
   deathSound: {fileID: 8300000, guid: 7b6b33682babad5438d7b5414f5bcc87, type: 3}
   hitSound: {fileID: 8300000, guid: 13a58eb5deb3e46599037ffb43ae7600, type: 3}
+  idleSound: {fileID: 0}
   hitEffect: {fileID: 2013586028}
+  healEffect: {fileID: 0}
   anim: {fileID: 939907463}
+  audioSource: {fileID: 0}
   weaponSocket: {fileID: 0}
 --- !u!224 &3341074814507369280
 RectTransform:
@@ -56771,6 +56774,7 @@ MonoBehaviour:
   SkillWindowButtonName: SkillWindow
   EquipWindowButtonName: EquipWindow
   StatusWindowButtonName: StatusWindow
+  UseHealKitName: UseHealKit
 --- !u!1001 &3812191318682684707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57196,6 +57200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthSlider: {fileID: 0}
   staminaSlider: {fileID: 897386586}
+  activeSkillImage: {fileID: 0}
   coolTimeSlider: {fileID: 0}
   coolTimeAnim: {fileID: 0}
   waveStartUI: {fileID: 8664183100396082894}
@@ -57206,13 +57211,17 @@ MonoBehaviour:
   waveText: {fileID: 8635712318976302874}
   beforeDayText: {fileID: 8664183102166822225}
   afterDayText: {fileID: 8664183101550423935}
-  dayText: {fileID: 448777625}
+  dayText: {fileID: 0}
+  clearTimeText: {fileID: 0}
+  clearScoreText: {fileID: 0}
   gameOverUI: {fileID: 0}
   statusWindowUI: {fileID: 0}
   inventoryUI: {fileID: 0}
   skillWindowUI: {fileID: 0}
   equipWindowUI: {fileID: 0}
   sleepUI: {fileID: 8664183101640744956}
+  skillWindow: {fileID: 0}
+  equipWindow: {fileID: 0}
 --- !u!1 &5408840706221630330
 GameObject:
   m_ObjectHideFlags: 0
@@ -58281,6 +58290,7 @@ MonoBehaviour:
   SkillWindowButtonName: SkillWindow
   EquipWindowButtonName: EquipWindow
   StatusWindowButtonName: StatusWindow
+  UseHealKitName: UseHealKit
 --- !u!114 &7380606103433629677
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58305,8 +58315,11 @@ MonoBehaviour:
   turnSmoothTime: 0.1
   deathSound: {fileID: 0}
   hitSound: {fileID: 0}
+  idleSound: {fileID: 0}
   hitEffect: {fileID: 0}
+  healEffect: {fileID: 0}
   anim: {fileID: 1507494151}
+  audioSource: {fileID: 0}
   weaponSocket: {fileID: 0}
 --- !u!143 &7380606103433629678
 CharacterController:

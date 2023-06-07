@@ -9429,7 +9429,7 @@ MonoBehaviour:
   damagedSearchRange: 40
   slider: {fileID: 0}
   agent: {fileID: 1863052250637835292}
-  deathSound: {fileID: 8300000, guid: b86f03005ed394911b43027aeaaedeb7, type: 3}
+  deathSound: {fileID: 8300000, guid: 48a29de876148b84aa27d896834a1f50, type: 3}
   hitSound: {fileID: 8300000, guid: c3d8accfc053f004ca665a1c8c4a6919, type: 3}
   hitEffect: {fileID: 1974137739759551947}
   isWaveEnemy: 0
@@ -9452,6 +9452,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   achievement: 128
+  goalDescription: 
 --- !u!1 &7900542571367836056
 GameObject:
   m_ObjectHideFlags: 0

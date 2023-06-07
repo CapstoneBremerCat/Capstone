@@ -21680,6 +21680,7 @@ MonoBehaviour:
   - 11_Cinema_SceneF
   - 12_Cinema_SceneG
   - 13_Stage_5
+  - 14_Cineme_Credit
   sun: {fileID: 0}
   playerPrefab: {fileID: 6823143498374011951, guid: dcc254a5c07a95f42843bfbd97b18cf1, type: 3}
   player: {fileID: 0}
@@ -39305,6 +39306,8 @@ MonoBehaviour:
   skillWindowUI: {fileID: 4124867788745318356}
   equipWindowUI: {fileID: 5128200793724564998}
   sleepUI: {fileID: 8664183101640744956}
+  skillWindow: {fileID: 1075214108}
+  equipWindow: {fileID: 614398947}
 --- !u!1001 &5220372479625408589
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -63,7 +63,7 @@ namespace Game
             UIManager.Instance.SetPartnerHUD(true);
             UIManager.Instance.SetPartnerHealthBar(GetHpRatio());
             // 오브젝트가 활성화 될 경우(Respawn), target을 찾아 이동.
-            if (agent) agent.isStopped = false;
+            if (agent) agent.enabled = true;
             StartCoroutine(UpdatePath());
             weapon = Instantiate(weapon, weaponSocket);
             weapon.Init(weaponSocket);
